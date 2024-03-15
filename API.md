@@ -1,5 +1,5 @@
 # Api Document
 ## upload plants
-* EndPoint: /requestHandler/uploadPlant
-* Method: Post
+* EndPoint: `/requestHandler/uploadPlant`
+* Method: `Post`
 * Input: 

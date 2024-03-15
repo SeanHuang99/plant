@@ -30,7 +30,9 @@ const plantSchema = new mongoose.Schema({
 });
 
 const Plant = mongoose.model('Plant', plantSchema);
+ async   function storeDat(){
 
+ }
 // Route to add a new plant
 router.post('/plants', async (req, res) => {
     try {

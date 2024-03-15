@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Plant Form</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<iframe src="navbar.html" frameborder="0" width="100%" height="50"></iframe>
+
+<div class="container">
+    <h1 class="mt-4">Add Plant</h1>
+    <form action="/add-plant" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description" name="description" required>
+        </div>
+        <div class="form-group">
+            <label for="details">Details:</label>
+            <textarea class="form-control" id="details" name="details" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="datetime">Date and Time seen:</label>
+            <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+        </div>
+        <!--        之后用geolocation（地图选点）替换？-->
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <h3>Plant Characteristics:</h3><br>
+            <label>Does the plant have flowers?</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="flowersYes" name="flowers" value="yes">
+                <label class="form-check-label" for="flowersYes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="flowersNo" name="flowers" value="no">
+                <label class="form-check-label" for="flowersNo">No</label>
+            </div>
+            <!-- 添加其他特征的单选框 -->
+        </div>
+        <div class="form-group">
+            <label for="sunExposure">Sun Exposure:</label>
+            <select class="form-control" id="sunExposure" name="sunExposure">
+                <option value="fullSun">Full Sun</option>
+                <option value="partialShade">Partial Shade</option>
+                <option value="fullShade">Full Shade</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="flowerColor">Flower Color:</label>
+            <input type="text" class="form-control" id="flowerColor" name="flowerColor">
+        </div>
+
+        <div class="form-group">
+            <h3>Identification</h3><br>
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name">
+
+            <label>Status</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="statusComplete" name="status" value="Complete">
+                <label class="form-check-label" for="statusComplete">Complete</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="statusInProgress" name="status" value="In Progress">
+                <label class="form-check-label" for="statusInProgress">In Progress</label>
+            </div>
+            <div>DBPedia...</div>
+            <div>A chat/comment...</div>
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="nickname">User Nickname:</label>
+            <input type="text" class="form-control" id="nickname" name="nickname" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

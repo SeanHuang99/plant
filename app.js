@@ -6,9 +6,12 @@ var logger = require('morgan');
 
 const bodyParser = require('body-parser');
 
-var mongodbController = require('./routes/apiController/databases/mongodbController');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var mongodbController = require('./routes/apiController/databases/mongodbController');
+var requestHandler=require("./routes/apiController/requestHandler/postHandler");
+
 
 var app = express();
 
@@ -25,7 +28,9 @@ app.use(bodyParser.json());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/api/mongodb',mongodbController);
+app.use('/mongodb',mongodbController);
+app.use('/requestHandler',requestHandler);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

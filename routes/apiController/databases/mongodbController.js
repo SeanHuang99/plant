@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const Plant = require('./models/Plant');
+
+const app = express();
+app.use(express.json());
 
 // MongoDB connection string
 const uri = "mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
@@ -22,42 +26,33 @@ mongoose.connection.on("close", () => {
     console.log("MongoDb connection is closed");
 });
 
-// Define a Mongoose schema and model for the data you're working with
-const plantSchema = new mongoose.Schema({
-    nickname: String,
-    description: String,
-    // Add other fields as per your requirements
-});
 
-const Plant = mongoose.model('Plant', plantSchema);
- async   function storeDat(){
-
- }
-// Route to add a new plant
 router.post('/plants', async (req, res) => {
     try {
-        const plant = new Plant({
-            nickname: req.body.nickname,
-            description: req.body.description,
-            // Populate other fields from req.body
-        });
-
-        await plant.save();
-        res.send(plant);
+        const { nickname, plant } = req.body;
+        const newPlant = new Plant({ nickname, plant });
+        await newPlant.save();
+        res.status(201).send('Plant info uploaded successfully.');
     } catch (error) {
-        res.status(500).send('Error saving the plant: ' + error.message);
+        res.status(500).send(error.message);
     }
 });
 
-// Route to get all plants
-router.get('/plants', async (req, res) => {
+
+router.get('/plants/:nickname', async (req, res) => {
     try {
-        const plants = await Plant.find();
-        res.send(plants);
+        const { nickname } = req.params;
+        const plantInfo = await Plant.findOne({ nickname });
+        if (plantInfo) {
+            res.status(200).json(plantInfo);
+        } else {
+            res.status(404).send('Plant info not found.');
+        }
     } catch (error) {
-        res.status(500).send('Error retrieving plants: ' + error.message);
+        res.status(500).send(error.message);
     }
 });
+
 
 // Export the router
 module.exports = router;

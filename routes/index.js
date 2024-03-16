@@ -8,6 +8,10 @@ router.get('/', function(req, res, next) {
 router.get('/upload',function (req, res){
   res.render('upload',{ title: 'Plants' })
 })
+
+router.get('/main',function (req, res){
+  res.render('main',{ title: 'Main' })
+})
 router.get('/about',function (req, res){
   res.render('about')
 })

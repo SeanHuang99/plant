@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var mongodbController = require('./routes/apiController/databases/mongodbController');
-var requestHandler=require("./routes/apiController/requestHandler/postHandler");
+var requestHandler=require("./routes/apiController/requestHandler/handler");
 
 
 var app = express();
@@ -25,8 +25,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
-app.use('/public/images', express.static(path
-    .join(__dirname, '/public/images')));
+app.use('/public/', express.static(path
+    .join(__dirname, '/public/')));
 
 
 app.use('/', indexRouter);

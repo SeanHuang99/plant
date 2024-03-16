@@ -7,15 +7,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="/public/javascript/index.js"></script>
     <style>
         /* 自定义样式 */
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
         .plant-card {
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-bottom: 20px;
             padding: 10px;
         }
-
         .plant-card img {
             max-width: 100%;
             height: 200px;
@@ -38,7 +44,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/main">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/upload">Upload</a>
@@ -56,68 +62,11 @@
     </div>
 </nav>
 
+<div class="mainContent" style="height: 100%; width: 100%">
 <!--复用的Navbar-->
-<iframe src="navbar.html" frameborder="0" width="100%" height="50"></iframe>
-
-<!--<div id="navbar-container"></div>-->
-<!--<script>-->
-<!--    $(document).ready(function() {-->
-<!--        // 使用 jQuery 加载导航栏内容-->
-<!--        $("#navbar-container").load("navbar.html");-->
-<!--    });-->
-<!--</script>-->
-
-<div class="container">
-    <h2 class="my-4">All Plants</h2>
-    <div class="row">
-        <!-- show card -->
-        <div class="col-lg-3 col-md-4">
-            <div class="plant-card text-center">
-                <img src="/public/images/flower.jpg" alt="Plant 1" class="img-fluid mx-auto">
-                <div class="mt-3">
-                    <h3>Plant 1</h3>
-                    <p>aaa</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4">
-            <div class="plant-card text-center">
-                <img src="/public/images/flower.jpg" alt="Plant 1" class="img-fluid mx-auto">
-                <div class="mt-3">
-                    <h3>Plant 1</h3>
-                    <p>aaa</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4">
-            <div class="plant-card text-center">
-                <img src="/public/images/flower.jpg" alt="Plant 1" class="img-fluid mx-auto">
-                <div class="mt-3">
-                    <h3>Plant 1</h3>
-                    <p>aaa</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4">
-            <div class="plant-card text-center">
-                <img src="/public/images/flower.jpg" alt="Plant 1" class="img-fluid mx-auto">
-                <div class="mt-3">
-                    <h3>Plant 1</h3>
-                    <p>aaa</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4">
-            <div class="plant-card text-center">
-                <img src="/public/images/flower.jpg" alt="Plant 1" class="img-fluid mx-auto">
-                <div class="mt-3">
-                    <h3>Plant 1</h3>
-                    <p>aaa</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<iframe id="content-iframe" src="/main" frameborder="0" width="100%" height="100%" style="border: none"></iframe>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

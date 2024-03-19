@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Plant = require('./models/Plant');
-
-const app = express();
+const ChatRecord=require('./models/chatRecord');
+var app = express();
 app.use(express.json());
 
 // MongoDB connection string
@@ -14,20 +14,20 @@ mongoose.connect(uri)
 
 // 设置回调
 mongoose.connection.on("open", () => {
-    // 设置连接成功的回调
+    // call back of connect success
     console.log("MongoDb connect success");
 });
 mongoose.connection.on("error", () => {
-    // 设置连接错误的回调
+    // call back of error
     console.log("MongoDb connect fail");
 });
 mongoose.connection.on("close", () => {
-    // 设置连接关闭的回调
+    // call back of db close
     console.log("MongoDb connection is closed");
 });
 
 
-router.post('/plants', async (req, res) => {
+router.post('/addPlants', async (req, res) => {
     try {
         const { nickname, plant } = req.body;
         const newPlant = new Plant({ nickname, plant });
@@ -39,10 +39,10 @@ router.post('/plants', async (req, res) => {
 });
 
 
-router.get('/plants/:nickname', async (req, res) => {
+router.get('/getPlants/:id', async (req, res) => {
     try {
         const { nickname } = req.params;
-        const plantInfo = await Plant.findOne({ nickname });
+        const plantInfo = await Plant.findOne({ id });
         if (plantInfo) {
             res.status(200).json(plantInfo);
         } else {
@@ -53,6 +53,15 @@ router.get('/plants/:nickname', async (req, res) => {
     }
 });
 
+
+router.get('/getAllPlants', async (req, res) => {
+    try {
+        const plants = await Plant.find({});
+        res.status(200).json(plants);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
 
 // Export the router
 module.exports = router;

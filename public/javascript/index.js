@@ -1,13 +1,36 @@
+var storage = {
+    set: function(key, value) {
+        window.localStorage.setItem(key, value);
+    },
+    get: function(key) {
+        return window.localStorage.getItem(key);
+    },
+    remove: function(key) {
+        window.localStorage.removeItem(key);
+    },
+    clear: function() {
+        window.localStorage.clear();
+    }
+};
+
+
 $(document).ready(function(){
+    if(storage.get("lastURL")!=null){
+        $('#content-iframe').attr('src', storage.get("lastURL"));
+    }
+
     // listen .nav-link event
     $('.nav-link').click(function(e){
         // stop default page skip
         e.preventDefault();
 
-        // 获取被点击链接的href属性
+        // get link
         var href = $(this).attr('href');
 
-        // 更新iframe的src属性为链接的href
+        // update iframe src to the link
         $('#content-iframe').attr('src', href);
+
+        //add the url to the record
+        storage.set("lastURL",href);
     });
 });

@@ -10,6 +10,7 @@ router.get('/upload',function (req, res){
 })
 
 router.get('/main',function (req, res){
+  
   res.render('main',{ title: 'Main' })
 })
 router.get('/about',function (req, res){

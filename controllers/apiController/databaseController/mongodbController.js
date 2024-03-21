@@ -3,8 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Plant = require('./models/Plant');
 const ChatRecord=require('./models/chatRecord');
-var app = express();
-app.use(express.json());
+// var app = express();
+// app.use(express.json());
 
 // MongoDB connection string
 const uri = "mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/web04?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
@@ -88,5 +88,5 @@ async function getChatRecord(plantId){
 }
 
 // Export the function
-module.exports = { addPlant, getPlant, getAllPlants,addChatRecord};
+module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord};
 

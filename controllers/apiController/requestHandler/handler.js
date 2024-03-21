@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
-var app = express();
-app.use(express.json());
 const mongoApi=require("../databaseController/mongodbController");
-const {response} = require("express");
 
 router.post("/addPlants",function (req,res,next){
-    const { description, details, datetime, location, flowers, sunExposure, flowerColor, name, status, nickname } = req.body;
     console.log("get plant add request:");
-    console.log(req.body.location);
-    console.log(nickname);
-
+    console.log(req.body);
+    console.log(req.body.nickname);
+    res.json(req.body);
 })
 
 router.get("/getPlants/:id",function (req,res,next){

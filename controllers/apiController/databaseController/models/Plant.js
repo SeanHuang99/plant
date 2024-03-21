@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const ChatSchema = new mongoose.Schema({
-    id:{
+const PlantSchema = new mongoose.Schema({
+    plantId:{
         type: String,
         unique: true,
         required: true,
@@ -10,10 +10,10 @@ const ChatSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    content: {
+    plant: {
         type: String,
         required: true,
     }
 });
 
-module.exports = mongoose.model('ChatRecord', ChatSchema);
+module.exports = mongoose.model('Plants', PlantSchema);

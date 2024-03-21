@@ -9,8 +9,8 @@ const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var mongodbController = require('./routes/apiController/databases/mongodbController');
-var requestHandler=require("./routes/apiController/requestHandler/handler");
+// var mongodbController = require('./controllers/apiController/databaseController/mongodbController');
+var requestHandler=require("./controllers/apiController/requestHandler/handler");
 
 
 var app = express();
@@ -31,7 +31,7 @@ app.use('/public/', express.static(path
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/mongodb',mongodbController);
+// app.use('/mongodb',mongodbController);
 app.use('/requestHandler',requestHandler);
 
 

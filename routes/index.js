@@ -21,4 +21,10 @@ router.get('/detail/:plantId',function (req, res){
   console.log(plantId)
   res.render('detail')
 })
+
+/* GET home page. */
+router.get('/testPage', function (req, res, next) {
+  res.render('testFormUpload', {title: 'Express'});
+});
+
 module.exports = router;

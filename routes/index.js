@@ -17,10 +17,8 @@ router.get('/about',function (req, res){
   res.render('about')
 })
 router.get('/detail/:plantId',function (req, res){
-
   const { plantId } = req.params;
   console.log(plantId)
-
 
   res.render('detail')
 })

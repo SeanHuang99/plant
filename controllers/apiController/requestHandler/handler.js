@@ -52,7 +52,7 @@ router.get("/getPlants/:id",function (req,res,next){
         .then(function(response){
             if(response.type==='success'){
                 plant=response.content;
-                res.status(200).json(plant);
+                res.json(plant);
             }
         })
         .catch(function(error){
@@ -63,7 +63,17 @@ router.get("/getPlants/:id",function (req,res,next){
 })
 
 router.get("/getAllPlants",function (req,res,next){
-
+    mongoApi.getPlant(plantId)
+        .then(function(response){
+            if(response.type==='success'){
+                plant=response.content;
+                res.status(200).json(plant);
+            }
+        })
+        .catch(function(error){
+            console.log("error: "+error.message);
+            res.status(500).send(error.message);
+        })
 })
 
 

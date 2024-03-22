@@ -20,6 +20,8 @@ router.get('/detail/:plantId',function (req, res){
 
   const { plantId } = req.params;
   console.log(plantId)
+
+
   res.render('detail')
 })
 

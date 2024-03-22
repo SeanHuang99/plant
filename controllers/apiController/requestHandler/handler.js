@@ -47,8 +47,9 @@ router.post("/addPlants",upload.single('photo'),function (req,res,next){
 })
 
 router.get("/getPlants/:id",function (req,res,next){
-    const { plantId } = req.params;
-    mongoApi.getPlant(plantId)
+    const { id } = req.params;
+    console.log(id)
+    mongoApi.getPlant(id)
         .then(function(response){
             if(response.type==='success'){
                 plant=response.content;
@@ -57,7 +58,7 @@ router.get("/getPlants/:id",function (req,res,next){
         })
         .catch(function(error){
             console.log("error: "+error.message);
-            res.status(500).send(error.message);
+            res.status(500).json(error.message);
         })
 
 })

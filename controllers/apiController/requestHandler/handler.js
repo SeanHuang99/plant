@@ -38,7 +38,7 @@ router.get('/test',function (req, res, next){
 
 
 router.post('/add', function (req, res, next) {
-    // console.log("test add"+req.body);
+    console.log(req.body);
     let firstNo = req.body.firstNumber;
     let secondNo = req.body.secondNumber;
     console.log(firstNo);

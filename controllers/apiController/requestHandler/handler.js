@@ -1,12 +1,49 @@
 const express = require('express');
 const router = express.Router();
+const multer  = require('multer');
 const mongoApi=require("../databaseController/mongodbController");
 
-router.post("/addPlants",function (req,res,next){
-    console.log("get plant add request:");
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'public/images/plantImages'); //确保这个目录已经存在
+    },
+    filename: function(req, file, cb) {
+        var origin=file.originalname;
+        var fileExtention=origin.split(".")
+        var fileName=Date.now()+"-"+origin;
+        cb(null, fileName); // 使用原始文件名
+    }
+});
+
+const upload = multer({ storage: storage });
+
+router.post("/addPlants",upload.single('photo'),function (req,res,next){
+    console.log("add plant post request:");
     console.log(req.body);
-    console.log(req.body.nickname);
-    res.json(req.body);
+    let nickname=req.body.nickname;
+    let filePath=req.file.path;
+    let description=req.body.description;
+    let details=req.body.details;
+    let datetime=req.body.datetime;
+    let location=req.body.location;
+    let flowers=req.body.flowers;
+    let sunExpose=req.body.sunExposure;
+    let flowerColor=req.body.flowerColor;
+    let plantName=req.body.name;
+    let status=req.body.status;
+
+    let plantId;
+    mongoApi.addPlant(plantName,description,details,datetime,location,flowers,sunExpose,flowerColor,status,nickname,filePath)
+        .then(function(response){
+            if(response.type==='success'){
+                plantId=response.content;
+                res.redirect(`/detail/${plantId}`);
+            }
+        })
+        .catch(function(error){
+            console.log("error: "+error.message);
+
+        })
 })
 
 router.get("/getPlants/:id",function (req,res,next){

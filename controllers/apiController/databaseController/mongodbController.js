@@ -12,7 +12,7 @@ const uri = "mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos
 // Connect to MongoDB using Mongoose
 mongoose.connect(uri)
 
-// 设置回调
+// callback
 mongoose.connection.on("open", () => {
     // call back of connect success
     console.log("MongoDb connect success");
@@ -27,13 +27,36 @@ mongoose.connection.on("close", () => {
 });
 
 
-async function addPlant(nickname,plant)
+async function addPlant(plantName,
+                        description,
+                        details,
+                        datetime,
+                        location,
+                        flowers,
+                        sunExposure,
+                        flowerColor,
+                        status,
+                        nickName,
+                        photoPath)
 {
     const now = new Date();
-    const plantId = `${plant}${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+    const plantId = `${plantName}${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
     var response;
     try {
-        const newPlant = new Plant({plantId, nickname, plant});
+        const newPlant = new Plant({
+            plantId,
+            plantName,
+            description,
+            details,
+            datetime,
+            location,
+            flowers,
+            sunExposure,
+            flowerColor,
+            status,
+            nickName,
+            photoPath
+        });
         await newPlant.save();
         response={'type':'success','content':plantId};
     } catch (error) {
@@ -70,10 +93,10 @@ async function getAllPlants(){
     return response;
 }
 
-async function addChatRecord(plantId,nickname,content){
+async function addChatRecord(plantId,nickName,content){
     var response;
     try {
-        const chatRecord = new ChatRecord({plantId,nickname,content});
+        const chatRecord = new ChatRecord({plantId,nickName,content});
         await chatRecord.save();
         response={'type':'success','content':''};
     } catch (error) {

@@ -6,7 +6,7 @@ const ChatSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
-    nickname: {
+    nickName: {
         type: String,
         required: true,
     },

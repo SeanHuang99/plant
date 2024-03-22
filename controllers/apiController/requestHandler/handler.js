@@ -64,7 +64,7 @@ router.get("/getPlants/:id",function (req,res,next){
 })
 
 router.get("/getAllPlants",function (req,res,next){
-    mongoApi.getPlant(plantId)
+    mongoApi.getAllPlants()
         .then(function(response){
             if(response.type==='success'){
                 plant=response.content;

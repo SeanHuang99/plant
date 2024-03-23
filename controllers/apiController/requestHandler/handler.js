@@ -48,7 +48,6 @@ router.post("/addPlants",upload.single('photo'),function (req,res,next){
 
 router.get("/getPlants/:id",function (req,res,next){
     const { id } = req.params;
-    console.log(id)
     mongoApi.getPlant(id)
         .then(function(response){
             if(response.type==='success'){
@@ -77,10 +76,26 @@ router.get("/getAllPlants",function (req,res,next){
         })
 })
 
+router.get("/getChatRecordById/:id",function (req,res,next){
+    const { id } = req.params;
+    mongoApi.getChatRecord(id)
+        .then(function(response){
+            if(response.type==='success'){
+                chatHistory=response.content;
+                res.status(200).json(chatHistory);
+            }
+        })
+        .catch(function(error){
+            console.log("error: "+error.message);
+            res.status(500).send(error.message);
+        })
+})
 
 /*
-just for test api
+------------------------------------------------------------------
+ following content just for test api
  */
+
 router.get('/test',function (req, res, next){
     console.log("add char message");
     mongoApi.addChatRecord("rosemary20240321031045","hello","team04")

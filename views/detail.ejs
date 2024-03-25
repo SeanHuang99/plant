@@ -12,9 +12,38 @@
       justify-content: center;
       margin-top: 20px; /* 调整按钮与内容的距离 */
     }
+    .custom-bg-color {
+      background-color: #bedee7; /* 自定义颜色 */
+    }
+    nav button{
+      background-color: #00B7FF;
+    }
+
   </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light custom-bg-color ">
+  <div class="container">
+    <!-- 返回主页的按钮 -->
+      <a class="navbar-brand btn btn-primary" href="/"><-Home</a>
+
+    <!-- 响应式导航栏切换按钮 -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- 导航链接列表 -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Username</a>
+        </li>
+        <!-- 添加更多导航链接... -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
 
 <div class="container">
   <h1>Plant Details</h1>
@@ -34,7 +63,7 @@
   <div class="btn-container">
     <!-- 按钮1 -->
 <!--    <button type="button" class="btn btn-primary mr-2">Back</button>-->
-    <a href="/" class="btn btn-primary mr-2">Back to Home</a>
+    <a href="/" class="btn btn-primary mr-2 nav-link">Back to Home</a>
     <!-- 按钮2 -->
     <button type="button" class="btn btn-danger ml-2">Edit</button>
   </div>

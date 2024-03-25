@@ -15,6 +15,7 @@ var storage = {
 
 
 $(document).ready(function(){
+    console.log(111)
     if(storage.get("lastURL")!=null){
         $('#content-iframe').attr('src', storage.get("lastURL"));
     }

@@ -105,10 +105,21 @@ async function addChatRecord(plantId,nickName,content){
     return response;
 }
 
-async function getChatRecord(plantId){
-
-    return 'get all chat record';
+async function getChatRecord(plantId) {
+    var response;
+    try {
+        const chatRecords = await ChatRecord.find({ plantId: plantId });
+        if (chatRecords.length > 0) {
+            response = {'type': 'success', 'content': chatRecords};
+        } else {
+            response = {'type': 'fail', 'content': 'No chat records found for this plant'};
+        }
+    } catch (error) {
+        response = {'type': 'fail', 'content': error.message};
+    }
+    return response;
 }
+
 
 
 

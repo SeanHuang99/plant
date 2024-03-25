@@ -1,26 +1,55 @@
 var express = require('express');
+const {getAllPlants, getPlant} = require("../controllers/apiController/databaseController/mongodbController");
+const {all} = require("express/lib/application");
+const fetch = require("node-fetch");
+const axios = require("axios");
+
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  // res.render('index', { title: 'Express' });
+  res.redirect("/index.ejs")
 });
 router.get('/upload',function (req, res){
   res.render('upload',{ title: 'Plants' })
 })
 
-router.get('/main',function (req, res){
-  
-  res.render('main',{ title: 'Main' })
+router.get('/main',async function (req, res) {
+  // 直接调用数据库接口
+  //   const allPlants = await getAllPlants()
+  // console.log(allPlants)
+  // console.log('main page')
+  // res.render('main', {title: 'Main', plantList: allPlants.content})
+
+    // 使用axios请求
+  // axios.get("http://localhost:3000/getAllPlants")
+  //     .then(res=>{
+  //       console.log(res)
+  //       res.render('main', {title: 'Main', plantList: res.content})
+  //     })
+
+    // 使用fetch请求
+  fetch("http://localhost:3000/requestHandler/getAllPlants")
+      .then(response => {
+          //在解析之前，响应的主体内容是原始的未经处理的数据流
+          return response.json(); // 将响应主体解析为 JSON
+      })
+      .then(data=>{
+        res.render('main', {title: 'Main', plantList: data})
+      })
 })
 router.get('/about',function (req, res){
   res.render('about')
 })
-router.get('/detail/:plantId',function (req, res){
-  const { plantId } = req.params;
-  console.log(plantId)
-
-  res.render('detail')
+router.get('/detail/:plantId',async function (req, res) {
+    const {plantId} = req.params;
+    // console.log(plantId)
+    const response=await getPlant(plantId)
+    // console.log(response.type)
+    if (response.type==='success'){
+        res.render('detail',{plant:response.content})
+    }
 })
 
 /* GET home page. */

@@ -22,6 +22,7 @@ $(document).ready(function(){
 
     // listen .nav-link event
     $('.nav-link').click(function(e){
+        console.log(222)
         // stop default page skip
         e.preventDefault();
 

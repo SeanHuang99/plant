@@ -47,6 +47,7 @@ router.post("/addPlants",upload.single('photo'),function (req,res,next){
 })
 
 router.get("/getPlants/:id",function (req,res,next){
+    console.log('getPlants')
     const { id } = req.params;
     mongoApi.getPlant(id)
         .then(function(response){

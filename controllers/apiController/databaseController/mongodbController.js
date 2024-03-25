@@ -110,6 +110,8 @@ async function getChatRecord(plantId){
     return 'get all chat record';
 }
 
+
+
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord};
 

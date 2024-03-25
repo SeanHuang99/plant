@@ -37,7 +37,7 @@ router.post("/addPlants",upload.single('photo'),function (req,res,next){
         .then(function(response){
             if(response.type==='success'){
                 plantId=response.content;
-                res.redirect(`/detail/${plantId}`);
+                res.status(200).json(plantId);
             }
         })
         .catch(function(error){

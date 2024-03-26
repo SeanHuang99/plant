@@ -8,9 +8,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // res.render('index', { title: 'Express' });
-  res.redirect("/index.ejs")
+  res.render('index', { title: 'Express' });
 });
+
 router.get('/upload',function (req, res){
   res.render('upload',{ title: 'Plants' })
 })
@@ -52,9 +52,9 @@ router.get('/detail/:plantId',async function (req, res) {
     }
 })
 
-/* GET home page. */
+/* test page. */
 router.get('/testPage', function (req, res, next) {
-  res.render('testFormUpload', {title: 'Express'});
+  res.render('test', {title: 'Express',roomNo:"3gg4h20240322144734"});
 });
 
 module.exports = router;

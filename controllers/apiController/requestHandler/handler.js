@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const mongoApi=require("../databaseController/mongodbController");
 
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, 'public/images/plantImages'); //确保这个目录已经存在
@@ -32,6 +33,10 @@ router.post("/addPlants",upload.single('photo'),function (req,res,next){
     let plantName=req.body.name;
     let status=req.body.status;
 
+    //todo: pedia
+
+
+    //mongodb storage
     let plantId;
     mongoApi.addPlant(plantName,description,details,datetime,location,flowers,sunExpose,flowerColor,status,nickname,filePath)
         .then(function(response){

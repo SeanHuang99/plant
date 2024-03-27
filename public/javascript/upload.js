@@ -17,8 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json(); // Assuming the server responds with JSON
             })
             .then(data => {
-                // console.log("success: "+data);
-                top.location.href="/detail/"+data.Success;
+                // console.log("success data: "+data);
+                // console.log(data);
+                top.location.href="/detail/"+data;
                 // Implement your success callback logic here
                 // For example, you might want to redirect the user or display a success message
             })

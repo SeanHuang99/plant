@@ -44,10 +44,13 @@ router.post("/addPlants",upload.single('photo'),function (req,res,next){
                 plantId=response.content;
                 res.status(200).json(plantId);
             }
+            else{
+                res.status(504).send("cannot add plants");
+            }
         })
         .catch(function(error){
             console.log("error: "+error.message);
-
+            res.status(504).send(error.message);
         })
 })
 

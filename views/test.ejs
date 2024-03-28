@@ -56,6 +56,7 @@
 
         // called when someone joins the room. If it is someone else it notifies the joining of the room
         socket.on('joined', function (room, userId) {
+            getChatRecord(roomNo);
             if (userId === name) {
                 // it enters the chat
                 hideLoginInterface(room, userId);
@@ -125,6 +126,21 @@
         document.getElementById('chat_interface').style.display = 'block';
         document.getElementById('who_you_are').innerHTML= userId;
         document.getElementById('in_room').innerHTML= ' '+room;
+    }
+
+    function getChatRecord(roomNo){
+
+        fetch('/requestHandler/getChatRecordById/'+roomNo)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                for(eachRecord in data){
+                    writeOnHistory('<b>' + data[eachRecord].nickName + ':</b> ' + data[eachRecord].content);
+                }
+            })
+            .catch(error => {
+                console.error('发生错误：', error);
+            });
     }
 </script>
 </body>

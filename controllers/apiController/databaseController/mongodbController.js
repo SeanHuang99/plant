@@ -95,6 +95,7 @@ async function getAllPlants(){
 
 async function addChatRecord(plantId,nickName,content){
     var response;
+    const now = new Date();
     try {
         const chatRecord = new ChatRecord({plantId,nickName,content});
         await chatRecord.save();
@@ -108,7 +109,7 @@ async function addChatRecord(plantId,nickName,content){
 async function getChatRecord(plantId) {
     var response;
     try {
-        const chatRecords = await ChatRecord.find({ plantId: plantId });
+        const chatRecords = await ChatRecord.find({ plantId: plantId }).sort({ date: 1 });
         if (chatRecords.length > 0) {
             response = {'type': 'success', 'content': chatRecords};
         } else {

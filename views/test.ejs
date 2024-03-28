@@ -132,14 +132,18 @@
         fetch('/requestHandler/getChatRecordById/'+roomNo)
             .then(response => response.json())
             .then(data => {
-                // console.log(data);
                 for(eachRecord in data){
+                    console.log(data[eachRecord]);
                     writeOnHistory('<b>' + data[eachRecord].nickName + ':</b> ' + data[eachRecord].content);
                 }
             })
             .catch(error => {
                 console.error('发生错误：', error);
             });
+    }
+
+    function compareTime(arr){
+        arr.sort((a, b) => b.date.localeCompare(a.date) || b.time.localeCompare(a.time));
     }
 </script>
 </body>

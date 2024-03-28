@@ -56,7 +56,6 @@
 
         // called when someone joins the room. If it is someone else it notifies the joining of the room
         socket.on('joined', function (room, userId) {
-            getChatRecord(roomNo);
             if (userId === name) {
                 // it enters the chat
                 hideLoginInterface(room, userId);
@@ -64,6 +63,7 @@
                 // notifies that someone has joined the room
                 writeOnHistory('<b>'+userId+'</b>' + ' joined room ' + room);
             }
+            getChatRecord(roomNo);
         });
         // called when a message is received
         socket.on('chat', function (room, userId, chatText) {
@@ -129,7 +129,6 @@
     }
 
     function getChatRecord(roomNo){
-
         fetch('/requestHandler/getChatRecordById/'+roomNo)
             .then(response => response.json())
             .then(data => {

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const fetch = require('node-fetch');
+const querystring = require('querystring');
 const mongoApi=require("../databaseController/mongodbController");
 
 
@@ -18,38 +20,60 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/addPlants",upload.single('photo'),function (req,res,next){
-    console.log("add plant post request:");
-    console.log(req.body);
-    let nickname=req.body.nickname;
-    let filePath=req.file.path;
-    let description=req.body.description;
-    let details=req.body.details;
-    let datetime=req.body.datetime;
-    let location=req.body.location;
-    let flowers=req.body.flowers;
-    let sunExpose=req.body.sunExposure;
-    let flowerColor=req.body.flowerColor;
-    let plantName=req.body.name;
-    let status=req.body.status;
+router.post("/addPlants",upload.single('photo'),async function (req, res, next) {
+    // console.log("add plant post request:");
+    // console.log(req.body);
+    let nickname = req.body.nickname;
+    let filePath = req.file.path;
+    let description = req.body.description;
+    let details = req.body.details;
+    let datetime = req.body.datetime;
+    let location = req.body.location;
+    let flowers = req.body.flowers;
+    let sunExpose = req.body.sunExposure;
+    let flowerColor = req.body.flowerColor;
+    let plantName = req.body.name;
+    let status = req.body.status;
 
-    //todo: pedia
+    //todo: DBPedia url generation
+    const sparqlQuery = `
+        PREFIX dbo: <http://dbpedia.org/ontology/>
+        PREFIX dbpedia: <http://dbpedia.org/resource/>
+        
+        SELECT ?plant WHERE {
+          ?plant dbo:commonName dbpedia:"${plantName}"@en.
+          FILTER (lang(?description) = "en")
+          
+        }
+        LIMIT 1
+    `;
 
+    const encodedQuery = querystring.stringify({ query: sparqlQuery });
+    const dbpediaSparqlEndpoint = `http://dbpedia.org/sparql?${encodedQuery}&format=json`;
+
+    try {
+        const response = await fetch(dbpediaSparqlEndpoint, {headers: {Accept: 'application/json'}});
+        // const data = await response.json();
+        console.log(response);
+        const plantInfo = data.results.bindings.length > 0 ? data.results.bindings[0] : null;
+    }catch (error) {
+        console.error("Error during DBpedia SPARQL query:", error);
+        res.status(504).send(error.message);
+    }
 
     //mongodb storage
     let plantId;
-    mongoApi.addPlant(plantName,description,details,datetime,location,flowers,sunExpose,flowerColor,status,nickname,filePath)
-        .then(function(response){
-            if(response.type==='success'){
-                plantId=response.content;
+    mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, filePath)
+        .then(function (response) {
+            if (response.type === 'success') {
+                plantId = response.content;
                 res.status(200).json(plantId);
-            }
-            else{
+            } else {
                 res.status(504).send("cannot add plants");
             }
         })
-        .catch(function(error){
-            console.log("error: "+error.message);
+        .catch(function (error) {
+            console.log("error: " + error.message);
             res.status(504).send(error.message);
         })
 })

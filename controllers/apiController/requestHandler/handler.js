@@ -111,7 +111,7 @@ router.get("/getAllPlants",function (req,res,next){
 
 router.get("/getChatRecordById/:id",function (req,res,next){
     const { id } = req.params;
-    console.log('recieve chat record request: '+id);
+    console.log('receive chat record request: '+id);
     mongoApi.getChatRecord(id)
         .then(function(response){
             if(response.type==='success'){

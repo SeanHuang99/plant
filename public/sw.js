@@ -1,4 +1,4 @@
-importScripts('/public/javascript/idb-utility.js');
+importScripts('/javascript/idb-utility.js');
 
 
 // Use the install event to pre-cache all initial resources.
@@ -9,17 +9,24 @@ self.addEventListener('install', event => {
         console.log('Service Worker: Caching App Shell at the moment......');
         try {
             const cache = await caches.open("static");
-            cache.addAll([
+            await cache.addAll([
                 '/',
-                '/insert',
                 '/upload',
                 '/manifest.json',
-                '/public/javascript/insert.js',
-                '/public/javascript/index.js',
-                '/public/javascript/idb-utility.js',
-                '/public/stylesheet/style.css',
-                '/public/images/icon.webp',
-            ]);
+                '/javascript/add.js',
+                '/javascript/idb-utility.js',
+                '/javascript/index.js',
+                '/javascript/main.js',
+                '/javascript/upload.js',
+                '/stylesheets/style.css',
+                '/images/icon.webp',
+                '/html/main.html',
+                '/html/main.ejs'
+            ]).then(()=>{
+                console.log('addAll finish')
+            }).catch(err=>{
+                console.log(err)
+            });
             console.log('Service Worker: App Shell Cached');
         }
         catch{
@@ -60,49 +67,41 @@ self.addEventListener('fetch', event => {
 });
 
 
-//Sync event to sync the todos
+//Sync event to sync the plants
 self.addEventListener('sync', event => {
     console.log('prepare to sync')
-    if (event.tag === 'sync-todo') {
-        console.log('Service Worker: Syncing new Todos');
-        openSyncTodosIDB().then((syncPostDB) => {
-            getAllSyncTodos(syncPostDB).then((syncTodos) => {
-                //把sync-todo表的todo更新到todo表
-                //不应该在触发sync事件之后再更新，而是点击add之后立即更新
-                // openTodosIDB().then(todoIDB=>{
-                //     // syncNewTodosToIDB(todoIDB,syncTodos)
-                //     addNewTodosToIDB(todoIDB,syncTodos).then(()=>{
-                //             console.log('all todos in sync-todo synchronized to todos')
-                //         })
-                // })
-                for (const syncTodo of syncTodos) {
-                    console.log('Service Worker: Syncing new Todo: ', syncTodo);
-                    console.log(syncTodo.text)
+    if (event.tag === 'sync-plant') {
+        console.log('Service Worker: Syncing new Plants');
+        openSyncPlantsIDB().then((syncPostDB) => {
+            getAllSyncPlants(syncPostDB).then((syncPlants) => {
+                for (const syncPlant of syncPlants) {
+                    console.log('Service Worker: Syncing new Plant: ', syncPlant);
+                    console.log(syncPlant)
+                    //todo:封装一个addPlant(newPlant)方法， 添加plant到后端
                     // Create a FormData object
-                    const formData = new URLSearchParams();
-                    // const formData = new FormData();
+                    // const formData = new URLSearchParams();
 
                     // Iterate over the properties of the JSON object and append them to FormData
-                    formData.append("text", syncTodo.text);
-                    formData.append("todoId", syncTodo.todoId);
+                    // formData.append("text", syncPlant.text);
+                    // formData.append("plantId", syncPlant.plantId);
 
                     // Fetch with FormData instead of JSON
-                    fetch('http://localhost:3000/add-todo', {
+                    fetch('http://localhost:3000/addPlants', {
                         method: 'POST',
-                        body: formData,
+                        body: syncPlant,
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
                     }).then(() => {
-                        console.log('Service Worker: Syncing new Todo: ', syncTodo, ' done');
-                        deleteSyncTodoFromIDB(syncPostDB,syncTodo.todoId);
+                        console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
+                        deleteSyncPlantFromIDB(syncPostDB,syncPlant.plantId);
                         // Send a notification
-                        self.registration.showNotification('Todo Synced', {
-                            body: 'Todo synced successfully!',
+                        self.registration.showNotification('Plant Synced', {
+                            body: 'Plant synced successfully!',
                             icon: '/images/icon.webp'
                         });
                     }).catch((err) => {
-                        console.error('Service Worker: Syncing new Todo: ', syncTodo, ' failed');
+                        console.error('Service Worker: Syncing new Plant: ', syncPlant, ' failed');
                     });
                 }
             });

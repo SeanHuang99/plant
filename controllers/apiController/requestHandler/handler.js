@@ -23,6 +23,7 @@ const upload = multer({ storage: storage });
 router.post("/addPlants",upload.single('photo'),async function (req, res, next) {
     // console.log("add plant post request:");
     // console.log(req.body);
+    console.log('offline addPlant')
     let nickname = req.body.nickname;
     let filePath = req.file.path;
     let description = req.body.description;
@@ -66,8 +67,16 @@ router.post("/addPlants",upload.single('photo'),async function (req, res, next) 
     mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, filePath)
         .then(function (response) {
             if (response.type === 'success') {
-                plantId = response.content;
-                res.status(200).json(plantId);
+                // plantId = response.content;
+                let plant = response.content;
+                res.status(200).json(plant.plantId);
+                //同时添加到IndexDB
+                openPlantsIDB().then(db => {
+                    addNewPlantsToIDB(db, plant)
+                })
+                openSyncPlantsIDB().then(db=>{
+                    addNewPlantToSync(db,plant)
+                })
             } else {
                 res.status(504).send("cannot add plants");
             }

@@ -1,27 +1,29 @@
+// const fetch = require("node-fetch");
+// const {getAllPlants} = require("../../controllers/apiController/databaseController/mongodbController");
 var storage = {
-    set: function(key, value) {
+    set: function (key, value) {
         window.localStorage.setItem(key, value);
     },
-    get: function(key) {
+    get: function (key) {
         return window.localStorage.getItem(key);
     },
-    remove: function(key) {
+    remove: function (key) {
         window.localStorage.removeItem(key);
     },
-    clear: function() {
+    clear: function () {
         window.localStorage.clear();
     }
 };
 
 
-$(document).ready(function(){
+$(document).ready(function () {
     console.log(111)
-    if(storage.get("lastURL")!=null){
+    if (storage.get("lastURL") != null) {
         $('#content-iframe').attr('src', storage.get("lastURL"));
     }
 
     // listen .nav-link event
-    $('.nav-link').click(function(e){
+    $('.nav-link').click(function (e) {
         console.log(222)
         // stop default page skip
         e.preventDefault();
@@ -33,14 +35,14 @@ $(document).ready(function(){
         $('#content-iframe').attr('src', href);
 
         //add the url to the record
-        storage.set("lastURL",href);
+        storage.set("lastURL", href);
     });
 });
 
 // Register service worker to control making site work offline
 window.onload = function () {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js', {scope: '/public'})
+        navigator.serviceWorker.register('/sw.js', {scope: '/'})
             .then(function (reg) {
                 console.log('Service Worker Registered!', reg);
             })
@@ -65,7 +67,7 @@ window.onload = function () {
                 if (permission === "granted") {
                     navigator.serviceWorker.ready
                         .then(function (serviceWorkerRegistration) {
-                            serviceWorkerRegistration.showNotification("Todo App",
+                            serviceWorkerRegistration.showNotification("Plant App",
                                 {
                                     body: "Notifications are enabled!",
                                     icon: '/images/icon.webp'
@@ -81,64 +83,105 @@ window.onload = function () {
     } else
         console.log('no notification in window');
 
-    //todo:在把insertTodoInList()从addNewTodosToIDB()中剥离之后，主页就无法显示所有todo了
-    //函数执行顺序？回调返回值？
-    //为什么要剥离：insertTodoInList由于要通过getElementById获取index页面的标签，因此只能在index.ejs页面上执行（否则会报错说找不到函数）
-    //是否可以不剥离？我只要保证addNewTodosToIDB()只在index.ejs页面执行就好了
-    //已解决，可以不剥离
-    // if (navigator.onLine) {
-    //     fetch('http://localhost:3000/todos')
-    //         .then(function (res) {
-    //             console.log('fetch(http://localhost:3000/todos)')
-    //             return res.json();
-    //         }).then(function (newTodos) {
-    //         openTodosIDB().then((db) => {
-    //             insertTodoInList(db, newTodos)
-    //             getAllTodos(db).then(todos => {
-    //                 //如果是第一次连接（IDB没有数据：长度=0）
-    //                 if (todos.length === 0) {
-    //                     //添加所有todo
-    //                     addNewTodosToIDB(db, newTodos).then(() => {
-    //                         console.log("All new todos added to IDB")
-    //                     })
-    //                     // .then(()=>insertTodoInList(db,newTodos))
-    //                 }
-    //                 //如果不是，判断todo的长度是否相同
-    //                 else {//相同 则正确
-    //                     //否则重新添加
-    //                     if (todos.length !== newTodos.length) {
-    //                         deleteAllExistingTodosFromIDB(db).then(() => {
-    //                             console.log('deleteAllExistingTodosFromIDB')
-    //                             addNewTodosToIDB(db, newTodos).then(() => {
-    //                                 console.log("All new todos added to IDB")
-    //                             })
-    //                             // .then(()=>insertTodoInList(db,newTodos))
-    //                         });
-    //                     }
-    //                 }
-    //             })
-    //         });
-    //     });
-    //
-    // } else {
-    //     console.log("Offline mode")
-    //     openTodosIDB().then((db) => {
-    //         //先把已有的todo加入
-    //         getAllTodos(db).then((todos) => {
-    //             for (const todo of todos) {
-    //                 insertTodoInList(todo)
-    //             }
-    //         });
-    //         //再判断sync-todo中是否有未同步的todo
-    //         openSyncTodosIDB().then(syncDB => {
-    //             getAllSyncTodos(syncDB).then(syncTodos => {
-    //                 //如果有，加入todo表
-    //                 if (syncTodos.length !== 0) {
-    //                     console.log('syncTodos.length !== 0')
-    //                     addNewTodosToIDB(db, syncTodos)
-    //                 }
-    //             });
-    //         })
-    //     })
-    // }
+    if (navigator.onLine) {
+        //直接通过fetch请求能否成功返回来判断是否在线
+        fetch('http://localhost:3000/requestHandler/getAllPlants')
+            .then(function (res) {
+                //todo:能否通过请求是否成功，判断在线/离线？
+                console.log('fetch /getAllPlants')
+                console.log(res.type)
+                // if (res.type === 'success') {//在线
+                //     console.log('online')
+                // } else {//离线
+                //     console.log('offline')
+                // }
+                return res.json();
+            })
+        .then(function (newPlants) {
+        openPlantsIDB().then((db) => {
+            getAllPlants(db).then(plants => {
+                //如果是第一次连接（IDB没有数据：长度=0）
+                if (plants.length === 0) {
+                    //添加所有plant
+                    addNewPlantsToIDB(db, newPlants).then(() => {
+                        console.log("All new plants added to IDB")
+                    })
+                }
+                //如果不是，判断plant的长度是否相同
+                else {//相同 则正确
+                    //否则重新添加
+                    if (plants.length !== newPlants.length) {
+                        deleteAllExistingPlantsFromIDB(db).then(() => {
+                            console.log('deleteAllExistingPlantsFromIDB')
+                            addNewPlantsToIDB(db, newPlants).then(() => {
+                                console.log("All new plants added to IDB")
+                            })
+                        });
+                    }
+                }
+            })
+        });
+        return newPlants
+        })
+    } else {
+        console.log("Offline mode")
+        openPlantsIDB().then((db) => {
+            //直接从IDB获取所有plants（未同步的plant已在点击添加时加入IDB）
+            getAllPlants(db).then(allPlants => {
+                return allPlants
+            });
+        })
+    }
 }
+
+// async function loadAllPlants(){
+//     // if (navigator.onLine) {
+//     //直接通过fetch请求能否成功返回来判断是否在线
+//     fetch('http://localhost:3000/requestHandler/getAllPlants')
+//         .then(function (res) {
+//             console.log('fetch /getAllPlants')
+//             if (res.type==='success'){//在线
+//                 console.log('online')
+//             }else {//离线
+//                 console.log('offline')
+//             }
+//             return res.json();
+//         })
+//     // .then(function (newPlants) {
+//     // openPlantsIDB().then((db) => {
+//     //     getAllPlants(db).then(plants => {
+//     //         //如果是第一次连接（IDB没有数据：长度=0）
+//     //         if (plants.length === 0) {
+//     //             //添加所有plant
+//     //             addNewPlantsToIDB(db, newPlants).then(() => {
+//     //                 console.log("All new plants added to IDB")
+//     //             })
+//     //         }
+//     //         //如果不是，判断plant的长度是否相同
+//     //         else {//相同 则正确
+//     //             //否则重新添加
+//     //             if (plants.length !== newPlants.length) {
+//     //                 deleteAllExistingPlantsFromIDB(db).then(() => {
+//     //                     console.log('deleteAllExistingPlantsFromIDB')
+//     //                     addNewPlantsToIDB(db, newPlants).then(() => {
+//     //                         console.log("All new plants added to IDB")
+//     //                     })
+//     //                 });
+//     //             }
+//     //         }
+//     //     })
+//     // });
+//     // return newPlants
+//     // })
+//     // }
+//     // else {
+//     console.log("Offline mode")
+//     openPlantsIDB().then((db) => {
+//         //直接从IDB获取所有plants（未同步的plant已在点击添加时加入IDB）
+//         getAllPlants(db).then(allPlants => {
+//             return allPlants
+//         });
+//     })
+//     // }
+// }
+// module.exports={loadAllPlants}

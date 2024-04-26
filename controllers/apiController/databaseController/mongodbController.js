@@ -62,7 +62,8 @@ async function addPlant(plantName,
             photoPath
         });
         await newPlant.save();
-        response={'type':'success','content':plantId};
+        // response={'type':'success','content':plantId};
+        response={'type':'success','content':newPlant};
     } catch (error) {
         response={'type':'fail','content':error.message};
     }

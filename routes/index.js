@@ -9,27 +9,27 @@ const axios = require("axios");
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index', {title: 'Express'});
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
 });
 
-router.get('/upload', function (req, res) {
-    res.render('upload', {title: 'Plants'})
+router.get('/upload',function (req, res){
+  res.render('upload',{ title: 'Plants' })
 })
 
-router.get('/main', async function (req, res) {
-    // 直接调用数据库接口
-    //   const allPlants = await getAllPlants()
-    // console.log(allPlants)
-    // console.log('main page')
-    // res.render('main', {title: 'Main', plantList: allPlants.content})
+router.get('/main',async function (req, res) {
+  // 直接调用数据库接口
+  //   const allPlants = await getAllPlants()
+  // console.log(allPlants)
+  // console.log('main page')
+  // res.render('main', {title: 'Main', plantList: allPlants.content})
 
     // 使用axios请求
-    // axios.get("http://localhost:3000/getAllPlants")
-    //     .then(res=>{
-    //       console.log(res)
-    //       res.render('main', {title: 'Main', plantList: res.content})
-    //     })
+  // axios.get("http://localhost:3000/getAllPlants")
+  //     .then(res=>{
+  //       console.log(res)
+  //       res.render('main', {title: 'Main', plantList: res.content})
+  //     })
 
     // 使用fetch请求
     fetch("http://localhost:3000/requestHandler/getAllPlants")
@@ -63,5 +63,3 @@ router.get('/testPage', function (req, res, next) {
 });
 
 module.exports = router;
-
-

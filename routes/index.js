@@ -48,6 +48,7 @@ router.get('/detail/:plantId',async function (req, res) {
     const response=await getPlant(plantId)
     // console.log(response.type)
     if (response.type==='success'){
+        console.log(response.content)
         res.render('detail',{plant:response.content})
     }
 })

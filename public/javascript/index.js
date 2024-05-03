@@ -17,10 +17,10 @@ var storage = {
 
 
 $(document).ready(function () {
-    console.log(111)
-    if (storage.get("lastURL") != null) {
-        $('#content-iframe').attr('src', storage.get("lastURL"));
-    }
+    // console.log(111)
+    // if (storage.get("lastURL") != null) {
+    //     $('#content-iframe').attr('src', storage.get("lastURL"));
+    // }
 
     // listen .nav-link event
     $('.nav-link').click(function (e) {

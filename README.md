@@ -17,7 +17,7 @@
 
         const mongoose = require('mongoose');
         
-        // 你的 MongoDB Atlas 连接字符串
+        // your MongoDB Atlas connection string
         const uri = 'mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000';
         
         mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })

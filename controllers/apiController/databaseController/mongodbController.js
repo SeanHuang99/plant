@@ -126,9 +126,18 @@ async function getChatRecord(plantId) {
     return response;
 }
 
-
+async function getAllChatRecord(){
+    var response;
+    try {
+        const allChat = await ChatRecord.find({});
+        response={'type':'success','content':allChat};
+    } catch (error) {
+        response={'type':'fail','content':error.message};
+    }
+    return response;
+}
 
 
 // Export the function
-module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord};
+module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord,getAllChatRecord};
 

@@ -21,7 +21,6 @@ self.addEventListener('install', event => {
                 '/stylesheets/style.css',
                 '/images/icon.webp',
                 '/html/main.html',
-                '/html/main.ejs'
             ]).then(()=>{
                 console.log('addAll finish')
             }).catch(err=>{

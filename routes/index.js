@@ -10,14 +10,17 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    console.log('aaa')
   res.render('index', { title: 'Express' });
 });
 
 router.get('/upload',function (req, res){
+    console.log('/upload')
   res.render('upload',{ title: 'Plants' })
 })
 
 router.get('/main',async function (req, res) {
+    console.log('/main')
   // 直接调用数据库接口
   //   const allPlants = await getAllPlants()
   // console.log(allPlants)
@@ -38,6 +41,7 @@ router.get('/main',async function (req, res) {
             return response.json(); // 将响应主体解析为 JSON
         })
         .then(data => {
+            // console.log(data)
             res.render('main', {title: 'Main', plantList: data})
         })
     // loadAllPlants().then(allPlants=>{
@@ -45,9 +49,11 @@ router.get('/main',async function (req, res) {
     // })
 })
 router.get('/about', function (req, res) {
+    console.log('/about')
     res.render('about')
 })
 router.get('/detail/:plantId', async function (req, res) {
+    console.log('/detail')
     const {plantId} = req.params;
     // console.log(plantId)
     const response = await getPlant(plantId)

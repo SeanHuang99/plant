@@ -128,6 +128,28 @@ const getAllSyncPlants = (syncPlantIDB) => {
     });
 }
 
+//call when jump into detail page(online and offline)
+const getDetailById = (IDB, id) => {
+    // 返回一个 Promise 对象，以便在调用该函数的地方能够使用 then() 方法获取结果
+    return new Promise((resolve, reject) => {
+        // 调用 getAllPlants 函数获取所有植物数据
+        getAllPlants(IDB).then(plants => {
+            // 根据 ID 查找对应的植物
+            const foundPlant = plants.find(plant => plant.plantId === id);
+            // 如果找到了对应的植物，则将其传递给 resolve 函数
+            if (foundPlant) {
+                resolve(foundPlant);
+            } else {
+                // 如果未找到对应的植物，则返回一个错误信息
+                reject(new Error(`Plant with ID ${id} not found`));
+            }
+        }).catch(error => {
+            // 如果在获取植物数据的过程中出现了错误，则将错误传递给 reject 函数
+            reject(error);
+        });
+    });
+};
+
 // Function to delete a syn
 const deleteSyncPlantFromIDB = (syncPlantIDB, id) => {
     const transaction = syncPlantIDB.transaction(["sync-plants"], "readwrite")

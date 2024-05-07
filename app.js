@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
+// const { Loader } = require("@googlemaps/js-api-loader");
+// import { Loader } from "@googlemaps/js-api-loader"
 
 
 var indexRouter = require('./routes/index');
@@ -32,6 +34,18 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 // app.use('/mongodb',mongodbController);
 app.use('/requestHandler',requestHandler);
+
+// app.get('/', function (req, res) {
+//   console.log('__dirname: '+__dirname)
+//   res.sendFile( __dirname + "/public/html/" + "mapTest.html" );
+//   // res.render("EJS-test" );
+// });// 显示html页面
+// var server = app.listen(3001, function () {
+//   var host = server.address().address;
+//   var port = server.address().port;
+//   //  服务器IP地址为127.0.0.1 端口为8888
+//   console.log( "server is running"+host+port);
+// });
 
 
 // catch 404 and forward to error handler

@@ -52,15 +52,16 @@ router.get('/about', function (req, res) {
     console.log('/about')
     res.render('about')
 })
-router.get('/detail/:plantId', async function (req, res) {
-    console.log('/detail')
-    const {plantId} = req.params;
+router.get('/detail', async function (req, res) {
+    // console.log('/detail')
+    // const {plantId} = req.params;
+    // const plantId = req.query.plantId;
     // console.log(plantId)
-    const response = await getPlant(plantId)
-    // console.log(response.type)
-    if (response.type === 'success') {
-        res.render('detail', {plant: response.content})
-    }
+    // const response = await getPlant(plantId)
+    // if (response.type === 'success') {
+    //     res.render('detail', {plant: response.content})
+    // }
+     res.render('detail')
 })
 
 /* test page. */
@@ -68,4 +69,10 @@ router.get('/testPage', function (req, res, next) {
     res.render('test', {title: 'Express', roomNo: "3gg4h20240322144734"});
 });
 
+router.get('/EJS-test',function (req, res) {
+    res.render('EJS-test')
+})
+router.get('/mapTest',function (req, res) {
+    res.render('mapTest')
+})
 module.exports = router;

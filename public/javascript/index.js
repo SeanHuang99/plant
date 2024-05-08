@@ -21,7 +21,9 @@ $(document).ready(function () {
     // if (storage.get("lastURL") != null) {
     //     $('#content-iframe').attr('src', storage.get("lastURL"));
     // }
-
+    if (getNickName()===null){
+        console.log(1111111)
+    }
     // listen .nav-link event
     $('.nav-link').click(function (e) {
         console.log(222)
@@ -41,6 +43,7 @@ $(document).ready(function () {
 
 // Register service worker to control making site work offline
 window.onload = function () {
+    showWelcomeOrIndex();
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', {scope: '/'})
             .then(function (reg) {
@@ -82,4 +85,43 @@ window.onload = function () {
             console.log('permission denied')
     } else
         console.log('no notification in window');
+}
+
+// function handleNickname() {
+//     var nickname = document.getElementById('nickname').value;
+//     console.log("Nickname entered:", nickname);
+//     setNickName(nickname);
+//     console.log("Nickname from storage:", getNickName());
+//     location.href="/";
+// }
+function handleNickname() {
+    var nicknameInput = document.getElementById('nickname');
+    var errorMessage = document.getElementById('error-message');
+    var nickname = nicknameInput.value.trim();
+
+    if (nickname === "") {
+        // Show error message if nickname is empty
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = "Please enter a nickname."; // Update the text content of the error message
+    } else {
+        // Hide the error message if it was previously displayed
+        setNickName(nickname);
+        errorMessage.style.display = 'none';
+        console.log("Nickname entered:", nickname);
+        showWelcomeOrIndex();
+        // Continue with any additional logic such as AJAX requests, local storage, etc.
+    }
+}
+
+function showWelcomeOrIndex(){
+    var welcomePage = document.getElementById('welcomePage');
+    var indexPage = document.getElementById('indexPage');
+    if(getNickName()===null){
+        welcomePage.style.display = 'block';
+        indexPage.style.display='none';
+    }
+    else{
+        welcomePage.style.display = 'none';
+        indexPage.style.display='block';
+    }
 }

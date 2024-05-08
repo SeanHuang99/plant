@@ -1,5 +1,5 @@
 var express = require('express');
-const {getAllPlants, getPlant} = require("../controllers/apiController/databaseController/mongodbController");
+const {getAllPlants, getPlant} = require("../controllers/databaseController/mongodbController");
 const {all} = require("express/lib/application");
 const fetch = require("node-fetch");
 const axios = require("axios");
@@ -10,7 +10,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log('aaa')
+    // console.log('aaa')
   res.render('index', { title: 'Express' });
 });
 

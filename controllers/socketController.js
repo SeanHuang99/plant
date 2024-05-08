@@ -1,4 +1,4 @@
-const mongoApi=require("./apiController/databaseController/mongodbController");
+const mongoApi=require("./databaseController/mongodbController");
 exports.init = function(io) {
     io.sockets.on('connection', function (socket) {
         console.log("socket connected");

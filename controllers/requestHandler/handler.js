@@ -134,13 +134,26 @@ router.get("/getChatRecordById/:id",function (req,res,next){
         })
 })
 
+router.get("/getAllChatRecord",function (req,res,next){
+    mongoApi.getAllChatRecord()
+        .then(function(response){
+            if(response.type==='success'){
+                chat=response.content;
+                res.status(200).json(chat);
+            }
+        })
+        .catch(function(error){
+            console.log("error: "+error.message);
+            res.status(500).send(error.message);
+        })
+})
 /*
 ------------------------------------------------------------------
  following content just for test api
  */
 
 router.get('/test',function (req, res, next){
-    console.log("add char message");
+    console.log("add chat message");
     mongoApi.addChatRecord("rosemary20240321031045","hello","team04")
         .then(
             function(response){
@@ -152,16 +165,6 @@ router.get('/test',function (req, res, next){
             error => console.error(error)
         );
     return {'type':'success'};
-});
-
-
-router.post('/add', function (req, res, next) {
-    console.log(req.body);
-    let firstNo = req.body.firstNumber;
-    let secondNo = req.body.secondNumber;
-    console.log(firstNo);
-    console.log(secondNo);
-    res.json(req.body);
 });
 
 module.exports = router;

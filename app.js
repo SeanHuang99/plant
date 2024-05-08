@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 // var mongodbController = require('./controllers/apiController/databaseController/mongodbController');
-var requestHandler=require("./controllers/apiController/requestHandler/handler");
+var requestHandler=require("./controllers/requestHandler/handler");
 
 
 var app = express();

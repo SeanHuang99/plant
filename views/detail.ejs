@@ -11,43 +11,197 @@
   <script src="/javascript/detail.js"></script>
 
   <style>
-    .btn-container {
+    body {
       display: flex;
-      justify-content: center;
-      margin-top: 20px; /* 调整按钮与内容的距离 */
-    }
-    .custom-bg-color {
-      background-color: #bedee7; /* 自定义颜色 */
-    }
-    nav button{
-      background-color: #00B7FF;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
     }
 
+    .navbar, .btn-container {
+      flex: 0 0 auto;
+    }
+
+    .container {
+      flex: 1 1 auto;
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .resizable {
+      display: flex;
+      height: 100%;
+    }
+
+    .panel {
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    #plant-details {
+      width: 70%;
+      background-color: #f9f9f9;
+    }
+
+    #chat {
+      width: 30%;
+      background-color: #e9e9e9;
+    }
+
+    .resizer {
+      width: 5px;
+      background-color: #cccccc;
+      cursor: col-resize;
+      flex-shrink: 0;
+    }
   </style>
 </head>
-<body>
+<body onload="init()">
+<nav class="navbar navbar-expand-lg navbar-light custom-bg-color">
+  <div class="container">
+    <a class="navbar-brand btn btn-primary" href="/"><- Home</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="#">Username</a></li>
+    </ul>
+  </div>
+</nav>
 
 <div class="container">
-  <h1>Plant Details</h1>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Plant Name: <%=plant.plantName%></h5>
-      <p class="card-text">Description: <%=plant.description%></p>
-      <p class="card-text">Details: <%=plant.details%></p>
-      <p class="card-text">Date/Time: <%=plant.datetime%></p>
-      <p class="card-text">User Nickname: <%=plant.nickName%></p>
-      <p class="card-text">Location: <%=plant.location%></p>
-      <p class="card-text">Plant Characteristics: Flowers: Yes, Leaves: Yes, Fruits/Seeds: No, Sun Exposure: Full Sun, Flower Color: Yellow</p>
-      <!-- 这里可以添加其他信息 -->
-      <p class="card-text">Images:...</p>
+  <div class="resizable">
+    <!-- Plant Details Panel -->
+    <div id="plant-details" class="panel">
+      <h1>Plant Details</h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Plant Name: <%= plant.plantName %></h5>
+          <p class="card-text">Description: <%= plant.description %></p>
+          <p class="card-text">Details: <%= plant.details %></p>
+          <p class="card-text">Date/Time: <%= plant.datetime %></p>
+          <p class="card-text">User Nickname: <%= plant.nickName %></p>
+          <p class="card-text">Location: <%= plant.location %></p>
+          <p class="card-text">Plant Characteristics: Flowers: Yes, Leaves: Yes, Fruits/Seeds: No, Sun Exposure: Full Sun, Flower Color: Yellow</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resizer Separator -->
+    <div class="resizer"></div>
+
+    <!-- Chat Panel -->
+    <div id="chat" class="panel">
+      <h1>Chat</h1>
+      <div id="chat_interface" class="card">
+        <div class="card-body">
+          <p id="who_you_are">You are in room: <%= plant.plantId %></p>
+          <div id="history" class="boxed"></div>
+          <div class="input bottom boxed">
+            <form onsubmit="return false;">
+              <p>
+                <label for="name">Chat:</label>
+                <input type="text" id="chat_input" name="chat_input" style="width: 80%;">
+                <button id="chat_send" class="btn btn-primary ml-2" onclick="sendChatText()">Send</button>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="btn-container">
-    <button type="button" class="btn btn-danger ml-2">Edit</button>
-  </div>
-
 </div>
 
+<div class="btn-container mt-4">
+  <a href="/" class="btn btn-primary mr-2">Back to Home</a>
+  <button type="button" class="btn btn-danger ml-2">Edit</button>
+</div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+  // Initialize socket.io connection and setup events
+  let name = 'hsc';
+  let roomNo = "<%= plant.plantId %>";
+  let socket = io();
+
+  function init() {
+    socket.on('joined', function (room, userId) {
+      if (userId === name) {
+        document.getElementById('who_you_are').innerHTML = userId + ', you are in room: ' + room;
+      } else {
+        writeOnHistory('<b>' + userId + '</b> joined room ' + room);
+      }
+      getChatRecord(room);
+    });
+
+    socket.on('chat', function (room, userId, chatText) {
+      let who = userId === name ? 'Me' : userId;
+      writeOnHistory('<b>' + who + ':</b> ' + chatText);
+    });
+
+    connectToRoom();
+    enableResizer(); // Enable resizable panel feature
+  }
+
+  function sendChatText() {
+    let chatText = document.getElementById('chat_input').value;
+    if (!chatText.trim()) return;
+    socket.emit('chat', roomNo, name, chatText);
+    document.getElementById('chat_input').value = '';
+  }
+
+  function writeOnHistory(text) {
+    let history = document.getElementById('history');
+    let paragraph = document.createElement('p');
+    paragraph.innerHTML = text;
+    history.appendChild(paragraph);
+  }
+
+  function getChatRecord(roomNo) {
+    fetch('/requestHandler/getChatRecordById/' + roomNo)
+            .then(response => response.json())
+            .then(data => {
+              for (let eachRecord of data) {
+                writeOnHistory('<b>' + eachRecord.nickName + ':</b> ' + eachRecord.content);
+              }
+            })
+            .catch(error => {
+              console.error('Error occurred:', error);
+            });
+  }
+
+  function connectToRoom() {
+    socket.emit('create or join', roomNo, name);
+  }
+
+  // Enable the resizable feature
+  function enableResizer() {
+    const resizer = document.querySelector('.resizer');
+    const plantDetails = document.getElementById('plant-details');
+    const chat = document.getElementById('chat');
+
+    let startX = 0;
+    let startWidth = 0;
+
+    resizer.addEventListener('mousedown', function (event) {
+      startX = event.clientX;
+      startWidth = plantDetails.offsetWidth;
+      document.addEventListener('mousemove', resize);
+      document.addEventListener('mouseup', stopResize);
+    });
+
+    function resize(event) {
+      const newWidth = startWidth + (event.clientX - startX);
+      const totalWidth = plantDetails.parentNode.offsetWidth;
+      plantDetails.style.width = `${(newWidth / totalWidth) * 100}%`;
+      chat.style.width = `${((totalWidth - newWidth) / totalWidth) * 100}%`;
+    }
+
+    function stopResize() {
+      document.removeEventListener('mousemove', resize);
+      document.removeEventListener('mouseup', stopResize);
+    }
+  }
+
+</script>
 </body>
 </html>

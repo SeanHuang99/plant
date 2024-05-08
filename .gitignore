@@ -6,7 +6,7 @@
 *.iml
 out
 gen
-!/node_modules/
+node_modules/
 !/views/EJS-test.ejs
 !/views/mapTest.ejs
 !/public/javascript/EJStest.js

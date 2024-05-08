@@ -78,8 +78,8 @@ function renderPlantList(plantList){
 
         // 创建卡片链接
         const cardLink = document.createElement('a');
-        // cardLink.href = `/detail?plantId=${plant.plantId}`;
-        cardLink.href = `/detail`;
+        cardLink.href = `/detail?plantId=${plant.plantId}`;
+        // cardLink.href = `/detail`;
         cardLink.classList.add('card-link');
         // 添加点击事件监听器
         cardLink.addEventListener('click', function(event) {

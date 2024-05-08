@@ -55,13 +55,13 @@ router.get('/about', function (req, res) {
 router.get('/detail', async function (req, res) {
     // console.log('/detail')
     // const {plantId} = req.params;
-    // const plantId = req.query.plantId;
-    // console.log(plantId)
-    // const response = await getPlant(plantId)
-    // if (response.type === 'success') {
-    //     res.render('detail', {plant: response.content})
-    // }
-     res.render('detail')
+    const plantId = req.query.plantId;
+    console.log(plantId)
+    const response = await getPlant(plantId)
+    if (response.type === 'success') {
+        res.render('detail', {plant: response.content})
+    }
+     // res.render('detail')
 })
 
 /* test page. */

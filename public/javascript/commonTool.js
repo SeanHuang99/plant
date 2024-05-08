@@ -1,11 +1,8 @@
 function getNickName(){
     let nickName=window.localStorage.getItem("userNickName")
-    if(nickName===null){
-        top.location.href="/";
-    }
-    else{
-        return nickName;
-    }
+
+    return nickName;
+
 }
 
 function setNickName(nickname){

@@ -116,7 +116,3 @@ function renderPlantList(plantList){
     });
 }
 
-function savePlantId(plantId){
-    localStorage.setItem("plantId",plantId)
-    console.log(plantId+'has saved to localStorage')
-}

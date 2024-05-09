@@ -81,7 +81,12 @@
           <p class="card-text">Date/Time: <%= plant.datetime %></p>
           <p class="card-text">User Nickname: <%= plant.nickName %></p>
           <p class="card-text">Location: <%= plant.location %></p>
-          <p class="card-text">Plant Characteristics: Flowers: Yes, Leaves: Yes, Fruits/Seeds: No, Sun Exposure: Full Sun, Flower Color: Yellow</p>
+          <p class="card-text">Plant Characteristics:</p>
+          <p class="card-text">Flowers: Yes</p>
+          <p class="card-text">Leaves: Yes,</p>
+          <p class="card-text">Fruits/Seeds: No</p>
+          <p class="card-text">Sun Exposure: Full Sun</p>
+          <p class="card-text">Flower Color: Yellow</p>
         </div>
       </div>
     </div>
@@ -100,7 +105,7 @@
             <form onsubmit="return false;">
               <p>
                 <label for="name">Chat:</label>
-                <input type="text" id="chat_input" name="chat_input" style="width: 80%;">
+                <input type="text" id="chat_input" name="chat_input" style="width: 50%;">
                 <button id="chat_send" class="btn btn-primary ml-2" onclick="sendChatText()">Send</button>
               </p>
             </form>
@@ -112,7 +117,7 @@
 </div>
 
 <div class="btn-container mt-4">
-<!--  <a href="/" class="btn btn-primary mr-2">Back to Home</a>-->
+  <!--  <a href="/" class="btn btn-primary mr-2">Back to Home</a>-->
   <button type="button" class="btn btn-danger ml-2">Edit</button>
 </div>
 

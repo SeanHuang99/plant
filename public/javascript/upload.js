@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     .then(data => {
                         // console.log("success data: "+data);
                         // console.log(data);
-
-                        location.href="/detail/";
+                        setPlantId(data)
+                        location.href=`/detail?plantId=${data}`;
                         // Implement your success callback logic here
                         // For example, you might want to redirect the user or display a success message
                     })

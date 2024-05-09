@@ -23,6 +23,10 @@ const PlantSchema = new mongoose.Schema({
         required: true,
     },
     photo: String, // base64 photo
+    DBpediaLink: String,
+    DBpediaName: String,
+    DBpediaDescription: String,
+    DBpediaGunes: String
 });
 
 module.exports = mongoose.model('Plants', PlantSchema);

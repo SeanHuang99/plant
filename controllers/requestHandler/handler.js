@@ -1,24 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const fetch = require('node-fetch');
-const querystring = require('querystring');
 const mongoApi=require("../databaseController/mongodbController");
 
-
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, 'public/images/plantImages'); //确保这个目录已经存在
-//     },
-//     filename: function(req, file, cb) {
-//         var origin=file.originalname;
-//         var fileExtention=origin.split(".")
-//         var fileName=Date.now()+"-"+origin;
-//         cb(null, fileName); // 使用原始文件名
-//     }
-// });
-//
-// const upload = multer({ storage: storage });
 
 const upload = multer();
 
@@ -36,47 +20,74 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     let status = req.body.status;
     let base64Image = req.body.base64Image;
 
-    //todo: DBPedia url generation
-    // const sparqlQuery = `
-    //     PREFIX dbo: <http://dbpedia.org/ontology/>
-    //     PREFIX dbpedia: <http://dbpedia.org/resource/>
-    //
-    //     SELECT ?plant WHERE {
-    //       ?plant dbo:commonName dbpedia:"${plantName}"@en.
-    //       FILTER (lang(?description) = "en")
-    //
-    //     }
-    //     LIMIT 1
-    // `;
-    //
-    // const encodedQuery = querystring.stringify({ query: sparqlQuery });
-    // const dbpediaSparqlEndpoint = `http://dbpedia.org/sparql?${encodedQuery}&format=json`;
-    //
-    // try {
-    //     const response = await fetch(dbpediaSparqlEndpoint, {headers: {Accept: 'application/json'}});
-    //     // const data = await response.json();
-    //     console.log(response);
-    //     const plantInfo = data.results.bindings.length > 0 ? data.results.bindings[0] : null;
-    // }catch (error) {
-    //     console.error("Error during DBpedia SPARQL query:", error);
-    //     res.status(504).send(error.message);
-    // }
+    const resource = `http://dbpedia.org/resource/${plantName}`;
+    // console.log("DBPedia URL: "+resource)
+    // The DBpedia SPARQL endpoint URL
+    const endpointUrl = 'https://dbpedia.org/sparql';
 
-    //mongodb storage
+    // <!--        PREFIX dbo: <http://dbpedia.org/ontology/>-->
+    // <!--        PREFIX dbr: <http://dbpedia.org/resource/>-->
+    // <!--        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>-->
+    // <!--        PREFIX foaf: <http://xmlns.com/foaf/0.1/>-->
+    // <!--        PREFIX dbp: <http://dbpedia.org/property/>-->
+    // <!--        SELECT ?name ?genus ?comment ?uri-->
+    // <!--        WHERE {-->
+    // <!--          BIND(dbr:Basil AS ?uri)-->
+    // <!--          OPTIONAL { ?uri dbp:name ?name . FILTER (langMatches(lang(?name), "en")) }-->
+    // <!--          OPTIONAL { ?uri dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en")) }-->
+    // <!--          OPTIONAL { ?uri rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en")) }-->
+    // <!--        }-->
+    // <!--        LIMIT 1-->
 
-    mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, base64Image)
+    // The SPARQL query to retrieve data for the given resource
+    const sparqlQuery = `
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX dbp: <http://dbpedia.org/property/>
+    SELECT ?name ?comment ?genus
+    WHERE {
+        OPTIONAL {<${resource}> dbp:name ?name . FILTER (langMatches(lang(?name), "en"))}
+        OPTIONAL {<${resource}> rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en"))}
+        OPTIONAL {<${resource}> dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en"))}
+    }
+    LIMIT 1
+    `;
+
+    // Encode the query as a URL parameter
+    const encodedQuery = encodeURIComponent(sparqlQuery);
+    // Build the URL for the SPARQL query
+    const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+    let DBpediaName="";
+    let DBpediaDescription="";
+    let DBpediagenus="";
+
+    await fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // The results are in the 'data' object
+            let bindings = data.results.bindings[0];
+            let result = JSON.stringify(bindings);
+            // console.log(result)
+            DBpediaName = bindings?.name?.value;
+            DBpediaDescription = bindings?.comment?.value;
+            DBpediagenus = bindings?.genus?.value;
+        });
+
+
+    // console.log("DBpediaName: "+DBpediaName);
+    // console.log("DBpediaDescription: "+DBpediaDescription);
+    // console.log("DBpediagenus: "+DBpediagenus);
+
+    // mongodb storage
+    mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
         .then(function (response) {
             if (response.type === 'success') {
                 // plantId = response.content;
                 let plant = response.content;
                 res.status(200).json(plant.plantId);
-                // //同时添加到IndexDB
-                // openPlantsIDB().then(db => {
-                //     addNewPlantsToIDB(db, plant)
-                // })
-                // openSyncPlantsIDB().then(db=>{
-                //     addNewPlantToSync(db,plant)
-                // })
             } else {
                 res.status(504).send("cannot add plants");
             }

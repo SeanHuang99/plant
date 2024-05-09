@@ -9,7 +9,7 @@ function setNickName(nickname){
     window.localStorage.setItem("userNickName",nickname);
 }
 
-function savePlantId(plantId){
+function setPlantId(plantId){
     window.localStorage.setItem("plantId",plantId)
     // console.log(plantId+'has saved to localStorage')
 }

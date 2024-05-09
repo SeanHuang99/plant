@@ -85,7 +85,7 @@ function renderPlantList(plantList){
         cardLink.addEventListener('click', function(event) {
             // 阻止默认行为，即防止链接的默认导航行为
             // event.preventDefault();
-            savePlantId(plant.plantId)
+            setPlantId(plant.plantId)
 
             // 在这里执行你想要的操作，例如跳转到详情页面或其他处理
             // 这里可以根据 plantId 执行相应的操作，比如跳转到详情页

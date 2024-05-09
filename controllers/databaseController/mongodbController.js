@@ -42,7 +42,11 @@ async function addPlant(plantName,
                         flowerColor,
                         status,
                         nickName,
-                        photo)
+                        photo,
+                        DBpediaLink,
+                        DBpediaName,
+                        DBpediaDescription,
+                        DBpediaGunes)
 {
     const now = new Date();
     const plantId = createPlantId(plantName);
@@ -60,7 +64,11 @@ async function addPlant(plantName,
             flowerColor,
             status,
             nickName,
-            photo
+            photo,
+            DBpediaLink,
+            DBpediaName,
+            DBpediaDescription,
+            DBpediaGunes
         });
         await newPlant.save();
         // response={'type':'success','content':plantId};

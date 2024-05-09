@@ -91,10 +91,10 @@ function renderPlantList(plantList){
             // 这里可以根据 plantId 执行相应的操作，比如跳转到详情页
             // window.location.href = `/detail?plantId=${plantId}`;
         });
-
+        console.log("plant features:     ",plant)
         // 创建图片元素
         const image = document.createElement('img');
-        image.src = plant.photoPath;
+        image.src = plant.photo;
         image.alt = plant.plantName;
         image.classList.add('img-fluid', 'mx-auto');
 

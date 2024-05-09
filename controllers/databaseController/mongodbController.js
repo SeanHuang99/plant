@@ -28,6 +28,7 @@ mongoose.connection.on("close", () => {
 
 
 function createPlantId(plantName) {
+    const now = new Date();
     return `${plantName}${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;;
 }
 
@@ -41,7 +42,7 @@ async function addPlant(plantName,
                         flowerColor,
                         status,
                         nickName,
-                        photoPath)
+                        photo)
 {
     const now = new Date();
     const plantId = createPlantId(plantName);
@@ -59,7 +60,7 @@ async function addPlant(plantName,
             flowerColor,
             status,
             nickName,
-            photoPath
+            photo
         });
         await newPlant.save();
         // response={'type':'success','content':plantId};

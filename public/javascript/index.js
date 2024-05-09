@@ -21,9 +21,6 @@ $(document).ready(function () {
     // if (storage.get("lastURL") != null) {
     //     $('#content-iframe').attr('src', storage.get("lastURL"));
     // }
-    if (getNickName()===null){
-        console.log(1111111)
-    }
     // listen .nav-link event
     $('.nav-link').click(function (e) {
         console.log(222)

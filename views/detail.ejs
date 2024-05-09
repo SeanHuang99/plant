@@ -16,11 +16,7 @@
       flex-direction: column;
       margin: 0 auto;
       padding: 0;
-      height: 100vh;
-    }
-
-    .navbar, .btn-container {
-      flex: 0 0 auto;
+      height: 90vh;
     }
 
     .container {
@@ -33,6 +29,7 @@
     .resizable {
       display: flex;
       height: 100%;
+      width: 100%;
     }
 
     .panel {
@@ -41,12 +38,14 @@
     }
 
     #plant-details {
-      width: 70%;
+      width: calc(100% - 200px);
       background-color: #f9f9f9;
     }
 
     #chat {
-      width: 30%;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
       background-color: #e9e9e9;
     }
 
@@ -56,18 +55,56 @@
       cursor: col-resize;
       flex-shrink: 0;
     }
+
+    #chat_history {
+      flex: 1;
+      overflow-y: auto;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: white;
+    }
+
+    #chat_input_box {
+      padding: 10px;
+      background-color: white;
+      border: 1px solid #ccc;
+      margin: 10px;
+      border-radius: 8px;
+    }
+
+    .input-group {
+      display: flex;
+      width: 100%;
+    }
+
+    .form-control {
+      flex-grow: 1;
+      border-radius: 20px; /* Rounded corners */
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-right: 10px;
+    }
+
+    .send-button {
+      border-radius: 20px; /* Rounded corners */
+      border: 2px solid purple;
+      background-color: transparent;
+      color: purple;
+      padding: 10px 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .send-button:hover {
+      background-color: purple;
+      color: white;
+    }
   </style>
 </head>
 <body onload="init()">
-<!--<nav class="navbar navbar-expand-lg navbar-light custom-bg-color">-->
-<!--  <div class="container">-->
-<!--    <a class="navbar-brand btn btn-primary" href="/"><- Home</a>-->
-<!--    <ul class="navbar-nav ml-auto">-->
-<!--      <li class="nav-item"><a class="nav-link" href="#">Username</a></li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</nav>-->
-
 <div class="container">
   <div class="resizable">
     <!-- Plant Details Panel -->
@@ -83,33 +120,29 @@
           <p class="card-text">Location: <%= plant.location %></p>
           <p class="card-text">Plant Characteristics:</p>
           <p class="card-text">Flowers: Yes</p>
-          <p class="card-text">Leaves: Yes,</p>
+          <p class="card-text">Leaves: Yes</p>
           <p class="card-text">Fruits/Seeds: No</p>
           <p class="card-text">Sun Exposure: Full Sun</p>
           <p class="card-text">Flower Color: Yellow</p>
         </div>
       </div>
     </div>
-
     <!-- Resizer Separator -->
     <div class="resizer"></div>
 
     <!-- Chat Panel -->
-    <div id="chat" class="panel">
-      <h1>Chat</h1>
-      <div id="chat_interface" class="card">
-        <div class="card-body">
-          <p id="who_you_are">You are in room: <%= plant.plantId %></p>
-          <div id="history" class="boxed"></div>
-          <div class="input bottom boxed">
-            <form onsubmit="return false;">
-              <p>
-                <label for="name">Chat:</label>
-                <input type="text" id="chat_input" name="chat_input" style="width: 50%;">
-                <button id="chat_send" class="btn btn-primary ml-2" onclick="sendChatText()">Send</button>
-              </p>
-            </form>
-          </div>
+    <div id="chat">
+      <!-- Chat History -->
+      <div id="chat_history">
+        <p id="who_you_are">You are in room: <%= plant.plantId %></p>
+      </div>
+
+      <!-- Chat Input Box -->
+      <div id="chat_input_box">
+        <div class="input-group">
+          <input type="text" class="form-control" id="chat_input" placeholder="Type your message..."
+                 onkeydown="handleKeyDown(event)">
+          <button class="send-button" onclick="sendChatText()">Send</button>
         </div>
       </div>
     </div>
@@ -129,44 +162,51 @@
   let socket = io();
 
   function init() {
+    // Event listener for joining a room
     socket.on('joined', function (room, userId) {
       if (userId === name) {
-        document.getElementById('who_you_are').innerHTML = userId + ', you are in room: ' + room;
+        document.getElementById('who_you_are').innerHTML = `${userId}, you are in room: ${room}`;
       } else {
-        writeOnHistory('<b>' + userId + '</b> joined room ' + room);
+        writeOnHistory(`<b>${userId}</b> joined room ${room}`);
       }
       getChatRecord(room);
     });
 
+    // Event listener for receiving chat messages
     socket.on('chat', function (room, userId, chatText) {
       let who = userId === name ? 'Me' : userId;
-      writeOnHistory('<b>' + who + ':</b> ' + chatText);
+      writeOnHistory(`<b>${who}:</b> ${chatText}`);
     });
 
     connectToRoom();
     enableResizer(); // Enable resizable panel feature
   }
 
+  // Send the chat message to the server
   function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     if (!chatText.trim()) return;
     socket.emit('chat', roomNo, name, chatText);
-    document.getElementById('chat_input').value = '';
+    document.getElementById('chat_input').value = ''; // Clear input
   }
 
+  // Append new chat history entries to the container
   function writeOnHistory(text) {
-    let history = document.getElementById('history');
+    let history = document.getElementById('chat_history');
     let paragraph = document.createElement('p');
     paragraph.innerHTML = text;
     history.appendChild(paragraph);
+    // Scroll down to show the latest message
+    history.scrollTop = history.scrollHeight;
   }
 
+  // Fetch the entire chat history for a particular room
   function getChatRecord(roomNo) {
-    fetch('/requestHandler/getChatRecordById/' + roomNo)
+    fetch(`/requestHandler/getChatRecordById/${roomNo}`)
             .then(response => response.json())
             .then(data => {
               for (let eachRecord of data) {
-                writeOnHistory('<b>' + eachRecord.nickName + ':</b> ' + eachRecord.content);
+                writeOnHistory(`<b>${eachRecord.nickName}:</b> ${eachRecord.content}`);
               }
             })
             .catch(error => {
@@ -174,11 +214,12 @@
             });
   }
 
+  // Request to join or create a new chat room
   function connectToRoom() {
     socket.emit('create or join', roomNo, name);
   }
 
-  // Enable the resizable feature
+  // Enable resizing of plant and chat panels
   function enableResizer() {
     const resizer = document.querySelector('.resizer');
     const plantDetails = document.getElementById('plant-details');
@@ -206,6 +247,8 @@
       document.removeEventListener('mouseup', stopResize);
     }
   }
+
+
 
 </script>
 </body>

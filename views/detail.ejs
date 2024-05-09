@@ -115,15 +115,38 @@
           <h5 class="card-title">Plant Name: <%= plant.plantName %></h5>
           <p class="card-text">Description: <%= plant.description %></p>
           <p class="card-text">Details: <%= plant.details %></p>
-          <p class="card-text">Date/Time: <%= plant.datetime %></p>
+          <p class="card-text">Date/Time: <%= new Date(plant.datetime).toLocaleString() %></p>
           <p class="card-text">User Nickname: <%= plant.nickName %></p>
           <p class="card-text">Location: <%= plant.location %></p>
           <p class="card-text">Plant Characteristics:</p>
-          <p class="card-text">Flowers: Yes</p>
-          <p class="card-text">Leaves: Yes</p>
-          <p class="card-text">Fruits/Seeds: No</p>
-          <p class="card-text">Sun Exposure: Full Sun</p>
-          <p class="card-text">Flower Color: Yellow</p>
+          <p class="card-text">Flowers: <%= plant.flowers %></p>
+          <p class="card-text">Sun Exposure: <%= plant.sunExposure %></p>
+          <p class="card-text">Flower Color: <%= plant.flowerColor %></p>
+          <p class="card-text">Status: <%= plant.status %></p>
+
+          <!-- Optional DBpedia Information -->
+          <% if (plant.DBpediaLink) { %>
+            <p class="card-text">
+              DBpedia Link: <a href="<%= plant.DBpediaLink %>" target="_blank">More Info</a>
+            </p>
+          <% } %>
+          <% if (plant.DBpediaName) { %>
+            <p class="card-text">DBpedia Name: <%= plant.DBpediaName %></p>
+          <% } %>
+          <% if (plant.DBpediaDescription) { %>
+            <p class="card-text">DBpedia Description: <%= plant.DBpediaDescription %></p>
+          <% } %>
+          <% if (plant.DBpediaGunes) { %>
+            <p class="card-text">DBpedia Gunes: <%= plant.DBpediaGunes %></p>
+          <% } %>
+
+          <!-- Optional Photo -->
+          <% if (plant.photo) { %>
+            <div class="plant-photo">
+              <img src="<%= plant.photo %>" alt="Plant Photo" style="max-width: 100%; border-radius: 8px;">
+            </div>
+          <% } %>
+
         </div>
       </div>
     </div>

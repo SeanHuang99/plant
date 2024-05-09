@@ -121,7 +121,13 @@
           <p class="card-text">Plant Characteristics:</p>
           <p class="card-text">Flowers: <%= plant.flowers %></p>
           <p class="card-text">Sun Exposure: <%= plant.sunExposure %></p>
-          <p class="card-text">Flower Color: <%= plant.flowerColor %></p>
+          <p class="card-text">
+            Flower Color:
+            <!-- Add a small colored box based on the stored color value -->
+            <span style="display: inline-block; width: 20px; height: 20px; background-color: <%= plant.flowerColor %>; border: 1px solid #ccc; vertical-align: middle; margin-left: 5px;"></span>
+            <!-- Display the actual color value -->
+            <%= plant.flowerColor %>
+          </p>
           <p class="card-text">Status: <%= plant.status %></p>
 
           <!-- Optional DBpedia Information -->

@@ -23,6 +23,7 @@ self.addEventListener('install', event => {
                 '/javascript/index.js',
                 '/javascript/main.js',
                 '/javascript/upload.js',
+                '/javascript/commonTool.js',
                 '/javascript/detail.js',
                 '/stylesheets/style.css',
                 '/images/icon.webp',

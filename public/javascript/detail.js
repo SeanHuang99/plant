@@ -1,11 +1,13 @@
 window.onload=function (){
+    window.localStorage.setItem('lastURL','/detail');
+    console.log("wel to detail");
     const plantId=localStorage.getItem('plantId')
     console.log('plantId: '+plantId)
     if (plantId==null){
         console.log('plantId==null')
         //return to main page, and show alert of 'cannot find plant'
     }
-    console.log('lalala')
+    // console.log('lalala')
     openPlantsIDB().then(IDB=>{
         getDetailById(IDB,plantId).then(plant=>{
             console.log('plant found in IDB ----- '+typeof plant)
@@ -20,4 +22,6 @@ window.onload=function (){
         //   console.log('plant==null')
         // }
     })
+
+    //syncn
 }

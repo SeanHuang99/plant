@@ -79,6 +79,26 @@ async function addPlant(plantName,
     return response;
 }
 
+async function updatePlant(id,
+                           plantName,
+                           description,
+                           details,
+                           datetime,
+                           location,
+                           flowers,
+                           sunExposure,
+                           flowerColor,
+                           status,
+                           nickName,
+                           photo,
+                           DBpediaLink,
+                           DBpediaName,
+                           DBpediaDescription,
+                           DBpediaGunes){
+
+
+
+}
 
 async function getPlant(id) {
     try {

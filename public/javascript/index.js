@@ -18,9 +18,13 @@ var storage = {
 
 $(document).ready(function () {
     // console.log(111)
-    // if (storage.get("lastURL") != null) {
-    //     $('#content-iframe').attr('src', storage.get("lastURL"));
-    // }
+    if (storage.get("lastURL") != null) {
+        $('#content-iframe').attr('src', storage.get("lastURL"));
+        console.log("jump to "+storage.get("lastURL"))
+    }
+    else{
+        $('#content-iframe').attr('src', "/main");
+    }
     // listen .nav-link event
     $('.nav-link').click(function (e) {
         console.log(222)
@@ -82,6 +86,12 @@ window.onload = function () {
             console.log('permission denied')
     } else
         console.log('no notification in window');
+
+
+    //sync chat records
+    if(!navigator.onLine){
+
+    }
 }
 
 // function handleNickname() {

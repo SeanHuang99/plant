@@ -98,6 +98,11 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
         })
 })
 
+router.post("/updatePlants",upload.none(),async function (req, res, next) {
+
+    res.status(200).send("updated");
+})
+
 router.get("/getPlants/:id",function (req,res,next){
     console.log('getPlants')
     const { id } = req.params;

@@ -248,7 +248,13 @@
     }
   }
 
-
+  // Handle key down event for chat input
+  function handleKeyDown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendChatText();
+    }
+  }
 
 </script>
 </body>

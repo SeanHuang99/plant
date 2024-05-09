@@ -34,7 +34,8 @@
             height: 200px;
             width: 200px;
         }
-        .navbar{
+
+        .navbar {
             /*height: 80px;*/
             padding: 10px 20px;
         }
@@ -42,7 +43,7 @@
     </style>
 </head>
 <body>
-<div id ="welcomePage" style="display:none" class="container">
+<div id="welcomePage" style="display:none" class="container">
     <header>
         <h1>Welcome to the Plant Enthusiast's Corner!</h1>
         <p>Please enter your nickname to continue:</p>
@@ -53,42 +54,42 @@
 </div>
 
 
-<div id ="indexPage" style="display:none" class="full-height">
-<!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <!--    title of the bar-->
-    <a class="navbar-brand d-flex align-items-center" href="/" style="margin: 5px;padding: 0">
-        <img src="/images/icon.webp" width="30" height="30px" alt="">
-    </a>
-    <!--    bar button for folded display on small screens-->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="/main">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/upload">Upload</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/testPage">chat-test</a>
-            </li>
-        </ul>
-    </div>
-    <div class="navbar-nav ml-auto">
-        <span class="nav-item nav-link">Welcome, Username</span>
-    </div>
-</nav>
+<div id="indexPage" style="display:none" class="full-height">
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <!--    title of the bar-->
+        <a class="navbar-brand d-flex align-items-center" href="/" style="margin: 5px;padding: 0">
+            <img src="/images/icon.webp" width="30" height="30px" alt="">
+        </a>
+        <!--    bar button for folded display on small screens-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/main">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/upload">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/testPage">chat-test</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-nav ml-auto">
+            <span class="nav-item nav-link">Welcome, Username</span>
+        </div>
+    </nav>
 
-<div class="mainContent" style="height: calc(100% - 60px); ">
-    <iframe id="content-iframe" src="/main"  width="100%" height="100%" style="border: none"></iframe>
-</div>
+    <div class="mainContent" style="height:100%;margin-top: 60px ">
+        <iframe id="content-iframe" src="/main" width="100%" height="100%" style="border: none"></iframe>
+    </div>
 </div>
 <!--<footer class="footer bg-dark text-light">-->
 <!--    <div class="footer-container">-->
@@ -126,6 +127,7 @@
         flex-direction: column;
         height: 100%; /* accounting for footer height */
     }
+
     .footer {
         height: 60px; /* consistent footer height */
         background-color: #343a40;

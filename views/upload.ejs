@@ -74,7 +74,7 @@
             <label for="flowerColorText">Flower Color:</label>
             <div class="input-group">
                 <!-- Text input for displaying the color name -->
-                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColorText">
+                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor">
                 <!-- Color picker positioned on the right -->
                 <input type="color" class="color-input" id="flowerColorPicker" name="flowerColorPicker" onchange="updateFlowerColor()">
             </div>
@@ -107,19 +107,24 @@
             <label for="nickname">User Nickname:</label>
             <input type="text" class="form-control" id="nickname" name="nickname" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <p> </p>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <p></p>
+
     </form>
 </div>
 <script>
     // Synchronize the text field with the color picker
     function updateFlowerColor() {
         const colorPicker = document.getElementById('flowerColorPicker');
-        const colorText = document.getElementById('flowerColorText');
+        const colorText = document.getElementById('flowerColor');
         colorText.value = colorPicker.value;
     }
 
     // Optionally, initialize the color text input with the color picker's default value
-    document.getElementById('flowerColorText').value = document.getElementById('flowerColorPicker').value;
+    document.getElementById('flowerColor').value = document.getElementById('flowerColorPicker').value;
 </script>
 </body>
 </html>

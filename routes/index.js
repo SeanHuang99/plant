@@ -1,5 +1,6 @@
 var express = require('express');
-const {getAllPlants, getPlant} = require("../controllers/databaseController/mongodbController");
+// const {getAllPlants, getPlant} = require("../controllers/databaseController/mongodbController");
+const mongoApi=require("../controllers/databaseController/mongodbController");
 const {all} = require("express/lib/application");
 const fetch = require("node-fetch");
 const axios = require("axios");
@@ -56,14 +57,29 @@ router.get('/detail', async function (req, res) {
     // console.log('/detail')
     // const {plantId} = req.params;
     const plantId = req.query.plantId;
-    console.log(plantId)
-    const response = await getPlant(plantId)
+    // console.log(plantId)
+    const response = await mongoApi.getPlant(plantId)
     if (response.type === 'success') {
         res.render('detail', {plant: response.content})
     }
      // res.render('detail')
 })
 
+router.get('/mongoImage/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const plant = await mongoApi.getPlant(id); // 假设这是一个函数来根据ID获取植物信息，包括图片
+        if (!plant) {
+            return res.status(404).send('Image not found');
+        }
+        // 返回图片数据
+        res.setHeader('Content-Type', 'image/jpeg'); // 根据实际图片格式设置，例如 'image/png'
+        res.send(Buffer.from(plant.imageData, 'base64'));
+    } catch (error) {
+        console.error('Failed to retrieve image:', error);
+        res.status(500).send('Server error');
+    }
+});
 /* test page. */
 router.get('/testPage', function (req, res, next) {
     res.render('test', {title: 'Express', roomNo: "3gg4h20240322144734"});

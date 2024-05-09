@@ -18,14 +18,15 @@ self.addEventListener('install', event => {
                 '/import/bootstrap.min.css',
                 '/import/bootstrap.min.js',
                 '/import/jquery-3.7.1.min.js',
-                '/manifest.json',
                 '/javascript/add.js',
                 '/javascript/idb-utility.js',
                 '/javascript/index.js',
                 '/javascript/main.js',
                 '/javascript/upload.js',
+                '/javascript/detail.js',
                 '/stylesheets/style.css',
                 '/images/icon.webp',
+                '/manifest.json',
             ]
             fileList.forEach(file => {
                 cache.add(file).catch(_ => console.error(`can't load ${file} to cache`))
@@ -63,29 +64,21 @@ self.addEventListener('activate', event => {
 //sw会拦截所有请求，因此做一个判断，只在offline时拦截
 self.addEventListener('fetch', event => {
     //如果offline，拦截请求并从缓存中查找资源
+    //todo: offline时刷新主页，状态显示为online？
     if (!navigator.onLine) {
         console.log('offline 拦截 ----- ' + event)
-        event.respondWith((async () => {
-            const cache = await caches.open("static");
-            const cachedResponse = await cache.match(event.request);
-            if (cachedResponse) {
-                console.log('Service Worker: Fetching from Cache: ', event.request.url);
-                return cachedResponse;
-            }
-            console.log('Service Worker: Fetching from URL: ', event.request.url);
-            return fetch(event.request);
-        }));
         // 提取请求的 URL
-        // var url = new URL(event.request.url);
+        var url = new URL(event.request.url);
         // 如果是详情页面的请求
-        // if (url.pathname.startsWith('/detail')) {
-        //     console.log('bbb')
-        //     const url = 'http://localhost:3000/detail'//截去后面的id
-        //     // findCache(event)
-        //     //todo:如何截取路径并查找缓存？（报错：an object that was not a Response was passed to respondWith().）
-        //     event.respondWith(findCache(url)); // 修改这里
-        //
-        // }
+        if (url.pathname==='/detail') {
+            console.log('bbb')
+            event.request.url = 'http://localhost:3000/detail'//截去后面的id
+            findCache(event)
+            //todo:如何截取路径并查找缓存？（报错：an object that was not a Response was passed to respondWith().）
+            // event.respondWith(findCache(url)); // 修改这里
+
+        }
+        else findCache(event)
     }
     //如果online则正常服务器请求
     else {
@@ -93,34 +86,18 @@ self.addEventListener('fetch', event => {
     }
 });
 
-async function findCache(requestUrl) { // 修改这里
-    try {
+function findCache(event){
+    event.respondWith((async () => {
         const cache = await caches.open("static");
-        const cachedResponse = await cache.match(request);
+        const cachedResponse = await cache.match(event.request);
         if (cachedResponse) {
-            console.log('Service Worker: Fetching from Cache: ', requestUrl);
+            console.log('Service Worker: Fetching from Cache: ', event.request.url);
             return cachedResponse;
         }
-        console.log('Service Worker: Fetching from URL: ', requestUrl);
-        return fetch(request);
-    } catch (error) {
-        console.error('Service Worker: Error fetching from cache or URL: ', error);
-        return new Response(null, {status: 500, statusText: 'Internal Server Error'});
-    }
+        console.log('Service Worker: Fetching from URL: ', event.request.url);
+        return fetch(event.request);
+    })());
 }
-
-// function findCache(event){
-//     event.respondWith((async () => {
-//         const cache = await caches.open("static");
-//         const cachedResponse = await cache.match(event.request);
-//         if (cachedResponse) {
-//             console.log('Service Worker: Fetching from Cache: ', event.request.url);
-//             return cachedResponse;
-//         }
-//         console.log('Service Worker: Fetching from URL: ', event.request.url);
-//         return fetch(event.request);
-//     }));
-// }
 
 //Sync event to sync the plants
 self.addEventListener('sync', event => {

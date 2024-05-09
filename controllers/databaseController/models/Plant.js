@@ -22,7 +22,7 @@ const PlantSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    photoPath: String, // 图片路径
+    photo: String, // base64 photo
 });
 
 module.exports = mongoose.model('Plants', PlantSchema);

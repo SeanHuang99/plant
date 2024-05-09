@@ -116,3 +116,11 @@ function renderPlantList(plantList){
     });
 }
 
+//排序前先删除之前渲染的plantList
+function deleteAllPlantsDOM(){
+    const plantContainer = document.getElementsByClassName('container')[0];
+    while (plantContainer.firstChild) {//可能有多个同级子节点
+        plantContainer.removeChild(plantContainer.firstChild);
+    }
+    console.log('deleteAllPlantsDOM')
+}

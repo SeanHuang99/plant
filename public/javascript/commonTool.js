@@ -1,8 +1,6 @@
 function getNickName(){
     let nickName=window.localStorage.getItem("userNickName")
-
     return nickName;
-
 }
 
 function setNickName(nickname){

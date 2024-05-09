@@ -9,6 +9,7 @@
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/main.js"></script>
     <script src="/javascript/commonTool.js"></script>
+    <script src="/javascript/sort.js"></script>
     <style>
         html,
         body {
@@ -33,36 +34,74 @@
     </style>
 </head>
 <body>
-<H3>All Plants</H3>
-<div class="">
-<!--    <div id="output"></div>-->
-<!--    <% for (var i = 0; i < plantList.length; i++) { %>-->
-<!--        <% if (i % 4 === 0) { %>-->
-<!--        <div class="row">-->
-<!--            <% } %>-->
-<!--            <div class="col-lg-3 col-md-6">-->
-<!--                <div class="plant-card text-center">-->
-<!--                    <a href="/detail?plantId=<%= plantList[i].plantId %>" class="card-link" onclick="savePlantId('<%=plantList[i].plantId%>')">-->
-<!--                    <img src="<%= plantList[i].photoPath %>" alt="<%= plantList[i].plantName %>"-->
-<!--                             class="img-fluid mx-auto">-->
-<!--                        <div class="mt-3">-->
-<!--                            <h3><%= plantList[i].plantName %></h3>-->
-<!--                            <p><%= plantList[i].description %></p>-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <% if ((i + 1) % 4 === 0 || i === plantList.length - 1) { %>-->
-<!--        </div>-->
-<!--        <% } %>-->
-<!--    <% } %>-->
+<div class="row">
+    <div class="col">
+        <h3>All Plants</h3>
+    </div>
+
+    <div class="col">
+        <div class="row justify-content-end">
+            <div class="col-md-2 d-flex justify-content-end align-items-center">
+                Sort by:
+            </div>
+            <div class="col-md-4">
+                <select id="dropdown" class="form-select">
+                    <option value="option1">None</option>
+                    <option value="option2">Time up</option>
+                    <option value="option3">Time down</option>
+                    <option value="option4">Completed</option>
+                    <option value="option5">In Progress</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
 </div>
-<div class="container"></div>
+
+<div>
+    <div class="container"></div>
+</div>
+
 </body>
 <script>
+    // 获取下拉列表和显示选项的容器
+    const dropdown = document.getElementById('dropdown');
+    const selectedOption = document.getElementById('selectedOption');
 
-    //不论online/offline，都从IDB获取plants
-    //都使用dom进行页面渲染（放弃ejs）
-    //详见main.js
+    // 监听下拉列表的 change 事件
+    dropdown.addEventListener('change', function() {
+        // 获取用户选择的选项
+        const selectedValue = dropdown.value;
+        const selectedText = dropdown.options[dropdown.selectedIndex].text;
+        if (selectedText==='None'){
+            openPlantsIDB().then(IDB=>{
+                getAllPlants(IDB).then(plantList=>{
+                    deleteAllPlantsDOM()
+                    renderPlantList(plantList)
+                })
+            })
+        }
+        else if (selectedText==='Time up'){
+            sortByDateUp().then(plantList=>{
+                deleteAllPlantsDOM()
+                renderPlantList(plantList)
+            })
+        }else if(selectedText==='Time down'){
+            sortByDateDown().then(plantList=>{
+                deleteAllPlantsDOM()
+                renderPlantList(plantList)
+            })
+        }else if(selectedText==='Completed'){
+            completedPlants().then(plants=>{
+                deleteAllPlantsDOM()
+                renderPlantList(plants)
+            })
+        }else if(selectedText==='In Progress'){
+            inProgressPlants().then(plants=>{
+                deleteAllPlantsDOM()
+                renderPlantList(plants)
+            })
+        }
+    });
 </script>
 </html>

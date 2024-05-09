@@ -109,7 +109,11 @@
   <div class="resizable">
     <!-- Plant Details Panel -->
     <div id="plant-details" class="panel">
-      <h1>Plant Details</h1>
+      <!-- Heading with the Edit button right after it -->
+      <div style="display: flex; align-items: center;">
+        <h1 style="margin-right: 10px;">Plant Details</h1>
+        <button type="button" class="btn btn-danger ml-2">Edit</button>
+      </div>
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">Plant Name: <%= plant.plantName %></h5>
@@ -176,11 +180,6 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="btn-container mt-4">
-  <!--  <a href="/" class="btn btn-primary mr-2">Back to Home</a>-->
-  <button type="button" class="btn btn-danger ml-2">Edit</button>
 </div>
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>

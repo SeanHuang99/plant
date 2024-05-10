@@ -11,10 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
             // console.log(`Updated Email: ${photo.value}`);
             const reader = new FileReader();
             reader.onload = function(e) {
+                var fileSize=e.size;
+                console.log("file size: "+fileSize/(1024*1024));
+
                 base64Image = e.target.result;
                 const formData = new FormData(form);
                 formData.append("base64Image",base64Image);
                 formData.delete("photo");
+
                 for (let [key, value] of formData.entries()) {
                     console.log(`${key}: ${value}`);
                 }

@@ -97,6 +97,7 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
                 let plant = response.content;
                 res.status(200).json(plant.plantId);
             } else {
+                console.log("cannot add plants");
                 res.status(504).send("cannot add plants");
             }
         })
@@ -169,7 +170,8 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
         if (result.type === 'success') {
             res.status(200).send('Plant name updated successfully');
         } else {
-            res.status(404).json({ message: result.content });
+            console.error(`${result.content}`)
+            res.status(500).json({ message: result.content });
         }
     } else {
         // If not the same, add an update request
@@ -177,6 +179,7 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
         if (result.type === 'success') {
             res.status(200).send('Update request submitted successfully');
         } else {
+            console.error(`${result.content}`)
             res.status(500).json({ message: result.content });
         }
     }

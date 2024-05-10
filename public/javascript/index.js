@@ -145,3 +145,9 @@ function updateNickname(){
         userGreeting.textContent = 'Welcome, Guest';  // Fallback text if no username is found
     }
 }
+function changeUserName(){
+    var welcomePage = document.getElementById('welcomePage');
+    var indexPage = document.getElementById('indexPage');
+    welcomePage.style.display = 'block';
+    indexPage.style.display='none';
+}

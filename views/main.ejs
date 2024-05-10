@@ -51,6 +51,7 @@
                     <option value="option3">Time down</option>
                     <option value="option4">Completed</option>
                     <option value="option5">In Progress</option>
+                    <option value="option6">Nearest Plant</option>
                 </select>
             </div>
         </div>
@@ -73,35 +74,73 @@
         // 获取用户选择的选项
         const selectedValue = dropdown.value;
         const selectedText = dropdown.options[dropdown.selectedIndex].text;
-        if (selectedText==='None'){
-            openPlantsIDB().then(IDB=>{
-                getAllPlants(IDB).then(plantList=>{
-                    deleteAllPlantsDOM()
-                    renderPlantList(plantList)
-                })
-            })
+        switch (selectedText) {
+            case 'None':
+                openPlantsIDB().then(IDB => {
+                    getAllPlants(IDB).then(plantList => {
+                        deleteAllPlantsDOM();
+                        renderPlantList(plantList);
+                    });
+                });
+                break;
+            case 'Time up':
+                sortByDate('asc').then(plantList => {
+                    deleteAllPlantsDOM();
+                    renderPlantList(plantList);
+                });
+                break;
+            case 'Time down':
+                sortByDate('desc').then(plantList => {
+                    deleteAllPlantsDOM();
+                    renderPlantList(plantList);
+                });
+                break;
+            case 'Completed':
+                filterPlants('status','Completed').then(plants => {
+                    deleteAllPlantsDOM();
+                    renderPlantList(plants);
+                });
+                break;
+            case 'In Progress':
+                filterPlants('status','In Progress').then(plants => {
+                    deleteAllPlantsDOM();
+                    renderPlantList(plants);
+                });
+                break;
+            case 'Nearest Plant':
+                if (!getCurrentLocation()){
+                    sortByDistance(getCurrentLocation(),'aes').then(plantList=>{
+                        deleteAllPlantsDOM();
+                        renderPlantList(plantList);
+                    })
+                }
+                break;
+            case 'Furthest Plant':
+                if (!getCurrentLocation()){
+                    sortByDistance(getCurrentLocation(),'desc').then(plantList=>{
+                        deleteAllPlantsDOM();
+                        renderPlantList(plantList);
+                    })
+                }
+                break;
+            default:
+                // 处理其他未知情况的逻辑
+                break;
         }
-        else if (selectedText==='Time up'){
-            sortByDateUp().then(plantList=>{
-                deleteAllPlantsDOM()
-                renderPlantList(plantList)
-            })
-        }else if(selectedText==='Time down'){
-            sortByDateDown().then(plantList=>{
-                deleteAllPlantsDOM()
-                renderPlantList(plantList)
-            })
-        }else if(selectedText==='Completed'){
-            completedPlants().then(plants=>{
-                deleteAllPlantsDOM()
-                renderPlantList(plants)
-            })
-        }else if(selectedText==='In Progress'){
-            inProgressPlants().then(plants=>{
-                deleteAllPlantsDOM()
-                renderPlantList(plants)
-            })
-        }
+
     });
+
+    function getCurrentLocation(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(position => {
+                console.log(position.coords.latitude, position.coords.longitude)
+                return {lat: position.coords.latitude, lng: position.coords.longitude}
+            })
+        }else {
+            alert("Geolocation is not supported")
+            location.reload()
+        }
+        return null
+    }
 </script>
 </html>

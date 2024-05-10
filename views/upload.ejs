@@ -9,6 +9,8 @@
     <script src="/import/bootstrap.min.js"></script>
     <script src="/javascript/upload.js"></script>
     <script src="/javascript/commonTool.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
+    <script type="module" src="/javascript/GoogleMap.js"></script>
     <style>
         .input-group {
             display: flex;
@@ -44,10 +46,11 @@
             <label for="datetime">Date and Time seen:</label>
             <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
         </div>
-        <!--        之后用geolocation（地图选点）替换？-->
         <div class="form-group">
             <label for="location">Location:</label>
             <input type="text" class="form-control" id="location" name="location" required>
+            <input id="search-box" type="text" placeholder="Search for places">
+            <div id="map"></div>
         </div>
         <div class="form-group">
             <h3>Plant Characteristics:</h3><br>

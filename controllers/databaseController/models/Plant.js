@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
-
+// 定义 Location Schema
+const locationSchema = new mongoose.Schema({
+    //todo: Double?
+    lat: String,
+    lng: String,
+});
 const PlantSchema = new mongoose.Schema({
     plantId:{
         type: String,
@@ -13,7 +18,7 @@ const PlantSchema = new mongoose.Schema({
     description: String, // 植物描述
     details: String, // 植物详细信息
     datetime: Date, // 观察日期和时间
-    location: String, // 观察位置
+    location: locationSchema, // 观察位置
     flowers: String, // 植物是否有花
     sunExposure: String, // 日照情况
     flowerColor: String, // 花的颜色
@@ -23,6 +28,7 @@ const PlantSchema = new mongoose.Schema({
         required: true,
     },
     photo: String, // base64 photo
+    //todo:定义DBpediaScheme?
     DBpediaLink: String,
     DBpediaName: String,
     DBpediaDescription: String,

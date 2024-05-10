@@ -37,8 +37,8 @@ app.use('/requestHandler',requestHandler);
 
 // app.get('/', function (req, res) {
 //   console.log('__dirname: '+__dirname)
-//   res.sendFile( __dirname + "/public/html/" + "mapTest.html" );
-//   // res.render("EJS-test" );
+//   // res.sendFile( __dirname + "/public/html/" + "mapTest.html" );
+//   res.render("mapTest" );
 // });// 显示html页面
 // var server = app.listen(3001, function () {
 //   var host = server.address().address;

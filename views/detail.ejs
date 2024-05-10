@@ -10,6 +10,8 @@
   <script src="/javascript/idb-utility.js"></script>
   <script src="/javascript/detail.js"></script>
   <script src="/javascript/commonTool.js"></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
+  <script type="module" src="/javascript/GoogleMap.js"></script>
   <style>
     body {
       display: flex;
@@ -121,7 +123,10 @@
           <p class="card-text">Details: <%= plant.details %></p>
           <p class="card-text">Date/Time: <%= new Date(plant.datetime).toLocaleString() %></p>
           <p class="card-text">User Nickname: <%= plant.nickName %></p>
-          <p class="card-text">Location: <%= plant.location %></p>
+          <p class="card-text">Location:
+            <input id="search-box" type="text" placeholder="Search for places">
+          <div id="map"></div>
+          </p>
           <p class="card-text">Plant Characteristics:</p>
           <p class="card-text">Flowers: <%= plant.flowers %></p>
           <p class="card-text">Sun Exposure: <%= plant.sunExposure %></p>

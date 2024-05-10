@@ -3,6 +3,9 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Plant = require('./models/Plant');
 const ChatRecord=require('./models/chatRecord');
+// mongodbcontroller.js
+const UpdateRequest = require('./updateRequest');
+
 // var app = express();
 // app.use(express.json());
 
@@ -184,22 +187,67 @@ async function getAllChatRecord(){
     return response;
 }
 
-// upload plant edit request (plantId, plantName, nickName, approveOrdecline=none)
-async function addUpdateRequest(plantId,plantName,nickname){
-
+// Add or update plant edit request (plantId, plantName, nickName)
+async function addUpdateRequest(plantId, plantName, nickName) {
+    var response;
+    try {
+        const updateRequest = new UpdateRequest({ plantId, plantName, nickName });
+        await updateRequest.save();
+        response = { type: 'success', content: '' };
+    } catch (error) {
+        response = { type: 'fail', content: error.message };
+    }
+    return response;
 }
 
-async function getUpdateRequestById(plantId){
-
+// Get plant edit request by plantId
+async function getUpdateRequestById(plantId) {
+    var response;
+    try {
+        const updateRequest = await UpdateRequest.findOne({ plantId });
+        if (updateRequest) {
+            response = { type: 'success', content: updateRequest };
+        } else {
+            response = { type: 'fail', content: 'No update request found for this plant' };
+        }
+    } catch (error) {
+        response = { type: 'fail', content: error.message };
+    }
+    return response;
 }
 
-async function getAllUpdateRequest(){
-
+// Get all plant edit requests
+async function getAllUpdateRequest() {
+    var response;
+    try {
+        const allRequests = await UpdateRequest.find({});
+        response = { type: 'success', content: allRequests };
+    } catch (error) {
+        response = { type: 'fail', content: error.message };
+    }
+    return response;
 }
 
-async function updateUpdateRequest(plantId,nickName,appOrdec){
-
+// Update plant edit request's approval status
+async function updateUpdateRequest(plantId, nickName, appOrdec) {
+    var response;
+    try {
+        const result = await UpdateRequest.findOneAndUpdate(
+            { plantId, nickName },
+            { approveOrdecline: appOrdec },
+            { new: true }
+        );
+        if (result) {
+            response = { type: 'success', content: result };
+        } else {
+            response = { type: 'fail', content: 'Update request not found or could not be updated' };
+        }
+    } catch (error) {
+        response = { type: 'fail', content: error.message };
+    }
+    return response;
 }
 // Export the function
-module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord,getAllChatRecord};
+module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
+    getAllUpdateRequest, updateUpdateRequest};
 

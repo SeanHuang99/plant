@@ -50,6 +50,11 @@ async function addPlant(plantName,
 {
     const now = new Date();
     const plantId = createPlantId(plantName);
+    let dbpediaUploads = {};
+    dbpediaUpdates.link = DBpediaLink;
+    dbpediaUpdates.name = DBpediaName;
+    dbpediaUpdates.description = DBpediaDescription;
+    dbpediaUpdates.genus = DBpediaGenus;
     var response;
     try {
         const newPlant = new Plant({
@@ -65,10 +70,7 @@ async function addPlant(plantName,
             status,
             nickName,
             photo,
-            DBpediaLink,
-            DBpediaName,
-            DBpediaDescription,
-            DBpediaGunes
+            dbpediaUploads
         });
         await newPlant.save();
         // response={'type':'success','content':plantId};
@@ -79,25 +81,23 @@ async function addPlant(plantName,
     return response;
 }
 
-async function updatePlant(id,
-                           plantName,
-                           description,
-                           details,
-                           datetime,
-                           location,
-                           flowers,
-                           sunExposure,
-                           flowerColor,
-                           status,
-                           nickName,
-                           photo,
-                           DBpediaLink,
-                           DBpediaName,
-                           DBpediaDescription,
-                           DBpediaGunes){
-
-
-
+async function updatePlant(id, updates){
+    let response;
+    try {
+        const updatedPlant = await Plant.findOneAndUpdate(
+            {plantId: id}, // Query based on the unique plantId
+            {$set: updates}, // Update operation
+            {new: true, runValidators: true} // Options: return the updated document and run model validators
+        );
+        if (updatedPlant) {
+            response = { type: 'success', content: updatedPlant };
+        } else {
+            response = { type: 'fail', content: 'Plant not found' };
+        }
+    }catch (error) {
+        response = { type: 'fail', content: error.message };
+    }
+    return response;
 }
 
 async function getPlant(id) {

@@ -20,6 +20,8 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     let status = req.body.status;
     let base64Image = req.body.base64Image;
 
+    console.log("location: "+location)
+
     const resource = `http://dbpedia.org/resource/${plantName}`;
     // console.log("DBPedia URL: "+resource)
     // The DBpedia SPARQL endpoint URL
@@ -82,20 +84,20 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     // console.log("DBpediagenus: "+DBpediagenus);
 
     // mongodb storage
-    mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
-        .then(function (response) {
-            if (response.type === 'success') {
-                // plantId = response.content;
-                let plant = response.content;
-                res.status(200).json(plant.plantId);
-            } else {
-                res.status(504).send("cannot add plants");
-            }
-        })
-        .catch(function (error) {
-            console.log("error: " + error.message);
-            res.status(504).send(error.message);
-        })
+    // mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
+    //     .then(function (response) {
+    //         if (response.type === 'success') {
+    //             // plantId = response.content;
+    //             let plant = response.content;
+    //             res.status(200).json(plant.plantId);
+    //         } else {
+    //             res.status(504).send("cannot add plants");
+    //         }
+    //     })
+    //     .catch(function (error) {
+    //         console.log("error: " + error.message);
+    //         res.status(504).send(error.message);
+    //     })
 })
 
 router.post("/updatePlants",upload.none(),async function (req, res, next) {

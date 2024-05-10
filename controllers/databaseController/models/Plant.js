@@ -28,11 +28,12 @@ const PlantSchema = new mongoose.Schema({
         required: true,
     },
     photo: String, // base64 photo
-    //todo:定义DBpediaScheme?
-    DBpediaLink: String,
-    DBpediaName: String,
-    DBpediaDescription: String,
-    DBpediaGunes: String
+    dbpedia: {  // Nested object for DBpedia-related information
+        link: String,
+        name: String,
+        description: String,
+        genus: String
+    }
 });
 
 module.exports = mongoose.model('Plants', PlantSchema);

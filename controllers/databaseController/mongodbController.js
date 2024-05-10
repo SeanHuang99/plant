@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Plant = require('./models/Plant');
 const ChatRecord=require('./models/chatRecord');
 // mongodbcontroller.js
-const UpdateRequest = require('./updateRequest');
+const UpdateRequest = require('./models/updateRequest');
 
 // var app = express();
 // app.use(express.json());

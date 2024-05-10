@@ -4,6 +4,42 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (event) => {
         event.preventDefault(); // Prevent the form from submitting via the default action
 
+        //表单验证（非空判断）
+        // 检查是否至少有一个单选按钮被选中
+        const flowersYes = document.getElementById('flowersYes');
+        const flowersNo = document.getElementById('flowersNo');
+        if (!(flowersYes.checked || flowersNo.checked )) {
+            alert('Please select whether the plant has flowers.');
+            flowersYes.focus()
+            return; // 防止表单提交
+        }
+        if (!selectSunExposure()){
+            alert('Please choose the Sun Exposure.');
+            const sunExposure=document.getElementById("sunExposure")
+            sunExposure.focus()
+            return; // 防止表单提交
+        }
+        const color=document.getElementById("flowerColor")
+        if (color.value==null || color.value===""){
+            alert('Please choose the color.');
+            color.focus()
+            return; // 防止表单提交
+        }
+        const complete = document.getElementById('statusComplete');
+        const inProgress = document.getElementById('statusInProgress');
+        if (!(complete.checked || inProgress.checked )) {
+            alert('Please select the status of the identification.');
+            complete.focus()
+            return; // 防止表单提交
+        }
+        // if (getMarker()==null){
+        //     alert('Please select the location');
+        //     const map=document.getElementById('map')
+        //     map.focus()
+        //     return; // 防止表单提交
+        // }
+
+
         const photo = form.elements['photo'].files[0];
         var fileSize=photo.size;
         console.log("file size: "+fileSize/(1024*1024)+"MB");

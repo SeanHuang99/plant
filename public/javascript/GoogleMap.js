@@ -26,13 +26,17 @@
 // // failed.", it means you probably did not give permission for the browser to
 // // locate you.
 let map, infoWindow,location={lat:53.3921,lng:-1.4898};
-
+function getMarker(){
+    return lastMarker
+}
+var lastMarker = null;
+//初始化位置
+setLocation()
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerView } = await google.maps.importLibrary("marker")
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
     const {SearchBox} = await google.maps.importLibrary("places");
-
 
 
     var Sheffield = new google.maps.LatLng(53.3921, -1.4898);
@@ -49,7 +53,7 @@ async function initMap() {
     });
 
 
-    let lastMarker = null; // 用于存储最后一个标记
+    // let lastMarker = null; // 用于存储最后一个标记
     // 添加地图点击事件监听器
     map.addListener("click", (event) => {
         if (lastMarker!=null){

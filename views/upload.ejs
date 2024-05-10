@@ -7,10 +7,10 @@
     <script src="/import/jquery-3.7.1.min.js"></script>
     <link href="/import/bootstrap.min.css" rel="stylesheet">
     <script src="/import/bootstrap.min.js"></script>
-    <script src="/javascript/upload.js"></script>
     <script src="/javascript/commonTool.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
     <script type="module" src="/javascript/GoogleMap.js"></script>
+    <script src="/javascript/upload.js"></script>
     <style>
         label{
             font-size: 18px;
@@ -46,7 +46,7 @@
 <body>
 <div class="container mt-5" style="padding: 0 100px">
     <h1 class="mt-4">Add Plant</h1>
-    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data">
+    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data" id="myForm">
         <div class="form-group">
             <label for="description">Description:</label>
             <input type="text" class="form-control" id="description" name="description" required>
@@ -62,7 +62,6 @@
         <div class="form-group">
             <label for="location">Location:</label>
             <button id="getCurrentLoc">Pan to current</button>
-<!--            <input type="text" class="form-control" id="location" name="location" required>-->
             <input id="search-box" type="text" placeholder="Search for place"  style="height: 40px;margin: 10px">
             <div id="map"></div>
             <input id="lat" name='lat' type="hidden" required>
@@ -88,7 +87,9 @@
         </div>
         <div class="form-group">
             <label for="sunExposure">Sun Exposure:</label>
-            <select class="form-control" id="sunExposure" name="sunExposure">
+            <select class="form-control sun" id="sunExposure" name="sunExposure">
+                <option disabled selected value>- Please choose the sun exposure</option>
+<!--                <option value hidden>重置</option>-->
                 <option value="fullSun">Full Sun</option>
                 <option value="partialShade">Partial Shade</option>
                 <option value="fullShade">Full Shade</option>
@@ -98,9 +99,9 @@
             <label for="flowerColorText">Flower Color:</label>
             <div class="input-group">
                 <!-- Text input for displaying the color name -->
-                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" placeholder="choose from ColorPicker ar right" readonly="readonly">
+                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" placeholder="choose from ColorPicker at right" readonly="readonly" >
                 <!-- Color picker positioned on the right -->
-                <input type="color" class="color-input" id="flowerColorPicker" name="flowerColorPicker" onchange="updateFlowerColor()">
+                <input type="color" class="color-input" id="flowerColorPicker" name="flowerColorPicker" onchange="updateFlowerColor()" required>
             </div>
         </div>
 
@@ -111,7 +112,7 @@
         <div class="form-group">
             <h3>Identification</h3>
             <label for="name">Plant Name:</label>
-            <input type="text" class="form-control" id="name" name="name">
+            <input type="text" class="form-control" id="name" name="name" required>
 
             <label>Status</label><br>
             <div class="form-check form-check-inline">
@@ -142,6 +143,15 @@
     </form>
 </div>
 <script>
+    function selectSunExposure(){
+        const select = document.querySelector('.sun');
+        const reset = document.querySelector('.sun option:nth-child(2)');
+        const select_index = select.selectedIndex;
+        console.log("select_index: "+select_index)
+        return select_index !== 0;
+
+    }
+
     // Synchronize the text field with the color picker
     function updateFlowerColor() {
         const colorPicker = document.getElementById('flowerColorPicker');

@@ -148,6 +148,36 @@ async function getAllPlants(){
     return response;
 }
 
+async function getNickNameOfPlant(id) {
+    try {
+        // Query the plant record with the specified plantId
+        const plantInfo = await Plant.findOne({ plantId: id });
+        let response;
+
+        // If the plant information is found, return its nickname
+        if (plantInfo) {
+            response = {
+                type: 'success',
+                content: plantInfo.nickName
+            };
+        } else {
+            // No matching plant record found
+            response = {
+                type: 'fail',
+                content: 'Plant not found'
+            };
+        }
+    } catch (error) {
+        // Catch errors and return the error message
+        response = {
+            type: 'fail',
+            content: error.message
+        };
+    }
+    // Return the response
+    return response;
+}
+
 async function addChatRecord(plantId,nickName,content){
     var response;
     const now = new Date();
@@ -248,6 +278,6 @@ async function updateUpdateRequest(plantId, nickName, appOrdec) {
     return response;
 }
 // Export the function
-module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
+module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
     getAllUpdateRequest, updateUpdateRequest};
 

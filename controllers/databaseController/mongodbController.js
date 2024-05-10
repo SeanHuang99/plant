@@ -36,7 +36,8 @@ async function addPlant(plantName,
                         description,
                         details,
                         datetime,
-                        location,
+                        lat,
+                        lng,
                         flowers,
                         sunExposure,
                         flowerColor,
@@ -55,9 +56,9 @@ async function addPlant(plantName,
     dbpediaUpdates.name = DBpediaName;
     dbpediaUpdates.description = DBpediaDescription;
     dbpediaUpdates.genus = DBpediaGunes;
-    // let location = {};
-    // location.lat=lat;
-    // location.lng=lng;
+    let location = {};
+    location.lat=lat;
+    location.lng=lng;
     var response;
     try {
         const newPlant = new Plant({
@@ -183,6 +184,14 @@ async function getAllChatRecord(){
     return response;
 }
 
+//
+async function addUpdateRequest(plantId,nickname){
+
+}
+
+async function getUpdateRequest(plantId){
+
+}
 
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord,getAllChatRecord};

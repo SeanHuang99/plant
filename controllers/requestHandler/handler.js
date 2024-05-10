@@ -12,7 +12,9 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     let description = req.body.description;
     let details = req.body.details;
     let datetime = req.body.datetime;
-    let location = req.body.location;
+    // let location = req.body.location;
+    let lat = req.body.lat;
+    let lng = req.body.lng;
     let flowers = req.body.flowers;
     let sunExpose = req.body.sunExposure;
     let flowerColor = req.body.flowerColor;
@@ -83,25 +85,25 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
         });
 
 
-    // console.log("DBpediaName: "+DBpediaName);
-    // console.log("DBpediaDescription: "+DBpediaDescription);
-    // console.log("DBpediagenus: "+DBpediagenus);
+    console.log("DBpediaName: "+DBpediaName);
+    console.log("DBpediaDescription: "+DBpediaDescription);
+    console.log("DBpediagenus: "+DBpediagenus);
 
     // mongodb storage
-    // mongoApi.addPlant(plantName, description, details, datetime, location, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
-    //     .then(function (response) {
-    //         if (response.type === 'success') {
-    //             // plantId = response.content;
-    //             let plant = response.content;
-    //             res.status(200).json(plant.plantId);
-    //         } else {
-    //             res.status(504).send("cannot add plants");
-    //         }
-    //     })
-    //     .catch(function (error) {
-    //         console.log("error: " + error.message);
-    //         res.status(504).send(error.message);
-    //     })
+    mongoApi.addPlant(plantName, description, details, datetime, lat,lng, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
+        .then(function (response) {
+            if (response.type === 'success') {
+                // plantId = response.content;
+                let plant = response.content;
+                res.status(200).json(plant.plantId);
+            } else {
+                res.status(504).send("cannot add plants");
+            }
+        })
+        .catch(function (error) {
+            console.log("error: " + error.message);
+            res.status(504).send(error.message);
+        })
 })
 
 router.post("/updatePlants",upload.none(),async function (req, res, next) {

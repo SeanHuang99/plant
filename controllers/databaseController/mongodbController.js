@@ -184,15 +184,22 @@ async function getAllChatRecord(){
     return response;
 }
 
-//
-async function addUpdateRequest(plantId,nickname){
+// upload plant edit request (plantId, plantName, nickName, approveOrdecline=none)
+async function addUpdateRequest(plantId,plantName,nickname){
 
 }
 
-async function getUpdateRequest(plantId){
+async function getUpdateRequestById(plantId){
 
 }
 
+async function getAllUpdateRequest(){
+
+}
+
+async function updateUpdateRequest(plantId,nickName,appOrdec){
+
+}
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants,addChatRecord,getChatRecord,getAllChatRecord};
 

@@ -14,16 +14,30 @@ function generateDetailPage(){
         console.log('plantId==null')
         //todo: return to main page, and show alert of 'cannot find plant'
     }
-    openPlantsIDB().then(IDB=> {
-        getDetailById(IDB, plantId).then(plant => {
-            console.log('plant found in IDB ----- ' + JSON.stringify(plant))
-            console.log(plant.plantId + '-------> ' + plant.description)
-            detailRender(plant)
-        }).catch(err => {
-            console.log(err)
-            //todo: return to main page, and show alert of 'cannot find plant'
+    if(navigator.onLine){
+        fetch('/requestHandler/getPlants/'+plantId)
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (newPlant) {
+                detailRender(newPlant)
+            })
+            .catch(function (e){
+                console.log(e.message)
+            })
+    }
+    else {
+        openPlantsIDB().then(IDB => {
+            getDetailById(IDB, plantId).then(plant => {
+                console.log('plant found in IDB ----- ' + JSON.stringify(plant))
+                console.log(plant.plantId + '-------> ' + plant.description)
+                detailRender(plant)
+            }).catch(err => {
+                console.log(err)
+                //todo: return to main page, and show alert of 'cannot find plant'
+            })
         })
-    })
+    }
 }
 
 

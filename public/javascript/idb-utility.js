@@ -10,7 +10,7 @@ function synDataFromServer() {
 
 function synPlantFromServer() {
     if (navigator.onLine) {
-        fetch('http://localhost:3000/requestHandler/getAllPlants')
+        fetch('/requestHandler/getAllPlants')
             .then(function (res) {
                 return res.json();
             })

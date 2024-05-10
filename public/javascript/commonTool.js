@@ -12,6 +12,6 @@ function setPlantId(plantId){
     // console.log(plantId+'has saved to localStorage')
 }
 
-function getpPlantId(){
+function getPlantId(){
     return window.localStorage.getItem("plantId")
 }

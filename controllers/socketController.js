@@ -1,12 +1,13 @@
 const mongoApi=require("./databaseController/mongodbController");
 exports.init = function(io) {
     io.sockets.on('connection', function (socket) {
-        console.log("socket connected");
+        // console.log("socket connected");
         try {
             /**
              * create or joins a room
              */
             socket.on('create or join', function (plantId, nickName) {
+                console.log(`${nickName} join chat room ${plantId}`)
                 socket.join(plantId);
                 io.sockets.to(plantId).emit('joined', plantId, nickName);
             });

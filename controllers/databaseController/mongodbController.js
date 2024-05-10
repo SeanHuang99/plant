@@ -54,11 +54,11 @@ async function addPlant(plantName,
 {
     const now = new Date();
     const plantId = createPlantId(plantName);
-    let dbpediaUploads = {};
-    dbpediaUploads.link = DBpediaLink;
-    dbpediaUploads.name = DBpediaName;
-    dbpediaUploads.description = DBpediaDescription;
-    dbpediaUploads.genus = DBpediaGunes;
+    let dbpedia = {};
+    dbpedia.link = DBpediaLink;
+    dbpedia.name = DBpediaName;
+    dbpedia.description = DBpediaDescription;
+    dbpedia.genus = DBpediaGunes;
     let location = {};
     location.lat=lat;
     location.lng=lng;
@@ -77,7 +77,7 @@ async function addPlant(plantName,
             status,
             nickName,
             photo,
-            dbpediaUploads
+            dbpedia
         });
         await newPlant.save();
         // response={'type':'success','content':plantId};

@@ -40,7 +40,12 @@ async function initMap() {
         //default location: Sheffield
         center: location,
         zoom: 11,
-        mapId: "DEMO_MAP_ID"
+        mapId: "DEMO_MAP_ID",
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_CENTER,
+        },
     });
 
 
@@ -62,12 +67,13 @@ async function initMap() {
         });
         // 将地图中心设置为标记的位置
         map.setCenter(lastMarker.position);
+        setLocation()
     });
 
 
 
     const searchBox = new SearchBox(document.getElementById("search-box"));
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById("search-box"));
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById("search-box"));
 
     searchBox.addListener("places_changed", () => {
         console.log('places_changed')
@@ -86,16 +92,17 @@ async function initMap() {
             title: place.name,
         });
         map.setCenter(place.geometry.location);
+        setLocation()
     });
 
 
     infoWindow = new google.maps.InfoWindow();
-
-    const locationButton = document.createElement("button");
+    //todo: 莫名其妙focus
+    const locationButton = document.getElementById("getCurrentLoc");
 
     locationButton.textContent = "Pan to Current Location";
     locationButton.classList.add("custom-map-control-button");
-    map.controls[google.maps.ControlPosition.BOTTOM].push(locationButton);
+    // map.controls[google.maps.ControlPosition.LEFT_CENTER].push(locationButton);
     locationButton.addEventListener("click", () => {
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -103,6 +110,8 @@ async function initMap() {
                 (position) => {
                     location.lat=position.coords.latitude;
                     location.lng=position.coords.longitude;
+                    console.log("pan to:", location.lat, location.lng);
+
                     if (lastMarker!=null){
                         lastMarker.setMap(null);
                     }
@@ -113,6 +122,7 @@ async function initMap() {
                     });
                     // 将地图中心设置为标记的位置
                     map.setCenter(lastMarker.position);
+                    setLocation()
                     //todo: store location to MongoDB
                 },
                 () => {
@@ -138,6 +148,10 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
+function setLocation(){
+    document.getElementById("lat").value = location.lat;
+    document.getElementById("lng").value = location.lng;
+}
 if (navigator.onLine){
     console.log('show map')
     initMap();

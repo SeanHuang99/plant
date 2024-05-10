@@ -53,9 +53,12 @@
         </div>
         <div class="form-group">
             <label for="location">Location:</label>
+            <button id="getCurrentLoc">Pan to current</button>
 <!--            <input type="text" class="form-control" id="location" name="location" required>-->
-            <input id="search-box" type="text" placeholder="Search for places">
+            <input id="search-box" type="text" placeholder="Search for place"  style="height: 40px;margin: 10px">
             <div id="map"></div>
+            <input id="lat" type="hidden">
+            <input id="lng" type="hidden">
         </div>
 
         <br>
@@ -87,7 +90,7 @@
             <label for="flowerColorText">Flower Color:</label>
             <div class="input-group">
                 <!-- Text input for displaying the color name -->
-                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" placeholder="choose from ColorPicker ar right">
+                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" placeholder="choose from ColorPicker ar right" readonly="readonly">
                 <!-- Color picker positioned on the right -->
                 <input type="color" class="color-input" id="flowerColorPicker" name="flowerColorPicker" onchange="updateFlowerColor()">
             </div>
@@ -114,7 +117,7 @@
         </div>
 
         <div class="form-group">
-            <label for="photo">Photo:</label>
+            <label for="photo">Photo:</label><br>
             <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*" required>
         </div>
         <div class="form-group">
@@ -123,7 +126,7 @@
         </div>
         <p> </p>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
         </div>
         <p></p>
 

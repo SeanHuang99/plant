@@ -261,7 +261,7 @@ async function getUpdateRequestById(plantId) {
 }
 
 // Get all plant edit requests
-async function getAllUpdateRequest() {
+async function getAllUpdateRequests() {
     var response;
     try {
         const allRequests = await UpdateRequest.find({});
@@ -291,7 +291,23 @@ async function updateUpdateRequest(plantId, nickName, appOrdec) {
     }
     return response;
 }
+
+async function getAllUpdateRequestsByNickName(nickName) {
+    let response;
+    try {
+        // Fetch all documents matching the given nickname
+        const updateRequests = await UpdateRequest.find({ nickName });
+        // Prepare success response
+        response = { 'type': 'success', 'content': updateRequests };
+    } catch (error) {
+        // Prepare failure response in case of an error
+        response = { 'type': 'fail', 'content': error.message };
+    }
+    // Return the structured response
+    return response;
+}
+
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, changePlantNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
-    getAllUpdateRequest, updateUpdateRequest};
+    getAllUpdateRequests, updateUpdateRequest, getAllUpdateRequestsByNickName};
 

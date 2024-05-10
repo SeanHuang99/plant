@@ -36,7 +36,7 @@
     </style>
 </head>
 <body>
-<div class="container mt-5" style="padding: 0 70px">
+<div class="container mt-5" style="padding: 0 100px">
     <h1 class="mt-4">Add Plant</h1>
     <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data">
         <div class="form-group">
@@ -87,7 +87,7 @@
             <label for="flowerColorText">Flower Color:</label>
             <div class="input-group">
                 <!-- Text input for displaying the color name -->
-                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" value="choose from ColorPicker ar right">
+                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" placeholder="choose from ColorPicker ar right">
                 <!-- Color picker positioned on the right -->
                 <input type="color" class="color-input" id="flowerColorPicker" name="flowerColorPicker" onchange="updateFlowerColor()">
             </div>
@@ -102,14 +102,14 @@
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" name="name">
 
-            <label>Status</label>
+            <label>Status</label><br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="statusComplete" name="status" value="Completed">
-                <label class="form-check-label" for="statusComplete">Completed</label>
+                <div class="form-check-label" >Completed</div>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="statusInProgress" name="status" value="In Progress">
-                <label class="form-check-label" for="statusInProgress">In Progress</label>
+                <div class="form-check-label" >In Progress</div>
             </div>
             <div>DBPedia...</div>
             <div>A chat/comment...</div>

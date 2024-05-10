@@ -6,14 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //transfer image/file to base64
         const photo = form.elements['photo'].files[0];
+        var fileSize=photo.size;
+        console.log("file size: "+fileSize/(1024*1024)+"MB");
         if (photo) {
             // photo.value = 'newemail@example.com';
             // console.log(`Updated Email: ${photo.value}`);
             const reader = new FileReader();
             reader.onload = function(e) {
-                var fileSize=e.size;
-                console.log("file size: "+fileSize/(1024*1024));
-
                 base64Image = e.target.result;
                 const formData = new FormData(form);
                 formData.append("base64Image",base64Image);

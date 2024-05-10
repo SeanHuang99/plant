@@ -55,10 +55,10 @@ async function addPlant(plantName,
     const now = new Date();
     const plantId = createPlantId(plantName);
     let dbpediaUploads = {};
-    dbpediaUpdates.link = DBpediaLink;
-    dbpediaUpdates.name = DBpediaName;
-    dbpediaUpdates.description = DBpediaDescription;
-    dbpediaUpdates.genus = DBpediaGunes;
+    dbpediaUploads.link = DBpediaLink;
+    dbpediaUploads.name = DBpediaName;
+    dbpediaUploads.description = DBpediaDescription;
+    dbpediaUploads.genus = DBpediaGunes;
     let location = {};
     location.lat=lat;
     location.lng=lng;

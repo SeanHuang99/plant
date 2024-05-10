@@ -22,7 +22,7 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     let status = req.body.status;
     let base64Image = req.body.base64Image;
 
-    console.log("location: "+location)
+    console.log(`lat: ${lat}, lng: ${lng}`);
 
     const resource = `http://dbpedia.org/resource/${plantName}`;
     // console.log("DBPedia URL: "+resource)
@@ -85,9 +85,9 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
         });
 
 
-    console.log("DBpediaName: "+DBpediaName);
-    console.log("DBpediaDescription: "+DBpediaDescription);
-    console.log("DBpediagenus: "+DBpediagenus);
+    // console.log("DBpediaName: "+DBpediaName);
+    // console.log("DBpediaDescription: "+DBpediaDescription);
+    // console.log("DBpediagenus: "+DBpediagenus);
 
     // mongodb storage
     mongoApi.addPlant(plantName, description, details, datetime, lat,lng, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)

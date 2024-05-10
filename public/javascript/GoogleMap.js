@@ -138,5 +138,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
+if (navigator.onLine){
+    console.log('show map')
+    initMap();
+}else console.log('hide map')
 // window.initMap = initMap;
-initMap();

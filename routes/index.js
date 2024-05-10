@@ -22,19 +22,6 @@ router.get('/upload',function (req, res){
 
 router.get('/main',async function (req, res) {
     console.log('/main')
-  // 直接调用数据库接口
-  //   const allPlants = await getAllPlants()
-  // console.log(allPlants)
-  // console.log('main page')
-  // res.render('main', {title: 'Main', plantList: allPlants.content})
-
-    // 使用axios请求
-  // axios.get("http://localhost:3000/getAllPlants")
-  //     .then(res=>{
-  //       console.log(res)
-  //       res.render('main', {title: 'Main', plantList: res.content})
-  //     })
-
     // 使用fetch请求
     fetch("http://localhost:3000/requestHandler/getAllPlants")
         .then(response => {
@@ -45,9 +32,6 @@ router.get('/main',async function (req, res) {
             // console.log(data)
             res.render('main', {title: 'Main', plantList: data})
         })
-    // loadAllPlants().then(allPlants=>{
-    //     res.render('main', {title: 'Main', plantList: allPlants})
-    // })
 })
 router.get('/about', function (req, res) {
     console.log('/about')

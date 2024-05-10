@@ -10,3 +10,4 @@ node_modules/
 !/views/EJS-test.ejs
 !/views/mapTest.ejs
 !/public/javascript/EJStest.js
+!/public/javascript/searchBox.js

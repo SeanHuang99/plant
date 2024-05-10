@@ -6,7 +6,6 @@ let ejs = require('ejs');
 // import "/public/import/jquery-3.7.1.min"
 // import "/public/import/bootstrap.min"
 // import "/public/import/bootstrap.min.css"
-
 const str = "<H3>All Plants</H3>\n" +
     "<div class=\"container\">\n" +
     "    <% for (var i = 0; i < plantList.length; i++) { %>\n" +
@@ -214,3 +213,7 @@ plantList = [
 let renderedHTML = template(plantList);
 // 假设你有一个 id 为 "output" 的 div 元素用于显示渲染后的 HTML
 document.getElementById('output').innerHTML = renderedHTML;
+
+//放弃这种做法，因为
+//1.这样注入和用原生html注入没有区别
+//2.生成的bundle.js文件如果想要离线访问必须缓存，每个页面都要有一个bundle，很占用空间

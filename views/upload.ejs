@@ -33,6 +33,11 @@
         .form-control-with-color {
             flex-grow: 1;
         }
+
+        #uploadedImage {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +125,9 @@
             <label for="photo">Photo:</label><br>
             <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*" required>
         </div>
+        <br>
+        <img id="uploadedImage" alt="Uploaded Image" style="display:none;"/>
+
         <div class="form-group">
             <label for="nickname">User Nickname:</label>
             <input type="text" class="form-control" id="nickname" name="nickname" required>
@@ -129,7 +137,7 @@
             <button type="submit" class="btn btn-primary btn-lg">Submit</button>
         </div>
         <p></p>
-
+        <p></p>
     </form>
 </div>
 <script>
@@ -140,8 +148,19 @@
         colorText.value = colorPicker.value;
     }
 
-    // Optionally, initialize the color text input with the color picker's default value
-    // document.getElementById('flowerColor').value = document.getElementById('flowerColorPicker').value;
+    document.getElementById('photo').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('uploadedImage');
+                img.src = e.target.result;
+                img.style.display = 'block';  // Ensure the image is visible
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
 </script>
 </body>
 </html>

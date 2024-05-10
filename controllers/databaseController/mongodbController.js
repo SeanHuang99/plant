@@ -88,38 +88,6 @@ async function addPlant(plantName,
     return response;
 }
 
-async function updatePlant(id, updates) {
-    let dbpediaUpdates = {};
-
-    // 构建 DBpedia 相关的更新
-    if (updates.DBpediaLink !== undefined) dbpediaUpdates.link = updates.DBpediaLink;
-    if (updates.DBpediaName !== undefined) dbpediaUpdates.name = updates.DBpediaName;
-    if (updates.DBpediaDescription !== undefined) dbpediaUpdates.description = updates.DBpediaDescription;
-    if (updates.DBpediaGenus !== undefined) dbpediaUpdates.genus = updates.DBpediaGenus;
-
-    // 创建最终的更新对象
-    let finalUpdates = {};
-    if (updates.plantName !== undefined) finalUpdates.plantName = updates.plantName;
-    if (Object.keys(dbpediaUpdates).length > 0) finalUpdates.dbpedia = dbpediaUpdates;
-
-    let response;
-    try {
-        const updatedPlant = await Plant.findOneAndUpdate(
-            { plantId: id },
-            { $set: finalUpdates },
-            { new: true, runValidators: true }
-        );
-
-        if (updatedPlant) {
-            response = { type: 'success', content: updatedPlant };
-        } else {
-            response = { type: 'fail', content: 'Plant not found' };
-        }
-    } catch (error) {
-        response = { type: 'fail', content: error.message };
-    }
-    return response;
-}
 
 async function getPlant(id) {
     try {
@@ -185,16 +153,20 @@ async function getNickNameOfPlant(id) {
 }
 
 
-async function changePlantNameOfPlant(id, newPlantName) {
+async function changePlantNameOfPlant(id, newPlantName,link,name,description,genus) {
+    let response;
     try {
+        const dbpedia={}
+        dbpedia.link = link;
+        dbpedia.name = name;
+        dbpedia.description = description;
+        dbpedia.genus = genus;
         // Update the plant name for the plant with the specified plantId
         const plantInfo = await Plant.findOneAndUpdate(
             { plantId: id }, // Find the plant by plantId
-            { plantName: newPlantName }, // Set the new plant name
+            { plantName: newPlantName ,dbpedia: dbpedia}, // Set the new plant name
             { new: true } // Return the updated document
         );
-
-        let response;
 
         // If the update was successful, return a success message
         if (plantInfo) {

@@ -164,39 +164,36 @@
           <div id="map"></div>
           </p>
           <p class="card-text">Plant Characteristics:</p>
-          <p class="card-text">Flowers: <%= plant.flowers %></p>
-          <p class="card-text">Sun Exposure: <%= plant.sunExposure %></p>
+          <p class="card-text" id="flowers">Flowers: </p>
+          <p class="card-text" id="sunExposure">Sun Exposure: </p>
           <p class="card-text">
             Flower Color:
             <!-- Add a small colored box based on the stored color value -->
-            <span style="display: inline-block; width: 20px; height: 20px; background-color: <%= plant.flowerColor %>; border: 1px solid #ccc; vertical-align: middle; margin-left: 5px;"></span>
+            <span id="flowerColorBox" style="display: inline-block; width: 20px; height: 20px; background-color:#000000FF ; border: 1px solid #000000; vertical-align: middle; margin-left: 5px;"></span>
             <!-- Display the actual color value -->
-            <%= plant.flowerColor %>
+            <span id = "flowerColor"></span>
           </p>
-          <p class="card-text">Status: <%= plant.status %></p>
+          <p class="card-text" id="status">Status: </p>
 
           <!-- Optional DBpedia Information -->
-          <% if (plant.DBpediaLink) { %>
+
             <p class="card-text">
-              DBpedia Link: <a href="<%= plant.DBpediaLink %>" target="_blank">More Info</a>
+              DBpedia Link: <a id="DBpediaLink" href="" target="_blank">More Info</a>
             </p>
-          <% } %>
-          <% if (plant.DBpediaName) { %>
-            <p class="card-text">DBpedia Name: <%= plant.DBpediaName %></p>
-          <% } %>
-          <% if (plant.DBpediaDescription) { %>
-            <p class="card-text">DBpedia Description: <%= plant.DBpediaDescription %></p>
-          <% } %>
-          <% if (plant.DBpediaGunes) { %>
-            <p class="card-text">DBpedia Gunes: <%= plant.DBpediaGunes %></p>
-          <% } %>
+
+            <p class="card-text" id="DBpediaName">DBpedia Name: </p>
+
+            <p class="card-text" id="DBpediaDescription">DBpedia Description: </p>
+
+            <p class="card-text" id="DBpediaGunes">DBpedia Gunes: </p>
+
 
           <!-- Optional Photo -->
-          <% if (plant.photo) { %>
+
             <div class="plant-photo">
-              <img src="<%= plant.photo %>" alt="Plant Photo" style="max-width: 100%; border-radius: 8px;">
+              <img id="photo" src="" alt="Plant Photo" style="max-width: 100%; border-radius: 8px;">
             </div>
-          <% } %>
+
 
         </div>
       </div>
@@ -208,7 +205,7 @@
     <div id="chat">
       <!-- Chat History -->
       <div id="chat_history">
-        <p id="who_you_are">You are in room: <%= plant.plantId %></p>
+        <p id="who_you_are">You are in room: </p>
       </div>
 
       <!-- Chat Input Box -->

@@ -178,6 +178,41 @@ async function getNickNameOfPlant(id) {
     return response;
 }
 
+async function changePlantNameOfPlant(id, newPlantName) {
+    try {
+        // Update the plant name for the plant with the specified plantId
+        const plantInfo = await Plant.findOneAndUpdate(
+            { plantId: id }, // Find the plant by plantId
+            { plantName: newPlantName }, // Set the new plant name
+            { new: true } // Return the updated document
+        );
+
+        let response;
+
+        // If the update was successful, return a success message
+        if (plantInfo) {
+            response = {
+                type: 'success',
+                content: `Plant name updated to '${newPlantName}'`
+            };
+        } else {
+            // If no matching plant record was found
+            response = {
+                type: 'fail',
+                content: 'Plant not found'
+            };
+        }
+    } catch (error) {
+        // Catch any errors and return an appropriate message
+        response = {
+            type: 'fail',
+            content: error.message
+        };
+    }
+    // Return the response
+    return response;
+}
+
 async function addChatRecord(plantId,nickName,content){
     var response;
     const now = new Date();
@@ -278,6 +313,6 @@ async function updateUpdateRequest(plantId, nickName, appOrdec) {
     return response;
 }
 // Export the function
-module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
+module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, changePlantNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
     getAllUpdateRequest, updateUpdateRequest};
 

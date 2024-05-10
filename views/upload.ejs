@@ -12,6 +12,11 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
     <script type="module" src="/javascript/GoogleMap.js"></script>
     <style>
+        label{
+            font-size: 18px;
+            font-weight: bold;
+            padding: 20px 0 10px 0;
+        }
         .input-group {
             display: flex;
             align-items: center;
@@ -31,7 +36,7 @@
     </style>
 </head>
 <body>
-<div class="container mt-5" style="padding: 0 50px">
+<div class="container mt-5" style="padding: 0 70px">
     <h1 class="mt-4">Add Plant</h1>
     <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data">
         <div class="form-group">
@@ -52,16 +57,21 @@
             <input id="search-box" type="text" placeholder="Search for places">
             <div id="map"></div>
         </div>
+
+        <br>
+        <hr class="border-dark">
+        <br>
+
         <div class="form-group">
-            <h3>Plant Characteristics:</h3><br>
-            <label>Does the plant have flowers?</label>
+            <h3>Plant Characteristics:</h3>
+            <label>Does the plant have flowers?</label><br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="flowersYes" name="flowers" value="yes">
-                <label class="form-check-label" for="flowersYes">Yes</label>
+                <div class="form-check-label" >Yes</div>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="flowersNo" name="flowers" value="no">
-                <label class="form-check-label" for="flowersNo">No</label>
+                <div class="form-check-label">No</div>
             </div>
             <!-- 添加其他特征的单选框 -->
         </div>
@@ -77,15 +87,18 @@
             <label for="flowerColorText">Flower Color:</label>
             <div class="input-group">
                 <!-- Text input for displaying the color name -->
-                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor">
+                <input type="text" class="form-control form-control-with-color" id="flowerColor" name="flowerColor" value="choose from ColorPicker ar right">
                 <!-- Color picker positioned on the right -->
                 <input type="color" class="color-input" id="flowerColorPicker" name="flowerColorPicker" onchange="updateFlowerColor()">
             </div>
         </div>
 
+        <br>
+        <hr class="border-dark">
+        <br>
 
         <div class="form-group">
-            <h3>Identification</h3><br>
+            <h3>Identification</h3>
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" name="name">
 
@@ -127,7 +140,7 @@
     }
 
     // Optionally, initialize the color text input with the color picker's default value
-    document.getElementById('flowerColor').value = document.getElementById('flowerColorPicker').value;
+    // document.getElementById('flowerColor').value = document.getElementById('flowerColorPicker').value;
 </script>
 </body>
 </html>

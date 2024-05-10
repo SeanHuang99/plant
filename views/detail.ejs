@@ -106,7 +106,8 @@
     }
   </style>
 </head>
-<body onload="init()">
+<!--<body onload="init()">-->
+<body>
 <div class="container">
   <div class="resizable">
     <!-- Plant Details Panel -->
@@ -118,11 +119,11 @@
       </div>
       <div class="card mb-4">
         <div class="card-body">
-          <h5 class="card-title">Plant Name: <%= plant.plantName %></h5>
-          <p class="card-text">Description: <%= plant.description %></p>
-          <p class="card-text">Details: <%= plant.details %></p>
-          <p class="card-text">Date/Time: <%= new Date(plant.datetime).toLocaleString() %></p>
-          <p class="card-text">User Nickname: <%= plant.nickName %></p>
+          <h5 class="card-title" id="plantName">Plant Name: </h5>
+          <p class="card-text" id="plantDescription">Description: </p>
+          <p class="card-text" id="plantDetail">Details: </p>
+          <p class="card-text" id="plantDate">Date/Time: </p>
+          <p class="card-text" id="nickName">User Nickname: </p>
           <p class="card-text">Location:
             <input id="search-box" type="text" placeholder="Search for places">
           <div id="map"></div>
@@ -188,107 +189,107 @@
 </div>
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-<script>
-  // Initialize socket.io connection and setup chat room
-  let name = getNickName();
-  let roomNo = getpPlantId();
-  let socket = io();
+<!--<script>-->
+<!--  // Initialize socket.io connection and setup chat room-->
+<!--  let name = getNickName();-->
+<!--  let roomNo = getpPlantId();-->
+<!--  let socket = io();-->
 
-  function init() {
-    // Event listener for joining a room
-    socket.on('joined', function (room, userId) {
-      if (userId === name) {
-        document.getElementById('who_you_are').innerHTML = `${userId}, you are in room: ${room}`;
-      } else {
-        writeOnHistory(`<b>${userId}</b> joined room ${room}`);
-      }
-      getChatRecord(room);
-    });
+<!--  function init() {-->
+<!--    // Event listener for joining a room-->
+<!--    socket.on('joined', function (room, userId) {-->
+<!--      if (userId === name) {-->
+<!--        document.getElementById('who_you_are').innerHTML = `${userId}, you are in room: ${room}`;-->
+<!--      } else {-->
+<!--        writeOnHistory(`<b>${userId}</b> joined room ${room}`);-->
+<!--      }-->
+<!--      getChatRecord(room);-->
+<!--    });-->
 
-    // Event listener for receiving chat messages
-    socket.on('chat', function (room, userId, chatText) {
-      let who = userId === name ? 'Me' : userId;
-      writeOnHistory(`<b>${who}:</b> ${chatText}`);
-    });
+<!--    // Event listener for receiving chat messages-->
+<!--    socket.on('chat', function (room, userId, chatText) {-->
+<!--      let who = userId === name ? 'Me' : userId;-->
+<!--      writeOnHistory(`<b>${who}:</b> ${chatText}`);-->
+<!--    });-->
 
-    connectToRoom();
-    enableResizer(); // Enable resizable panel feature
-  }
+<!--    connectToRoom();-->
+<!--    enableResizer(); // Enable resizable panel feature-->
+<!--  }-->
 
-  // Send the chat message to the server
-  function sendChatText() {
-    let chatText = document.getElementById('chat_input').value;
-    if (!chatText.trim()) return;
-    socket.emit('chat', roomNo, name, chatText);
-    document.getElementById('chat_input').value = ''; // Clear input
-  }
+<!--  // Send the chat message to the server-->
+<!--  function sendChatText() {-->
+<!--    let chatText = document.getElementById('chat_input').value;-->
+<!--    if (!chatText.trim()) return;-->
+<!--    socket.emit('chat', roomNo, name, chatText);-->
+<!--    document.getElementById('chat_input').value = ''; // Clear input-->
+<!--  }-->
 
-  // Append new chat history entries to the container
-  function writeOnHistory(text) {
-    let history = document.getElementById('chat_history');
-    let paragraph = document.createElement('p');
-    paragraph.innerHTML = text;
-    history.appendChild(paragraph);
-    // Scroll down to show the latest message
-    history.scrollTop = history.scrollHeight;
-  }
+<!--  // Append new chat history entries to the container-->
+<!--  function writeOnHistory(text) {-->
+<!--    let history = document.getElementById('chat_history');-->
+<!--    let paragraph = document.createElement('p');-->
+<!--    paragraph.innerHTML = text;-->
+<!--    history.appendChild(paragraph);-->
+<!--    // Scroll down to show the latest message-->
+<!--    history.scrollTop = history.scrollHeight;-->
+<!--  }-->
 
-  // Fetch the entire chat history for a particular room
-  function getChatRecord(roomNo) {
-    fetch(`/requestHandler/getChatRecordById/${roomNo}`)
-            .then(response => response.json())
-            .then(data => {
-              for (let eachRecord of data) {
-                writeOnHistory(`<b>${eachRecord.nickName}:</b> ${eachRecord.content}`);
-              }
-            })
-            .catch(error => {
-              console.error('Error occurred:', error);
-            });
-  }
+<!--  // Fetch the entire chat history for a particular room-->
+<!--  function getChatRecord(roomNo) {-->
+<!--    fetch(`/requestHandler/getChatRecordById/${roomNo}`)-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--              for (let eachRecord of data) {-->
+<!--                writeOnHistory(`<b>${eachRecord.nickName}:</b> ${eachRecord.content}`);-->
+<!--              }-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--              console.error('Error occurred:', error);-->
+<!--            });-->
+<!--  }-->
 
-  // Request to join or create a new chat room
-  function connectToRoom() {
-    socket.emit('create or join', roomNo, name);
-  }
+<!--  // Request to join or create a new chat room-->
+<!--  function connectToRoom() {-->
+<!--    socket.emit('create or join', roomNo, name);-->
+<!--  }-->
 
-  // Enable resizing of plant and chat panels
-  function enableResizer() {
-    const resizer = document.querySelector('.resizer');
-    const plantDetails = document.getElementById('plant-details');
-    const chat = document.getElementById('chat');
+<!--  // Enable resizing of plant and chat panels-->
+<!--  function enableResizer() {-->
+<!--    const resizer = document.querySelector('.resizer');-->
+<!--    const plantDetails = document.getElementById('plant-details');-->
+<!--    const chat = document.getElementById('chat');-->
 
-    let startX = 0;
-    let startWidth = 0;
+<!--    let startX = 0;-->
+<!--    let startWidth = 0;-->
 
-    resizer.addEventListener('mousedown', function (event) {
-      startX = event.clientX;
-      startWidth = plantDetails.offsetWidth;
-      document.addEventListener('mousemove', resize);
-      document.addEventListener('mouseup', stopResize);
-    });
+<!--    resizer.addEventListener('mousedown', function (event) {-->
+<!--      startX = event.clientX;-->
+<!--      startWidth = plantDetails.offsetWidth;-->
+<!--      document.addEventListener('mousemove', resize);-->
+<!--      document.addEventListener('mouseup', stopResize);-->
+<!--    });-->
 
-    function resize(event) {
-      const newWidth = startWidth + (event.clientX - startX);
-      const totalWidth = plantDetails.parentNode.offsetWidth;
-      plantDetails.style.width = `${(newWidth / totalWidth) * 100}%`;
-      chat.style.width = `${((totalWidth - newWidth) / totalWidth) * 100}%`;
-    }
+<!--    function resize(event) {-->
+<!--      const newWidth = startWidth + (event.clientX - startX);-->
+<!--      const totalWidth = plantDetails.parentNode.offsetWidth;-->
+<!--      plantDetails.style.width = `${(newWidth / totalWidth) * 100}%`;-->
+<!--      chat.style.width = `${((totalWidth - newWidth) / totalWidth) * 100}%`;-->
+<!--    }-->
 
-    function stopResize() {
-      document.removeEventListener('mousemove', resize);
-      document.removeEventListener('mouseup', stopResize);
-    }
-  }
+<!--    function stopResize() {-->
+<!--      document.removeEventListener('mousemove', resize);-->
+<!--      document.removeEventListener('mouseup', stopResize);-->
+<!--    }-->
+<!--  }-->
 
-  // Handle key down event for chat input
-  function handleKeyDown(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      sendChatText();
-    }
-  }
+<!--  // Handle key down event for chat input-->
+<!--  function handleKeyDown(event) {-->
+<!--    if (event.key === "Enter") {-->
+<!--      event.preventDefault();-->
+<!--      sendChatText();-->
+<!--    }-->
+<!--  }-->
 
-</script>
+<!--</script>-->
 </body>
 </html>

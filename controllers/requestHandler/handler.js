@@ -106,7 +106,7 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
         })
 })
 
-router.post("/updatePlants",upload.none(),async function (req, res, next) {
+router.post("/updatePlantsRequest",upload.none(),async function (req, res, next) {
 
     res.status(200).send("updated");
 })
@@ -171,6 +171,8 @@ router.get("/getAllChatRecord",function (req,res,next){
             res.status(500).send(error.message);
         })
 })
+
+
 /*
 ------------------------------------------------------------------
  following content just for test api

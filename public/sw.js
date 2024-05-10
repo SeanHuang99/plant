@@ -25,6 +25,7 @@ self.addEventListener('install', event => {
                 '/javascript/upload.js',
                 '/javascript/commonTool.js',
                 '/javascript/detail.js',
+                '/javascript/sort.js',
                 '/stylesheets/style.css',
                 '/images/icon.webp',
                 '/manifest.json',

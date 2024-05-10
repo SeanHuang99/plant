@@ -17,7 +17,10 @@ var storage = {
 
 
 $(document).ready(function () {
-    // console.log(111)
+    //insert nickname to index page
+    updateNickname()
+
+
     if (storage.get("lastURL") != null) {
         $('#content-iframe').attr('src', storage.get("lastURL"));
         // console.log("jump to "+storage.get("lastURL"))
@@ -115,6 +118,7 @@ function handleNickname() {
         setNickName(nickname);
         errorMessage.style.display = 'none';
         console.log("Nickname entered:", nickname);
+        updateNickname()
         showWelcomeOrIndex();
         // Continue with any additional logic such as AJAX requests, local storage, etc.
     }
@@ -130,5 +134,14 @@ function showWelcomeOrIndex(){
     else{
         welcomePage.style.display = 'none';
         indexPage.style.display='block';
+    }
+}
+function updateNickname(){
+    const username = getNickName();  // This function is assumed to be defined in your commonTool.js
+    const userGreeting = document.getElementById('userGreeting');
+    if (username) {
+        userGreeting.textContent = `Welcome, ${username}`;
+    } else {
+        userGreeting.textContent = 'Welcome, Guest';  // Fallback text if no username is found
     }
 }

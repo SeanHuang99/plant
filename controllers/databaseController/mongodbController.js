@@ -54,7 +54,10 @@ async function addPlant(plantName,
     dbpediaUpdates.link = DBpediaLink;
     dbpediaUpdates.name = DBpediaName;
     dbpediaUpdates.description = DBpediaDescription;
-    dbpediaUpdates.genus = DBpediaGenus;
+    dbpediaUpdates.genus = DBpediaGunes;
+    // let location = {};
+    // location.lat=lat;
+    // location.lng=lng;
     var response;
     try {
         const newPlant = new Plant({
@@ -81,20 +84,34 @@ async function addPlant(plantName,
     return response;
 }
 
-async function updatePlant(id, updates){
+async function updatePlant(id, updates) {
+    let dbpediaUpdates = {};
+
+    // 构建 DBpedia 相关的更新
+    if (updates.DBpediaLink !== undefined) dbpediaUpdates.link = updates.DBpediaLink;
+    if (updates.DBpediaName !== undefined) dbpediaUpdates.name = updates.DBpediaName;
+    if (updates.DBpediaDescription !== undefined) dbpediaUpdates.description = updates.DBpediaDescription;
+    if (updates.DBpediaGenus !== undefined) dbpediaUpdates.genus = updates.DBpediaGenus;
+
+    // 创建最终的更新对象
+    let finalUpdates = {};
+    if (updates.plantName !== undefined) finalUpdates.plantName = updates.plantName;
+    if (Object.keys(dbpediaUpdates).length > 0) finalUpdates.dbpedia = dbpediaUpdates;
+
     let response;
     try {
         const updatedPlant = await Plant.findOneAndUpdate(
-            {plantId: id}, // Query based on the unique plantId
-            {$set: updates}, // Update operation
-            {new: true, runValidators: true} // Options: return the updated document and run model validators
+            { plantId: id },
+            { $set: finalUpdates },
+            { new: true, runValidators: true }
         );
+
         if (updatedPlant) {
             response = { type: 'success', content: updatedPlant };
         } else {
             response = { type: 'fail', content: 'Plant not found' };
         }
-    }catch (error) {
+    } catch (error) {
         response = { type: 'fail', content: error.message };
     }
     return response;

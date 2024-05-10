@@ -18,7 +18,10 @@ const PlantSchema = new mongoose.Schema({
     description: String, // 植物描述
     details: String, // 植物详细信息
     datetime: Date, // 观察日期和时间
-    // location: locationSchema, // 观察位置
+    location: {
+        lat: Number,
+        lng: Number,
+    }, // location
     flowers: String, // 植物是否有花
     sunExposure: String, // 日照情况
     flowerColor: String, // 花的颜色

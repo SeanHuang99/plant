@@ -20,14 +20,14 @@ $(document).ready(function () {
     // console.log(111)
     if (storage.get("lastURL") != null) {
         $('#content-iframe').attr('src', storage.get("lastURL"));
-        console.log("jump to "+storage.get("lastURL"))
+        // console.log("jump to "+storage.get("lastURL"))
     }
     else{
-        $('#content-iframe').attr('src', "/main");
+        $('#content-iframe').attr('src', '/main');
     }
     // listen .nav-link event
     $('.nav-link').click(function (e) {
-        console.log(222)
+        // console.log(222)
         // stop default page skip
         e.preventDefault();
 

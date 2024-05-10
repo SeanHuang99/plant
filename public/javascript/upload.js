@@ -4,10 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (event) => {
         event.preventDefault(); // Prevent the form from submitting via the default action
 
-        //transfer image/file to base64
         const photo = form.elements['photo'].files[0];
         var fileSize=photo.size;
         console.log("file size: "+fileSize/(1024*1024)+"MB");
+
+        // console.log("location: "+infoWindowlocation);
+        //transfer image/file to base64
         if (photo) {
             // photo.value = 'newemail@example.com';
             // console.log(`Updated Email: ${photo.value}`);

@@ -76,6 +76,10 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
             DBpediaName = bindings?.name?.value;
             DBpediaDescription = bindings?.comment?.value;
             DBpediagenus = bindings?.genus?.value;
+        })
+        .catch(function (error) {
+                console.log("error: " + error.message);
+                res.status(504).send(error.message);
         });
 
 

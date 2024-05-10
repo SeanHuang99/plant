@@ -149,10 +149,15 @@ async function getAllPlants(){
 }
 
 async function getNickNameOfPlant(id) {
+    // Declare response at the start of the function
+    let response = {
+        type: 'fail',
+        content: 'Unexpected error occurred'
+    };
+
     try {
         // Query the plant record with the specified plantId
         const plantInfo = await Plant.findOne({ plantId: id });
-        let response;
 
         // If the plant information is found, return its nickname
         if (plantInfo) {
@@ -174,9 +179,11 @@ async function getNickNameOfPlant(id) {
             content: error.message
         };
     }
+
     // Return the response
     return response;
 }
+
 
 async function changePlantNameOfPlant(id, newPlantName) {
     try {

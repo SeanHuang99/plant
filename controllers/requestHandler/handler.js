@@ -106,9 +106,31 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
         })
 })
 
-router.post("/updatePlantsRequest",upload.none(),async function (req, res, next) {
+router.post('/updatePlantsRequest', async function (req, res, next) {
+    const { plantId, preferredPlantName, nickName } = req.body;
 
-    res.status(200).send("updated");
+    const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
+    if (originalNickName.type === 'fail') {
+        return res.status(404).json({ message: 'Plant not found' });
+    }
+
+    // If the uploader and the modifier are the same, update directly
+    if (originalNickName.content === nickName) {
+        const result = await mongoApi.changePlantNameOfPlant(plantId, preferredPlantName);
+        if (result.type === 'success') {
+            res.status(200).send('Plant name updated successfully');
+        } else {
+            res.status(404).json({ message: result.content });
+        }
+    } else {
+        // If not the same, add an update request
+        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName);
+        if (result.type === 'success') {
+            res.status(200).send('Update request submitted successfully');
+        } else {
+            res.status(500).json({ message: result.content });
+        }
+    }
 })
 
 router.get("/getPlants/:id",function (req,res,next){

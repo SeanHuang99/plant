@@ -61,4 +61,9 @@ router.get('/EJS-test',function (req, res) {
 router.get('/mapTest',function (req, res) {
     res.render('mapTest')
 })
+
+router.get('/huangtest', function (req, res) {
+    console.log('/huangtest')
+    res.render('temptest')
+})
 module.exports = router;

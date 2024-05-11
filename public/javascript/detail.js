@@ -1,11 +1,11 @@
-window.onload=function (){
-    if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.getItem("lastURL")===undefined) {
-        window.localStorage.setItem('lastURL', '/detail');
-    }
-    // synPlantFromServer();
-    // console.log("wel to detail");
-    generateDetailPage();
+
+if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.getItem("lastURL")===undefined) {
+    window.localStorage.setItem('lastURL', '/detail');
 }
+// synPlantFromServer();
+console.log("wel to detail");
+generateDetailPage();
+
 
 function generateDetailPage(){
     const plantId=localStorage.getItem('plantId')

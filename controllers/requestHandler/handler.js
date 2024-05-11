@@ -8,7 +8,7 @@ const upload = multer();
 
 router.post("/addPlants",upload.none(),async function (req, res, next) {
     console.log('offline addPlant')
-    let plantId=req.body.plantId;
+    // let plantId=req.body.plantId;
     let nickname = req.body.nickname;
     let description = req.body.description;
     let details = req.body.details;
@@ -81,17 +81,17 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
             DBpediagenus = bindings?.genus?.value;
         })
         .catch(function (error) {
-                console.log("error: " + error.message);
-                res.status(504).send(error.message);
+                console.log("dbpedia error: " + error.message);
+                // res.status(504).send(error.message);
         });
 
 
-    // console.log("DBpediaName: "+DBpediaName);
-    // console.log("DBpediaDescription: "+DBpediaDescription);
-    // console.log("DBpediagenus: "+DBpediagenus);
+    console.log("DBpediaName: "+DBpediaName);
+    console.log("DBpediaDescription: "+DBpediaDescription);
+    console.log("DBpediagenus: "+DBpediagenus);
 
     // mongodb storage
-    mongoApi.addPlant(plantId,plantName, description, details, datetime, lat,lng, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
+    mongoApi.addPlant(plantName, description, details, datetime, lat,lng, flowers, sunExpose, flowerColor, status, nickname, base64Image,resource,DBpediaName,DBpediaDescription,DBpediagenus)
         .then(function (response) {
             if (response.type === 'success') {
                 // plantId = response.content;

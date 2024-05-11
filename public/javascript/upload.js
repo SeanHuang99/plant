@@ -43,7 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const photo = form.elements['photo'].files[0];
         var fileSize=photo.size;
         console.log("file size: "+fileSize/(1024*1024)+"MB");
-
+        if((fileSize/(1024*1024))>4){
+            alert("Plant Image cannot exceed 4MB");
+            return;
+        }
         // console.log("location: "+infoWindowlocation);
         //transfer image/file to base64
         if (photo) {
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         // console.log("success data: "+data);
                         // console.log(data);
                         setPlantId(data)
-                        location.href=`/detail?plantId=${data}`;
+                        location.href=`/detail`;
                         // Implement your success callback logic here
                         // For example, you might want to redirect the user or display a success message
                     })

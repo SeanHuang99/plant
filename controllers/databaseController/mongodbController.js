@@ -30,13 +30,12 @@ mongoose.connection.on("close", () => {
 });
 
 
-// function createPlantId(plantName) {
-//     const now = new Date();
-//     return `${plantName}${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;;
-// }
+function createPlantId(plantName) {
+    const now = new Date();
+    return `${plantName}${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;;
+}
 
-async function addPlant(plantId,
-                        plantName,
+async function addPlant(plantName,
                         description,
                         details,
                         datetime,
@@ -54,7 +53,7 @@ async function addPlant(plantId,
                         DBpediaGunes)
 {
     const now = new Date();
-    // const plantId = createPlantId(plantName);
+    const plantId = createPlantId(plantName);
     let dbpedia = {};
     dbpedia.link = DBpediaLink;
     dbpedia.name = DBpediaName;

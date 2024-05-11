@@ -45,7 +45,7 @@
 
             // Proceed with the AJAX request
             $.ajax({
-                url: `/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`,
+                url: `/api/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`,
                 type: 'GET',
                 success: function(response) {
                     console.log("AJAX call was successful, data received:", response);

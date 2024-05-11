@@ -98,7 +98,7 @@ function closeEditPopup() {
 
 // Function to submit a request to update the plant name
 async function submitRequest() {
-    const plantId = getpPlantId();
+    const plantId = getPlantId();
     const nickName = getNickName();
     const preferredPlantName = document.getElementById('preferredPlantName').value;
 

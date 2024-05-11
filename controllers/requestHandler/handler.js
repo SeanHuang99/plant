@@ -247,7 +247,20 @@ router.get("/getAllChatRecord",function (req,res,next){
         })
 })
 
-
+router.get("/getAllUpdateRequests", function (req, res, next){
+    const nickName = req.query.nickName; // Assume nickname is passed as a query parameter
+    mongoApi.getAllUpdateRequestsByNickName(nickName)
+        .then(function(response){
+            if (response.type === 'success') {
+                res.json(response); // Send success response back to client
+            } else {
+                res.status(404).json(response); // Send failure response back to client
+            }
+        })
+        .catch(function(error){
+            res.status(500).json({ type: 'fail', content: error.message });
+        });
+});
 /*
 ------------------------------------------------------------------
  following content just for test api
@@ -267,5 +280,6 @@ router.get('/test',function (req, res, next){
         );
     return {'type':'success'};
 });
+
 
 module.exports = router;

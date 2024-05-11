@@ -66,4 +66,25 @@ router.get('/huangtest', function (req, res) {
     console.log('/huangtest')
     res.render('temptest')
 })
+
+router.get('/getAllUpdateRequests', function (req, res) {
+
+    res.render('updateRequests')
+})
+
+// API Route for fetching update requests by nickname
+router.get("/api/getAllUpdateRequests", function (req, res, next){
+    const nickName = req.query.nickName;
+    mongoApi.getAllUpdateRequestsByNickName(nickName)
+        .then(function(response){
+            if (response.type === 'success') {
+                res.json(response); // Send success response back to client
+            } else {
+                res.status(404).json(response); // Send failure response back to client
+            }
+        })
+        .catch(function(error){
+            res.status(500).json({ type: 'fail', content: error.message });
+        });
+});
 module.exports = router;

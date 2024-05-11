@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 if (navigator.onLine) {
     console.log('onLine mode')
-    fetch('http://localhost:3000/requestHandler/getAllPlants')
+    fetch('/requestHandler/getAllPlants')
         .then(function (res) {
             return res.json();
         })

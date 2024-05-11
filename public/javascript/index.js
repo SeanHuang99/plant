@@ -16,12 +16,21 @@ var storage = {
 };
 
 
-$(document).ready(function () {
+
+
+
+
+
+
+
+// Register service worker to control making site work offline
+window.onload = function () {
     //insert nickname to index page
     updateNickname()
+    showWelcomeOrIndex();
 
-
-    if (storage.get("lastURL") != null) {
+    //from local storage, to load the last url record.
+    if (storage.get("lastURL") !== undefined && storage.get("lastURL") !== null && storage.get("lastURL") !== "") {
         $('#content-iframe').attr('src', storage.get("lastURL"));
         // console.log("jump to "+storage.get("lastURL"))
     }
@@ -43,11 +52,9 @@ $(document).ready(function () {
         //add the url to the record
         storage.set("lastURL", href);
     });
-});
 
-// Register service worker to control making site work offline
-window.onload = function () {
-    showWelcomeOrIndex();
+
+
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', {scope: '/'})
             .then(function (reg) {

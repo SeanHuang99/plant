@@ -295,18 +295,38 @@
     history.scrollTop = history.scrollHeight;
   }
 
+  function cleanChatPanel(){
+
+    let history = document.getElementById('chat_history');
+    let children = Array.from(history.children); // 将HTMLCollection转换为数组以便使用数组方法
+
+    // 遍历子元素并删除除了id="who_you_are"的所有子元素
+    children.forEach(child => {
+      if (child.id !== "who_you_are") {
+        history.removeChild(child);
+      }
+    });
+  }
+
   // Fetch the entire chat history for a particular room
   function getChatRecord(roomNo) {
-    fetch(`/requestHandler/getChatRecordById/${roomNo}`)
-            .then(response => response.json())
-            .then(data => {
-              for (let eachRecord of data) {
-                writeOnHistory(`<b>${eachRecord.nickName}:</b> ${eachRecord.content}`);
-              }
-            })
-            .catch(error => {
-              console.error('Error occurred:', error);
-            });
+    cleanChatPanel();
+    if(navigator.onLine) {
+      fetch(`/requestHandler/getChatRecordById/${roomNo}`)
+              .then(response => response.json())
+              .then(data => {
+                for (let eachRecord of data) {
+                  let who=getNickName()===eachRecord.nickName?"Me":eachRecord.nickName;
+                  writeOnHistory(`<b>${who}:</b> ${eachRecord.content}`);
+                }
+              })
+              .catch(error => {
+                console.error('Error occurred:', error);
+              });
+    }else{
+      //todo get chat record from indexed db
+
+    }
   }
 
   // Request to join or create a new chat room

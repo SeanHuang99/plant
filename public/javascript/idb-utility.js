@@ -1,11 +1,10 @@
-
-function synDataFromServer() {
-    if (navigator.onLine) {
-        // syn plant information indexed db
-        synPlantFromServer();
-        synChatRecordFromServer();
-    }
-}
+// function synDataFromServer() {
+//     if (navigator.onLine) {
+//         // syn plant information indexed db
+//         synPlantFromServer();
+//         synChatRecordFromServer();
+//     }
+// }
 
 
 function synPlantFromServer() {
@@ -43,9 +42,6 @@ function synPlantFromServer() {
 }
 
 
-function synChatRecordFromServer(){
-
-}
 
 
 function createPlantId(plantName) {
@@ -251,3 +247,21 @@ function openSyncPlantsIDB() {
     });
 }
 
+function synChatRecordFromServer() {
+
+}
+function synChatRecordFromServer(){
+
+}
+
+const addNewChatRecordToSync=(syncChatIDB, chat)=>{
+
+}
+
+const getChatRecordById = (IDB, plantId) => {
+
+}
+
+const addNewChatsToIDB = (chatIDB, chat) => {
+
+}

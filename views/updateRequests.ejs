@@ -35,7 +35,6 @@
     </div>
 
 <script>
-    console.log(getNickName())
     $(document).ready(function() {
         $('#loadingIndicator').show(); // Show loading indicator when the AJAX call starts
         let nickName = getNickName();
@@ -61,7 +60,7 @@
                                 `<tr>
                                 <td>${request.plantId || 'N/A'}</td>
                                 <td>${request.plantName || 'N/A'}</td>
-                                <td>${request.approveOrdecline || 'Unreviewed'}</td>
+                                <td>${request.statusOfRequest || 'in-progress'}</td>
                                 <td>${request.date ? new Date(request.date).toLocaleDateString() : 'Unknown'}</td>
                             </tr>`
                             );

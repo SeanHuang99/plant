@@ -15,15 +15,16 @@ const UpdateRequestSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    approveOrdecline: {
+    statusOfRequest: {
         type: String,
-        enum: ['Unreviewed', 'Approved', 'Declined'],
-        default: 'Unreviewed',
+        enum: ['completed', 'in-progress'],
+        default: 'in-progress',
     },
     date: {
         type: Date,
         default: Date.now,
     },
 });
+
 
 module.exports = mongoose.model('UpdateRequest', UpdateRequestSchema);

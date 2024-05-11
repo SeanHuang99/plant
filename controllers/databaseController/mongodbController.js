@@ -279,7 +279,7 @@ async function updateUpdateRequest(plantId, nickName, appOrdec) {
     try {
         const result = await UpdateRequest.findOneAndUpdate(
             { plantId, nickName },
-            { approveOrdecline: appOrdec },
+            { statusOfRequest: status },
             { new: true }
         );
         if (result) {
@@ -296,15 +296,11 @@ async function updateUpdateRequest(plantId, nickName, appOrdec) {
 async function getAllUpdateRequestsByNickName(nickName) {
     let response;
     try {
-        // Fetch all documents matching the given nickname
         const updateRequests = await UpdateRequest.find({ nickName });
-        // Prepare success response
         response = { 'type': 'success', 'content': updateRequests };
     } catch (error) {
-        // Prepare failure response in case of an error
         response = { 'type': 'fail', 'content': error.message };
     }
-    // Return the structured response
     return response;
 }
 

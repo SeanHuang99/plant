@@ -55,7 +55,7 @@ function sendChatText() {
     else{
         //todo upload chat to indexdb
         addNewChatsToIDB()
-        writeOnHistory(`<b><span style="color: green;">Me (Offline):</span></b> ${chatText}`);
+        writeOnHistory(`<b><span style="color: red;">Me (Offline):</span></b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
 }

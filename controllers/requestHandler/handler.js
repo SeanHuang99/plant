@@ -25,7 +25,7 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
 
     // console.log(`lat: ${lat}, lng: ${lng}`);
 
-    const resource = `http://dbpedia.org/resource/${plantName}`;
+    const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(plantName)}`;
     // console.log("DBPedia URL: "+resource)
     // The DBpedia SPARQL endpoint URL
     const endpointUrl = 'https://dbpedia.org/sparql';
@@ -118,7 +118,7 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
     // If the uploader and the modifier are the same, update directly
     if (originalNickName.content === nickName) {
 
-        const resource = `http://dbpedia.org/resource/${preferredPlantName}`;
+        const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(preferredPlantName)}`;
         // console.log("DBPedia URL: "+resource)
         // The DBpedia SPARQL endpoint URL
         const endpointUrl = 'https://dbpedia.org/sparql';
@@ -295,7 +295,7 @@ router.get("/getChatRecordById/:id",function (req,res,next){
 
 router.post('/updateOfflineChatRecordToServer', async function (req, res, next) {
     const { chatRecord } = req.params;
-
+    console.log(JSON.stringify(chatRecord));
     res.status(200);
 })
 
@@ -349,26 +349,38 @@ router.get("/api/getAllUpdateRequests", function (req, res, next){
         });
 });
 
+function capitalizeFirstLetterIfAlphabet(input) {
+    // 检查输入是否为字符串且不为空
+    if (typeof input === 'string' && input.length > 0) {
+        // 检查第一个字符是否为英文字母
+        if (input[0].match(/[a-z]/i)) {
+            // 是字母，将第一个字符转为大写，其余部分不变
+            return input[0].toUpperCase() + input.slice(1);
+        }
+    }
+    // 第一个字符不是英文字母或输入不合法，返回原字符串
+    return input;
+}
 
 /*
 ------------------------------------------------------------------
  following content just for test api
  */
 
-router.get('/test',function (req, res, next){
-    console.log("add chat message");
-    mongoApi.addChatRecord("rosemary20240321031045","hello","team04")
-        .then(
-            function(response){
-                console.log(response.type);
-                console.log(response.content);
-            }
-        )
-        .catch(
-            error => console.error(error)
-        );
-    return {'type':'success'};
-});
+// router.get('/test',function (req, res, next){
+//     console.log("add chat message");
+//     mongoApi.addChatRecord("rosemary20240321031045","hello","team04")
+//         .then(
+//             function(response){
+//                 console.log(response.type);
+//                 console.log(response.content);
+//             }
+//         )
+//         .catch(
+//             error => console.error(error)
+//         );
+//     return {'type':'success'};
+// });
 
 
 module.exports = router;

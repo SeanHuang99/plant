@@ -117,6 +117,7 @@ async function getAllPlants(){
     return response;
 }
 
+
 async function getNickNameOfPlant(id) {
     // Declare response at the start of the function
     let response = {
@@ -194,12 +195,27 @@ async function changePlantNameOfPlant(id, newPlantName,link,name,description,gen
 }
 
 async function addChatRecord(plantId,nickName,content){
+
     var response;
     const now = new Date();
+    const newChat = {
+        nickName: nickName,
+        content: content,
+        date: new Date() // 如果不指定日期，默认使用当前时间
+    };
     try {
-        const chatRecord = new ChatRecord({plantId,nickName,content});
-        await chatRecord.save();
-        response={'type':'success','content':''};
+        const result = await ChatRecord.findOneAndUpdate(
+            { plantId: plantId }, // 查询条件
+            { $push: { chatList: newChat } }, // 要添加的聊天数据
+            { new: true, upsert: true } // 选项: 返回更新后的文档，并在找不到时创建新文档
+        );
+        console.log('Updated Chat Record:', result);
+        if(result){
+            response={'type':'success','content':''};
+        }
+        else{
+            response={'type':'fail','content':'Cannot update chat record'};
+        }
     } catch (error) {
         response={'type':'fail','content':error.message};
     }
@@ -209,8 +225,8 @@ async function addChatRecord(plantId,nickName,content){
 async function getChatRecord(plantId) {
     var response;
     try {
-        const chatRecords = await ChatRecord.find({ plantId: plantId }).sort({ date: 1 });
-        if (chatRecords.length > 0) {
+        const chatRecords = await ChatRecord.findOne({ plantId: plantId });
+        if (chatRecords.chatList.length > 0) {
             response = {'type': 'success', 'content': chatRecords};
         } else {
             response = {'type': 'fail', 'content': 'No chat records found for this plant'};

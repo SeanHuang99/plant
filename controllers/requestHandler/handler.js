@@ -108,142 +108,11 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
         })
 })
 
-router.post('/updatePlantsRequest', async function (req, res, next) {
-    const { plantId, preferredPlantName, nickName,creator} = req.body;
-    const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
-    if (originalNickName.type === 'fail') {
-        return res.status(404).json({ message: 'Plant not found' });
-    }
-
-    // If the uploader and the modifier are the same, update directly
-    if (originalNickName.content === nickName) {
-
-        const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(preferredPlantName)}`;
-        // console.log("DBPedia URL: "+resource)
-        // The DBpedia SPARQL endpoint URL
-        const endpointUrl = 'https://dbpedia.org/sparql';
 
 
-        // The SPARQL query to retrieve data for the given resource
-        const sparqlQuery = `
-            PREFIX dbo: <http://dbpedia.org/ontology/>
-            PREFIX dbr: <http://dbpedia.org/resource/>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-            PREFIX dbp: <http://dbpedia.org/property/>
-            SELECT ?name ?comment ?genus
-            WHERE {
-                OPTIONAL {<${resource}> dbp:name ?name . FILTER (langMatches(lang(?name), "en"))}
-                OPTIONAL {<${resource}> rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en"))}
-                OPTIONAL {<${resource}> dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en"))}
-            }
-            LIMIT 1
-            `;
-
-        // Encode the query as a URL parameter
-        const encodedQuery = encodeURIComponent(sparqlQuery);
-        // Build the URL for the SPARQL query
-        const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
-
-        let DBpediaName="";
-        let DBpediaDescription="";
-        let DBpediagenus="";
-
-        await fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // The results are in the 'data' object
-                let bindings = data.results.bindings[0];
-                let result = JSON.stringify(bindings);
-                // console.log(result)
-                DBpediaName = bindings?.name?.value;
-                DBpediaDescription = bindings?.comment?.value;
-                DBpediagenus = bindings?.genus?.value;
-            })
-            .catch(function (error) {
-                console.log("error: " + error.message);
-                res.status(504).send(error.message);
-            });
 
 
-        const result = await mongoApi.changePlantNameOfPlant(plantId, preferredPlantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
-        if (result.type === 'success') {
-            res.status(200).send('Plant name updated successfully');
-        } else {
-            console.error(`${result.content}`)
-            res.status(500).json({ message: result.content });
-        }
-    } else {
-        // If not the same, add an update request
-        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName, creator);
-        if (result.type === 'success') {
-            res.status(200).send('Update request submitted successfully');
-        } else {
-            console.error(`${result.content}`)
-            res.status(500).json({ message: result.content });
-        }
-    }
-})
 
-router.post('/updatePlantsRequestFromURPage', async function (req, res, next) {
-    const { plantId, plantName, date, decision, creator} = req.body;
-
-    const resource = `http://dbpedia.org/resource/${preferredPlantName}`;
-    // console.log("DBPedia URL: "+resource)
-    // The DBpedia SPARQL endpoint URL
-    const endpointUrl = 'https://dbpedia.org/sparql';
-
-
-    // The SPARQL query to retrieve data for the given resource
-    const sparqlQuery = `
-        PREFIX dbo: <http://dbpedia.org/ontology/>
-        PREFIX dbr: <http://dbpedia.org/resource/>
-        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-        PREFIX dbp: <http://dbpedia.org/property/>
-        SELECT ?name ?comment ?genus
-        WHERE {
-            OPTIONAL {<${resource}> dbp:name ?name . FILTER (langMatches(lang(?name), "en"))}
-            OPTIONAL {<${resource}> rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en"))}
-            OPTIONAL {<${resource}> dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en"))}
-        }
-        LIMIT 1
-        `;
-
-    // Encode the query as a URL parameter
-    const encodedQuery = encodeURIComponent(sparqlQuery);
-    // Build the URL for the SPARQL query
-    const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
-
-    let DBpediaName="";
-    let DBpediaDescription="";
-    let DBpediagenus="";
-
-    await fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            // The results are in the 'data' object
-            let bindings = data.results.bindings[0];
-            let result = JSON.stringify(bindings);
-            // console.log(result)
-            DBpediaName = bindings?.name?.value;
-            DBpediaDescription = bindings?.comment?.value;
-            DBpediagenus = bindings?.genus?.value;
-        })
-        .catch(function (error) {
-            console.log("error: " + error.message);
-            res.status(504).send(error.message);
-        });
-
-
-        const result = await mongoApi.changePlantNameOfPlant(plantId, preferredPlantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
-        if (result.type === 'success') {
-            res.status(200).send('Plant name updated successfully');
-        } else {
-            console.error(`${result.content}`)
-            res.status(500).json({ message: result.content });
-        }
-})
 
 router.get("/getPlants/:id",function (req,res,next){
     console.log('getPlants')
@@ -358,6 +227,156 @@ router.get("/api/getAllUpdateRequests", function (req, res, next){
         });
 });
 
+
+
+router.post('/updatePlantsRequest', async function (req, res, next) {
+    const { plantId, preferredPlantName, nickName,creator} = req.body;
+    const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
+    if (originalNickName.type === 'fail') {
+        return res.status(404).json({ message: 'Plant not found' });
+    }
+
+    // If the uploader and the modifier are the same, update directly
+    if (originalNickName.content === nickName) {
+
+        const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(preferredPlantName)}`;
+        // console.log("DBPedia URL: "+resource)
+        // The DBpedia SPARQL endpoint URL
+        const endpointUrl = 'https://dbpedia.org/sparql';
+
+
+        // The SPARQL query to retrieve data for the given resource
+        const sparqlQuery = `
+            PREFIX dbo: <http://dbpedia.org/ontology/>
+            PREFIX dbr: <http://dbpedia.org/resource/>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+            PREFIX dbp: <http://dbpedia.org/property/>
+            SELECT ?name ?comment ?genus
+            WHERE {
+                OPTIONAL {<${resource}> dbp:name ?name . FILTER (langMatches(lang(?name), "en"))}
+                OPTIONAL {<${resource}> rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en"))}
+                OPTIONAL {<${resource}> dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en"))}
+            }
+            LIMIT 1
+            `;
+
+        // Encode the query as a URL parameter
+        const encodedQuery = encodeURIComponent(sparqlQuery);
+        // Build the URL for the SPARQL query
+        const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+        let DBpediaName="";
+        let DBpediaDescription="";
+        let DBpediagenus="";
+
+        await fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // The results are in the 'data' object
+                let bindings = data.results.bindings[0];
+                let result = JSON.stringify(bindings);
+                // console.log(result)
+                DBpediaName = bindings?.name?.value;
+                DBpediaDescription = bindings?.comment?.value;
+                DBpediagenus = bindings?.genus?.value;
+            })
+            .catch(function (error) {
+                console.log("error: " + error.message);
+                res.status(504).send(error.message);
+            });
+
+
+        const result = await mongoApi.changePlantNameOfPlant(plantId, preferredPlantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
+        if (result.type === 'success') {
+            res.status(200).send('Plant name updated successfully');
+        } else {
+            console.error(`${result.content}`)
+            res.status(500).json({ message: result.content });
+        }
+    } else {
+        // If not the same, add an update request
+        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName, creator);
+        if (result.type === 'success') {
+            res.status(200).send('Update request submitted successfully');
+        } else {
+            console.error(`${result.content}`)
+            res.status(500).json({ message: result.content });
+        }
+    }
+});
+
+router.post('/updatePlantsRequestFromURPage', async function (req, res) {
+    try {
+        // console.log(req.body);
+        const requests = req.body.requests;
+        console.log(requests)
+        // if (!Array.isArray(requests)) {
+        //     return res.status(400).send('Bad request: Expected an array of requests');
+        // }
+        await Promise.all(requests.map(async request => {
+            const { plantId, plantName, date, decision, creator } = request;
+
+
+            const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(plantName)}`;
+            // console.log("DBPedia URL: "+resource)
+            // The DBpedia SPARQL endpoint URL
+            const endpointUrl = 'https://dbpedia.org/sparql';
+
+
+            // The SPARQL query to retrieve data for the given resource
+            const sparqlQuery = `
+            PREFIX dbo: <http://dbpedia.org/ontology/>
+            PREFIX dbr: <http://dbpedia.org/resource/>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+            PREFIX dbp: <http://dbpedia.org/property/>
+            SELECT ?name ?comment ?genus
+            WHERE {
+                OPTIONAL {<${resource}> dbp:name ?name . FILTER (langMatches(lang(?name), "en"))}
+                OPTIONAL {<${resource}> rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en"))}
+                OPTIONAL {<${resource}> dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en"))}
+            }
+            LIMIT 1
+            `;
+
+            // Encode the query as a URL parameter
+            const encodedQuery = encodeURIComponent(sparqlQuery);
+            // Build the URL for the SPARQL query
+            const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+            let DBpediaName="";
+            let DBpediaDescription="";
+            let DBpediagenus="";
+
+            await fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // The results are in the 'data' object
+                    let bindings = data.results.bindings[0];
+                    let result = JSON.stringify(bindings);
+                    // console.log(result)
+                    DBpediaName = bindings?.name?.value;
+                    DBpediaDescription = bindings?.comment?.value;
+                    DBpediagenus = bindings?.genus?.value;
+                })
+                .catch(function (error) {
+                    console.log("error: " + error.message);
+                    res.status(504).send(error.message);
+                });
+
+
+            await mongoApi.changePlantNameOfPlant(plantId, plantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
+
+            await mongoApi.updateRequestFromUrPage(plantId, plantName, date, decision, creator);
+        }));
+        res.status(200).send('All requests processed successfully.');
+    } catch (error) {
+        console.error('Error processing update requests:', error);
+        res.status(500).send(error.message);
+    }
+});
+
 function capitalizeFirstLetterIfAlphabet(input) {
     // 检查输入是否为字符串且不为空
     if (typeof input === 'string' && input.length > 0) {
@@ -370,7 +389,6 @@ function capitalizeFirstLetterIfAlphabet(input) {
     // 第一个字符不是英文字母或输入不合法，返回原字符串
     return input;
 }
-
 /*
 ------------------------------------------------------------------
  following content just for test api

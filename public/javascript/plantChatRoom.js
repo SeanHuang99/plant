@@ -117,15 +117,35 @@ function getChatRecord(roomNo) {
             const transaction = IDB.transaction(["chats","sync-chats"], "readonly");
             const chatsStore = transaction.objectStore("chats");
             const syncChatsStore = transaction.objectStore("sync-chats");
+            //get server-side chat record
             getChatRecordById(chatsStore, roomNo).then(chatRecord => {
-                console.log('chat record found in IDB ----- ' + JSON.stringify(chatRecord))
+                // console.log('server-side chat record found in IDB ----- ' + JSON.stringify(chatRecord))
+                for (let eachRecord of chatRecord.chatList) {
+                    let who = getNickName() === eachRecord.nickName ? "Me" : eachRecord.nickName;
+                    if (getNickName() === eachRecord.nickName) {
+                        writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${eachRecord.content}`);
+                    } else {
+                        writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${eachRecord.content}`);
+                    }
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+
+            //get offline-side chat record
+            getChatRecordById(syncChatsStore, roomNo).then(chatRecord => {
+                console.log('offline-side chat record found in IDB ----- ' + JSON.stringify(chatRecord))
+                for (let eachRecord of chatRecord.chatList) {
+                    let who = getNickName() === eachRecord.nickName ? "Me" : eachRecord.nickName;
+                    if (getNickName() === eachRecord.nickName) {
+                        writeOnHistory(`<b><span style="color: red;">${who} (offline):</span></b> ${eachRecord.content}`);
+                    } else {
+                        writeOnHistory(`<b><span style="color: blue;">${who} (offline):</span></b> ${eachRecord.content}`);
+                    }
+                }
             }).catch(err => {
                 console.log(err)
 
-            })
-
-            getChatRecordById(syncChatsStore, roomNo).then(chatRecord => {
-                console.log('chat record found in IDB ----- ' + JSON.stringify(chatRecord))
             })
         })
 

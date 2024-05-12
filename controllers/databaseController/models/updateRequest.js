@@ -12,6 +12,10 @@ const UpdateRequestSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    creator:{
+        type: String,
+        required: true,
+    },
     statusOfRequest: {
         type: String,
         enum: ['completed', 'in-progress'],

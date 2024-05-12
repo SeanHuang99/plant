@@ -103,14 +103,14 @@ async function submitRequest() {
     const plantId = getPlantId();
     const nickName = getNickName();
     const preferredPlantName = document.getElementById('preferredPlantName').value;
-
+    const creator = getNickNameOfPlant();
     // Post the data to the backend via the "/updatePlants" route
     const response = await fetch('/requestHandler/updatePlantsRequest', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ plantId, preferredPlantName, nickName })
+        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator})
     });
 
     if (response.ok) {
@@ -123,4 +123,18 @@ async function submitRequest() {
     // Close the modal after submitting
     // $('#editModal').modal('hide');
     closeEditPopup()
+}
+
+function getNickNameOfPlant() {
+    // Get the element by its ID
+    var nickNameElement = document.getElementById('nickName');
+
+    // Extract the text content from the element
+    var text = nickNameElement.textContent;
+
+    // Assuming the format is "User Nickname: actual_nickname", split the text and retrieve the nickname
+    var parts = text.split(': ');
+
+    // Return the nickname part, if it exists, otherwise return an empty string
+    return parts.length > 1 ? parts[1] : '';
 }

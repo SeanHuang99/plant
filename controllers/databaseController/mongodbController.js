@@ -233,10 +233,10 @@ async function getAllChatRecord(){
 }
 
 // Add or update plant edit request (plantId, plantName, nickName)
-async function addUpdateRequest(plantId, plantName, nickName) {
+async function addUpdateRequest(plantId, plantName, nickName, creator) {
     var response;
     try {
-        const updateRequest = new UpdateRequest({ plantId, plantName, nickName });
+        const updateRequest = new UpdateRequest({ plantId, plantName, nickName, creator });
         await updateRequest.save();
         response = { type: 'success', content: '' };
     } catch (error) {
@@ -293,10 +293,10 @@ async function updateUpdateRequest(plantId, nickName, appOrdec) {
     return response;
 }
 
-async function getAllUpdateRequestsByNickName(nickName) {
+async function getAllUpdateRequestsByNickName(creator) {
     let response;
     try {
-        const updateRequests = await UpdateRequest.find({ nickName });
+        const updateRequests = await UpdateRequest.find({ creator });
         response = { 'type': 'success', 'content': updateRequests };
     } catch (error) {
         response = { 'type': 'fail', 'content': error.message };

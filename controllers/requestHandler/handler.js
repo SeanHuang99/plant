@@ -109,8 +109,7 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
 })
 
 router.post('/updatePlantsRequest', async function (req, res, next) {
-    const { plantId, preferredPlantName, nickName } = req.body;
-
+    const { plantId, preferredPlantName, nickName,creator} = req.body;
     const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
     if (originalNickName.type === 'fail') {
         return res.status(404).json({ message: 'Plant not found' });
@@ -176,7 +175,7 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
         }
     } else {
         // If not the same, add an update request
-        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName);
+        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName, creator);
         if (result.type === 'success') {
             res.status(200).send('Update request submitted successfully');
         } else {

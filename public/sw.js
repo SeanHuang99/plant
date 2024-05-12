@@ -25,6 +25,7 @@ self.addEventListener('install', event => {
                 '/javascript/commonTool.js',
                 '/javascript/detail.js',
                 '/javascript/sort.js',
+                '/javascript/plantChatRoom.js',
                 '/stylesheets/style.css',
                 '/images/icon.webp',
                 '/manifest.json',

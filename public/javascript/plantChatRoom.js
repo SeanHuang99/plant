@@ -22,7 +22,7 @@ function init() {
         }
         //todo update indexdb from server
         console.log("do synChatRecordFromServer")
-        // synChatRecordFromServer();
+        synAllChatObjsFromServer()
     });
 
     // Event listener for receiving chat messages
@@ -37,7 +37,7 @@ function init() {
         }
         //todo update indexdb from server
         console.log("do synChatRecordFromServer")
-        // synChatRecordFromServer();
+        synAllChatObjsFromServer()
     });
 
     connectToRoom();

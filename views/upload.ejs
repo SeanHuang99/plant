@@ -195,13 +195,14 @@
         console.log('run changeFormToObj()')
 
         let formData = new FormData(form);
-        formData.set('plantId',createPlantId(formData.get('name')))
+
+        formData.set('plantId',createPlantId(formData.get('plantName')))
         formData = await changeImageFormat(formData);
 
         const formObject = {};
         formData.forEach((value, key) => {
             formObject[key] = value;
-            console.log(`${key}: ${value}`)
+            // console.log(`${key}: ${value}`)
         });
         // console.log(formData)
         return formObject;
@@ -232,7 +233,7 @@
 
 
     function mySubmit(form){
-        console.log(form)
+        console.log("ready to submit: "+form)
         //做表单验证（非空+限制图片大小）
         if (checkForm(form)){
             console.log('处理表单')
@@ -254,7 +255,9 @@
                         console.log('err: '+err)
                     }).finally(()=>{
                         alert('submit successfully')
-                        setPlantId()
+                        // console.log("current plant id: "+plantObj.plantId);
+                        setPlantId(plantObj.plantId)
+                        window.location.href="/detail";
                         return true
                     })
                 }else {

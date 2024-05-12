@@ -104,33 +104,70 @@ function findCache(event){
 self.addEventListener('sync', event => {
     console.log('prepare to sync')
     if (event.tag === 'sync-plant') {
-        console.log('Service Worker: Syncing new Plants');
-        openSyncPlantsIDB().then((syncPostDB) => {
-            getAllSyncPlants(syncPostDB).then((syncPlants) => {
-                for (const syncPlant of syncPlants) {
-                    console.log('Service Worker: Syncing new Plant: ', syncPlant);
-                    console.log(syncPlant)
-
-                    // Fetch with FormData instead of JSON
-                    fetch('http://localhost:3000/requestHandler/addPlants', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(syncPlant)
-                    }).then(() => {
-                        console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
-                        deleteSyncPlantFromIDB(syncPostDB, syncPlant.plantId);
-                        // Send a notification
-                        self.registration.showNotification('Plant Synced', {
-                            body: 'Plant synced successfully!',
-                            icon: '/images/icon.webp'
-                        });
-                    }).catch((err) => {
-                        console.error('Service Worker: Syncing new Plant: ', syncPlant, ' failed');
-                    });
-                }
-            });
-        });
+        syncPlantToServer()
+    }
+    else if(event.tag === 'sync-chat'){
+        syncChatToServer()
     }
 });
+
+function syncPlantToServer(){
+    console.log('Service Worker: Syncing new Plants');
+    openSyncPlantsIDB().then((syncPostDB) => {
+        getAllPlants(syncPostDB).then((syncPlants) => {
+            for (const syncPlant of syncPlants) {
+                console.log('Service Worker: Syncing new Plant: ', syncPlant);
+
+                // Fetch with FormData instead of JSON
+                fetch('http://localhost:3000/requestHandler/addPlants', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(syncPlant)
+                }).then(() => {
+                    console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
+                    deleteSyncPlantFromIDB(syncPostDB, syncPlant.plantId);
+                    // Send a notification
+                    self.registration.showNotification('Plant Synced', {
+                        body: 'Plant synced successfully!',
+                        icon: '/images/icon.webp'
+                    });
+                }).catch((err) => {
+                    console.error('Service Worker: Syncing new Plant: ', syncPlant, ' failed');
+                });
+            }
+        });
+    });
+}
+
+function syncChatToServer(){
+    console.log('Service Worker: Syncing new chat');
+    openSyncChatsIDB().then((syncPostDB) => {
+        getAllChats(syncPostDB).then((syncChats) => {
+            for (const syncChat of syncChats) {
+                console.log('Service Worker: Syncing new Chat: ', syncChat);
+
+                // Fetch with FormData instead of JSON
+                //todo:添加addChat接口
+                fetch('http://localhost:3000/requestHandler/addPlants', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(syncChat)
+                }).then(() => {
+                    console.log('Service Worker: Syncing new Chat: ', syncChat, ' done');
+                    deleteSyncPlantFromIDB(syncPostDB, syncChat._id);
+                    // Send a notification
+                    self.registration.showNotification('Chat Synced', {
+                        body: 'Plant synced successfully!',
+                        icon: '/images/icon.webp'
+                    });
+                }).catch((err) => {
+                    console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
+                });
+            }
+        });
+    });
+}

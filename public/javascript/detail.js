@@ -20,7 +20,8 @@ function generateDetailPage(){
                 return res.json();
             })
             .then(function (newPlant) {
-                detailRender(newPlant)
+                //todo: showMapInDetail is not defined?
+                showMapInDetail(newPlant.location).then(r => detailRender(newPlant))
             })
             .catch(function (e){
                 console.log(e.message)
@@ -31,7 +32,7 @@ function generateDetailPage(){
             getDetailById(IDB, plantId).then(plant => {
                 console.log('plant found in IDB ----- ' + JSON.stringify(plant))
                 console.log(plant.plantId + '-------> ' + plant.description)
-                detailRender(plant)
+                showMapInDetail(plant.location).then(r => detailRender(plant))
             }).catch(err => {
                 console.log(err)
                 //todo: return to main page, and show alert of 'cannot find plant'

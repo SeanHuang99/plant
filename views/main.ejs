@@ -9,6 +9,7 @@
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/main.js"></script>
     <script src="/javascript/commonTool.js"></script>
+    <script src="/javascript/GoogleMap.js"></script>
     <script src="/javascript/sort.js"></script>
     <style>
         html,
@@ -133,7 +134,7 @@
     function getCurrentLocation(){
         if (navigator.geolocation){
             navigator.geolocation.getCurrentPosition(position => {
-                console.log(position.coords.latitude, position.coords.longitude)
+                console.log('当前位置：'+position.coords.latitude, position.coords.longitude)
                 return {lat: position.coords.latitude, lng: position.coords.longitude}
             })
         }else {

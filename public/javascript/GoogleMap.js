@@ -26,12 +26,9 @@
 // // failed.", it means you probably did not give permission for the browser to
 // // locate you.
 let map, infoWindow,location={lat:53.3921,lng:-1.4898};
-function getMarker(){
-    return lastMarker
-}
 var lastMarker = null;
 //初始化位置
-setLocation()
+// setLocation()
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerView } = await google.maps.importLibrary("marker")
@@ -141,12 +138,14 @@ async function initMap() {
     console.log(location)
     return location
 }
-async function showMap(location){
-    const { Map } = await google.maps.importLibrary("maps");v
+async function showMapInDetail(loc){
+    console.log('render map')
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
     map = new Map(document.getElementById("map"), {
         //default location: Sheffield
-        center: location,
+        center: loc,
         zoom: 11,
         mapId: "DEMO_MAP_ID",
         mapTypeControl: true,
@@ -157,7 +156,7 @@ async function showMap(location){
     });
     const marker =new AdvancedMarkerElement({
         map: map,
-        position: location,
+        position: loc,
         title: "chosen Location",
     });
     // 将地图中心设置为标记的位置
@@ -172,13 +171,18 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     );
     infoWindow.open(map);
 }
+const path=window.location.pathname
+if (path==='/upload'){
+    initMap()
+}//否则执行showMapInDetail() （在detail.js中调用）
 
 function setLocation(){
     document.getElementById("lat").value = location.lat;
     document.getElementById("lng").value = location.lng;
 }
-if (navigator.onLine){
-    console.log('show map')
-    initMap();
-}else console.log('hide map')
-// window.initMap = initMap;
+//球面上的距离不能直接用勾股定理，直接调用Google封装的函数即可
+async function computeDistanceBetween(from, to) {
+    const {spherical} = await google.maps.importLibrary("geometry")
+    const distance = spherical.computeDistanceBetween(from, to)
+    console.log('distance'+distance)
+}

@@ -24,19 +24,20 @@ function sortByDate(order) {
         });
     });
 }
-function sortPlants(plants,key,order) {
+
+function sortPlants(plants, key, order) {
     plants.sort((a, b) => {
         if (order === 'asc') {
-            return a[key]-b[key]
+            return a[key] - b[key]
         } else {
-            return b[key]-a[key]
+            return b[key] - a[key]
         }
     })
     return plants
 }
 
 // whether identification is finished.
-function filterPlants(key,value) {
+function filterPlants(key, value) {
     return new Promise((resolve, reject) => {
         openPlantsIDB().then(IDB => {
             getAllPlants(IDB).then(plants => {
@@ -51,15 +52,23 @@ function filterPlants(key,value) {
         });
     });
 }
+
+function haveLoc(plant) {
+    return plant.location.lat != null && plant.location.lng != null
+}
+
 // Sorting by distance away is a ‘stretch’ goal (i.e. nice to have).
-function sortByDistance(currentLoc,order){
+function sortByDistance(currentLoc, order) {
     return new Promise((resolve, reject) => {
         openPlantsIDB().then(IDB => {
             getAllPlants(IDB).then(plants => {
+                //delete plant without location
+                plants = plants.filter(plant => haveLoc(plant));
+                //calculate distance
                 plants.forEach(plant => {
-                    plant.distance=computeDistanceBetween(currentLoc, plant.location);
+                    plant.distance = computeDistanceBetween(currentLoc, plant.location);
                 })
-                plants=sortPlants(plants,'distance',order)
+                plants = sortPlants(plants, 'distance', order)
                 resolve(plants);
             }).catch(error => {
                 reject(error); // 如果无法获取植物数组，则拒绝 Promise
@@ -71,9 +80,3 @@ function sortByDistance(currentLoc,order){
 
 }
 
-//球面上的距离不能直接用勾股定理
-async function computeDistanceBetween(from, to){
-    const {spherical} = await google.maps.importLibrary("geometry")
-     const distance=spherical.computeDistanceBetween(from,to)
-    console.log(distance)
-}

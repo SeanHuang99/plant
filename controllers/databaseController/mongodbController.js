@@ -320,7 +320,35 @@ async function getAllUpdateRequestsByNickName(creator) {
     return response;
 }
 
+async function updateRequestFromUrPage(plantId, plantName, date, decision, creator) {
+    try {
+        const result = await UpdateRequest.findOneAndUpdate(
+            {
+                plantId: plantId,
+                date: date,
+                creator: creator
+            },
+            {
+                statusOfRequest: 'completed',
+                decision: decision
+            },
+            {
+                new: true // Return the updated document
+            }
+        );
+
+        if (!result) {
+            throw new Error('No matching document found to update.');
+        }
+
+        return result;
+    } catch (error) {
+        console.error('Failed to update request:', error);
+        throw error; // Rethrow or handle as needed
+    }
+}
+
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, changePlantNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
-    getAllUpdateRequests, updateUpdateRequest, getAllUpdateRequestsByNickName};
+    getAllUpdateRequests, updateUpdateRequest, getAllUpdateRequestsByNickName, updateRequestFromUrPage};
 

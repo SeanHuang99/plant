@@ -27,7 +27,7 @@ const UpdateRequestSchema = new mongoose.Schema({
     },
     decision: {
         type: String,
-        enum: ['agree', 'disagree', ''],
+        enum: ['agree', 'reject', ''],
         default: '',
     },
 });

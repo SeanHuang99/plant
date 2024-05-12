@@ -20,9 +20,10 @@ if (navigator.onLine) {
         .then(function (res) {
             return res.json();
         })
-        .then(function (newPlants) {
-            synPlantFromServer();
-            renderPlantList(newPlants)
+        .then( function (newPlants) {
+            //only need to sync from server when plant was changed
+             deleteAllPlantsDOM().then(()=>renderPlantList(newPlants))
+            // renderPlantList(newPlants)
         })
 }
 else {
@@ -94,8 +95,9 @@ function renderPlantList(plantList){
 }
 
 //排序前先删除之前渲染的plantList
-function deleteAllPlantsDOM(){
+async function deleteAllPlantsDOM(){
     const plantContainer = document.getElementsByClassName('container')[0];
+    console.log(plantContainer)
     while (plantContainer.firstChild) {//可能有多个同级子节点
         plantContainer.removeChild(plantContainer.firstChild);
     }

@@ -23,6 +23,7 @@ window.onload = function () {
     //insert nickname to index page
     updateNickname()
     showWelcomeOrIndex();
+    synPlantFromServer();
 
     //from local storage, to load the last url record.
     if (storage.get("lastURL") !== undefined && storage.get("lastURL") !== null && storage.get("lastURL") !== "") {

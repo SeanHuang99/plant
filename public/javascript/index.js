@@ -18,11 +18,6 @@ var storage = {
 
 
 
-
-
-
-
-
 // Register service worker to control making site work offline
 window.onload = function () {
     //insert nickname to index page

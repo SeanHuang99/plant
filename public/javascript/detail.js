@@ -2,7 +2,7 @@ if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.get
     window.localStorage.setItem('lastURL', '/detail');
 }
 // synPlantFromServer();
-console.log("wel to detail");
+// console.log("wel to detail");
 generateDetailPage();
 
 

@@ -8,6 +8,7 @@ window.onload=function (){
     if(navigator.onLine){
         init()
     }
+    getChatRecord(roomNo);
 }
 
 function init() {
@@ -19,7 +20,9 @@ function init() {
         } else {
             writeOnHistory(`<b>${userId}</b> joined room ${room}`);
         }
-        getChatRecord(room);
+        //todo update indexdb from server
+        console.log("do synChatRecordFromServer")
+        synChatRecordFromServer();
     });
 
     // Event listener for receiving chat messages
@@ -33,6 +36,9 @@ function init() {
         else{
             writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${chatText}`);
         }
+        //todo update indexdb from server
+        console.log("do synChatRecordFromServer")
+        synChatRecordFromServer();
     });
 
     connectToRoom();
@@ -100,8 +106,7 @@ function getChatRecord(roomNo) {
         //todo get chat record from indexed db
         openChatsIDB().then(IDB => {
             getChatRecordById(IDB, roomNo).then(chatRecord => {
-                console.log('plant found in IDB ----- ' + JSON.stringify(chatRecord))
-
+                console.log('chat record found in IDB ----- ' + JSON.stringify(chatRecord))
             }).catch(err => {
                 console.log(err)
 

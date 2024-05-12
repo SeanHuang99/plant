@@ -29,7 +29,7 @@ function synPlantFromServer() {
                         //如果是第一次连接（IDB没有数据：长度=0）
                         // if (plants.length === 0) {
                         //添加所有plant
-                        deleteAllExistingPlantsFromIDB(db).then(()=>{
+                        deleteAllExistingPlantsFromIDB(db).then(() => {
                             addNewPlantsToIDB(db, newPlants).then(() => {
                                 console.log("All new plants added to IDB")
                             })
@@ -84,6 +84,7 @@ const addNewPlantToSync = (syncPlantIDB, plant) => {
 
 // Function to add new plants to IndexedDB and return a promise
 const addNewPlantsToIDB = (plantIDB, plants) => {
+    console.log('db名字：'+plantIDB.name)
     return new Promise((resolve, reject) => {
         const transaction = plantIDB.transaction(["plants"], "readwrite");
         const plantStore = transaction.objectStore("plants");
@@ -96,9 +97,6 @@ const addNewPlantsToIDB = (plantIDB, plants) => {
                     const getRequest = plantStore.get(addRequest.result);
                     getRequest.addEventListener("success", () => {
                         // console.log("Found " + JSON.stringify(getRequest.result));
-                        // Assume insertplantInList is defined elsewhere
-                        //plant:如何编写回调的返回值？
-                        // insertPlantInList(getRequest.result);
                         resolveAdd(getRequest.result); // Resolve the add promise
                     });
                     getRequest.addEventListener("error", (event) => {
@@ -247,7 +245,8 @@ async function openSyncPlantsIDB() {
     });
 }
 
-const getAllChats = (plantIDB) => {
+//syncIDB同步server时调用
+const getAllChatObjs = (plantIDB) => {
     return new Promise((resolve, reject) => {
         const transaction = plantIDB.transaction(["chats"]);
         const plantStore = transaction.objectStore("chats");
@@ -276,7 +275,7 @@ async function openChatsIDB() {
 
         request.onupgradeneeded = function (event) {
             const db = event.target.result;
-            db.createObjectStore('chats', {keyPath: '_id'});
+            db.createObjectStore('chats', {keyPath: 'plantId'});
         };
 
         request.onsuccess = function (event) {
@@ -296,8 +295,7 @@ async function openSyncChatsIDB() {
 
         request.onupgradeneeded = function (event) {
             const db = event.target.result;
-            //todo:主键用_id?
-            db.createObjectStore('sync-chats', {keyPath: '_id'});
+            db.createObjectStore('sync-chats', {keyPath: 'plantId'});
         };
 
         request.onsuccess = function (event) {
@@ -306,10 +304,50 @@ async function openSyncChatsIDB() {
         };
     });
 }
+//只删除chats（清空chatList），不删除记录（chatObj）
+const updateWithClearedChatList = (store, chatObj) => {
+    // 使用 put 方法将更新后的对象重新存储到 plantStore 中
+    return new Promise((resolve, reject) => {
+        const putRequest = store.put(chatObj);
+        putRequest.addEventListener("success", () => {
+            resolve();
+        });
+        putRequest.addEventListener("error", (event) => {
+            reject(event.target.error);
+        });
+    });
+};
+//syncIDB每次同步之后都会清空，下次在add时必然没有记录，就会创建新的chatObj，更新就会把server的记录覆盖
+//改为：同步后只清空chatList，保留当前记录
+const clearSyncChatFromIDB=(db, plantId)=>{
+    const transaction = db.transaction(["plants"], "readwrite");
+    const plantStore = transaction.objectStore("plants");
+    return new Promise((resolve, reject) => {
+        const getRequest = plantStore.get(plantId);
 
-const deleteAllChatsFromIDB = (plantIDB) => {
-    const transaction = plantIDB.transaction(["chats"], "readwrite");
-    const plantStore = transaction.objectStore("chats");
+        getRequest.addEventListener("success", () => {
+            const chatObj = getRequest.result;
+            chatObj.chatList=[]
+            const updatePromises = updateWithClearedChatList(plantStore, chatObj)
+
+            Promise.all(updatePromises)
+                .then(() => {
+                    resolve();
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+
+        getRequest.addEventListener("error", (event) => {
+            reject(event.target.error);
+        });
+    });
+}
+
+const deleteAllChatObjsFromIDB = (db) => {
+    const transaction = db.transaction(["plants"], "readwrite");
+    const plantStore = transaction.objectStore("plants");
     const clearRequest = plantStore.clear();
 
     return new Promise((resolve, reject) => {
@@ -321,21 +359,19 @@ const deleteAllChatsFromIDB = (plantIDB) => {
             reject(event.target.error);
         });
     });
-};
-function synChatRecordFromServer() {
+}
+
+function synAllChatObjsFromServer() {
     if (navigator.onLine) {
         fetch('/requestHandler/getAllChatRecord')
             .then(function (res) {
                 return res.json();
             })
-            .then(function (newChats) {
+            .then(function (chatObjs) {
                 openChatsIDB().then((db) => {
-                    getAllChats(db).then(plants => {
-                        //先清空，再添加
-                        deleteAllChatsFromIDB(db).then(()=>{
-                            addNewChatsToIDB(db, newChats).then(() => {
-                                console.log("All new chats added to IDB")
-                            })
+                    deleteAllChatObjsFromIDB(db).then(()=>{
+                        chatObjs.forEach(chatObj => {
+                            addChatObj(db, chatObj);
                         })
                     })
                 })
@@ -343,67 +379,82 @@ function synChatRecordFromServer() {
     }
 }
 
-const addNewChatRecordToSync=(syncChatIDB, chat)=>{
-    if (chat !== null) {
-        const transaction = syncPlantIDB.transaction(["chats"], "readwrite")
-        const plantStore = transaction.objectStore("chats")
-        const addRequest = plantStore.add(chat)
-        addRequest.addEventListener("success", () => {
-            console.log("Added " + "#" + addRequest.result + ": " + chat.content)
-            const getRequest = plantStore.get(addRequest.result)
-            getRequest.addEventListener("success", () => {
-                console.log("Found " + JSON.stringify(getRequest.result))
-                // Send a sync message to the service worker
-                navigator.serviceWorker.ready.then((sw) => {
-                    console.log('sw.sync.register("sync-chat")')
-                    sw.sync.register("sync-chat")
-                }).then(() => {
-                    console.log("Sync chat registered");
-                }).catch((err) => {
-                    console.log("Sync registration failed: " + JSON.stringify(err))
-                })
-            })
-        })
-    }
-}
-
-const getChatRecordById = async (IDB, plantId) => {
-    const chats = await getAllChats(IDB);
-    return chats.filter((chat) => {
-        return chat.plantId === plantId
-    });
-}
-
-const addNewChatsToIDB = (chatIDB, chats) => {
+const addNewChatToIDB = (db,plantId, chat) => {
+    const dbName=db.name
     return new Promise((resolve, reject) => {
-        const transaction = chatIDB.transaction(["chats"], "readwrite");
+        const transaction = db.transaction(["chats"], "readwrite");
         const plantStore = transaction.objectStore("chats");
-
-        const addPromises = chats.map(chat => {
-            return new Promise((resolveAdd, rejectAdd) => {
-                const addRequest = plantStore.add(chat);
-                addRequest.addEventListener("success", () => {
-                    console.log("Added " + "#" + addRequest.result + ": " + chat);
-                    const getRequest = plantStore.get(addRequest.result);
-                    getRequest.addEventListener("success", () => {
-                        console.log("Found " + JSON.stringify(getRequest.result));
-                        resolveAdd(getRequest.result); // Resolve the add promise
-                    });
-                    getRequest.addEventListener("error", (event) => {
-                        rejectAdd(event.target.error); // Reject the add promise if there's an error
-                    });
+        //先查找有无对应当前plantId的记录
+        getChatRecordById(plantId).then(chatObj => {
+            if (chatObj != null) {
+                //如果有，插入到chatList
+                chatObj.chatList.push(chat)
+                //更新chatObj
+                const updateRequest = plantStore.put(chatObj);
+                updateRequest.addEventListener("success", () => {
+                    console.log("Updated chat object with plantId " + plantId);
+                    if (dbName==='Sync'){
+                        registerSync()
+                    }
+                    resolve();
                 });
-                addRequest.addEventListener("error", (event) => {
-                    rejectAdd(event.target.error); // Reject the add promise if there's an error
+                updateRequest.addEventListener("error", (event) => {
+                    reject(event.target.error);
                 });
-            });
-        });
-
-        // Resolve the main promise when all add operations are completed
-        Promise.all(addPromises).then(() => {
-            resolve();
-        }).catch((error) => {
-            reject(error);
-        });
+            } else {
+                //如果没有，新建chat记录
+                const newChatObj = {
+                    plantId: plantId,
+                    chatList: [chat]
+                }
+                //插入IDB
+                addChatObj(db,newChatObj)
+                if (dbName==='Sync'){
+                    registerSync()
+                }
+            }
+        })
     });
 };
+
+// Send a sync message to the service worker
+function registerSync(){
+    navigator.serviceWorker.ready.then((sw) => {
+        console.log('sw.sync.register("sync-chat")')
+        sw.sync.register("sync-chat")
+    }).then(() => {
+        console.log("Sync chat registered");
+    }).catch((err) => {
+        console.log("Sync registration failed: " + JSON.stringify(err))
+    })
+}
+const getChatRecordById = async (IDB, plantId) => {
+    return new Promise((resolve, reject) => {
+        const transaction = IDB.transaction("sync-chats", "readonly");
+        const store = transaction.objectStore("sync-chats");
+        const getRequest = store.get(plantId);
+
+        getRequest.onsuccess = function (event) {
+            const record = event.target.result;
+            resolve(record); // 将记录存在与否转换为布尔值并返回
+        };
+
+        getRequest.onerror = function (event) {
+            reject(event.target.error);
+        };
+    });
+}
+
+function addChatObj(db,chatObj){
+    const transaction = db.transaction(["chats"], "readwrite");
+    const plantStore = transaction.objectStore("chats");
+    const addRequest = plantStore.add(chatObj);
+
+    addRequest.addEventListener("success", () => {
+        console.log("Added new chat object with plantId " + chatObj.plantId);
+        resolve();
+    });
+    addRequest.addEventListener("error", (event) => {
+        reject(event.target.error);
+    });
+}

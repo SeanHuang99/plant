@@ -93,7 +93,11 @@ function detailRender(plant){
 
 
 function openEditPopup() {
-    document.getElementById('editPopup').style.display = 'flex';
+    if (navigator.onLine){
+        document.getElementById('editPopup').style.display = 'flex';
+    }else {
+        alert(' You cannot edit when offline')
+    }
 }
 
 function closeEditPopup() {

@@ -3,9 +3,9 @@ let name = getNickName();
 let roomNo = getPlantId();
 let socket = io();
 
-window.onload=function (){
+window.onload = function () {
     cleanChatPanel()
-    if(navigator.onLine){
+    if (navigator.onLine) {
         init()
     }
     getChatRecord(roomNo);
@@ -49,12 +49,17 @@ function init() {
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     if (!chatText.trim()) return;
-    if(navigator.onLine) {
+    if (navigator.onLine) {
         socket.emit('chat', roomNo, name, chatText);
-    }
-    else{
+    } else {
         //todo upload chat to indexdb
-        addNewChatsToIDB()
+        const chat = {
+            nickName: getNickName(),
+            content: chatText,
+            date: Date.now(),
+        }
+        const plantId=roomNo
+        addNewChatsToIDB(plantId, chat)
         writeOnHistory(`<b><span style="color: red;">Me (Offline):</span></b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
@@ -70,7 +75,7 @@ function writeOnHistory(text) {
     history.scrollTop = history.scrollHeight;
 }
 
-function cleanChatPanel(){
+function cleanChatPanel() {
 
     let history = document.getElementById('chat_history');
     let children = Array.from(history.children); // 将HTMLCollection转换为数组以便使用数组方法
@@ -85,12 +90,12 @@ function cleanChatPanel(){
 
 // Fetch the entire chat history for a particular room
 function getChatRecord(roomNo) {
-    if(navigator.onLine) {
+    if (navigator.onLine) {
         fetch(`/requestHandler/getChatRecordById/${roomNo}`)
             .then(response => response.json())
             .then(data => {
                 for (let eachRecord of data.chatList) {
-                    let who=getNickName()===eachRecord.nickName?"Me":eachRecord.nickName;
+                    let who = getNickName() === eachRecord.nickName ? "Me" : eachRecord.nickName;
                     if(getNickName()===eachRecord.nickName) {
                         writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${eachRecord.content}`);
                     }
@@ -102,7 +107,7 @@ function getChatRecord(roomNo) {
             .catch(error => {
                 console.error('Error occurred:', error);
             });
-    }else{
+    } else {
         //todo get chat record from indexed db
         openChatsIDB().then(IDB => {
             getChatRecordById(IDB, roomNo).then(chatRecord => {

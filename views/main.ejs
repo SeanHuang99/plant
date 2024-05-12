@@ -15,6 +15,7 @@
         html,
         body {
             margin: 0;
+            padding: 0;
             height: 100%;
             width: 100%;
         }
@@ -22,22 +23,30 @@
         /* 自定义样式 */
         .plant-card {
             border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            /*border-radius: 5px;*/
+            /*margin-bottom: 20px;*/
             padding: 10px;
         }
 
         .plant-card img {
             max-width: 100%;
-            height: 200px;
-            width: 200px;
+            height: 250px;
+            width: 250px;
+        }
+        .footer {
+            height: 60px; /* consistent footer height */
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 <div class="row align-items-center" style="height: 70px">
     <div class="col">
-        <h3 style="padding-left: 10px">All Plants</h3>
+        <h3 style="padding-left: 10px;margin: 0">All Plants</h3>
     </div>
 
     <div class="col">
@@ -62,6 +71,9 @@
 
 <div>
     <div class="container"></div>
+    <footer class="footer">
+        <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
+    </footer>
 </div>
 
 </body>

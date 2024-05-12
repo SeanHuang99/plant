@@ -144,9 +144,9 @@ function syncPlantToServer(){
 function syncChatToServer(){
     console.log('Service Worker: Syncing new chat');
     openSyncChatsIDB().then((syncPostDB) => {
-        getAllChats(syncPostDB).then((syncChats) => {
-            for (const syncChat of syncChats) {
-                console.log('Service Worker: Syncing new Chat: ', syncChat);
+        getAllChatObjs(syncPostDB).then((chatObjs) => {
+            for (const chatObj of chatObjs) {
+                console.log('Service Worker: Syncing new Chat: ', chatObj);
 
                 // Fetch with FormData instead of JSON
                 //todo:添加addChat接口
@@ -155,13 +155,13 @@ function syncChatToServer(){
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(syncChat)
+                    body: JSON.stringify(chatObj)
                 }).then(() => {
-                    console.log('Service Worker: Syncing new Chat: ', syncChat, ' done');
-                    deleteSyncPlantFromIDB(syncPostDB, syncChat._id);
+                    console.log('Service Worker: Syncing new Chat: ', chatObj, ' done');
+                    clearSyncChatFromIDB(syncPostDB, chatObj.plantId);
                     // Send a notification
                     self.registration.showNotification('Chat Synced', {
-                        body: 'Plant synced successfully!',
+                        body: 'Chat synced successfully!',
                         icon: '/images/icon.webp'
                     });
                 }).catch((err) => {

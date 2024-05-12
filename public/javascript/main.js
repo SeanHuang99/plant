@@ -56,6 +56,7 @@ function renderPlantList(plantList){
 
         // 创建卡片链接
         const cardLink = document.createElement('a');
+        cardLink.style.textDecoration = "none";
         // cardLink.href = `/detail?plantId=${plant.plantId}`;
         cardLink.href = `/detail`;
         cardLink.classList.add('card-link');
@@ -80,6 +81,7 @@ function renderPlantList(plantList){
         const description = document.createElement('div');
         description.classList.add('mt-3');
         description.innerHTML = `<h3>${plant.plantName}</h3><p>${plant.description}</p>`;
+        description.style.color='black'
 
         // 将图片和描述添加到链接中
         cardLink.appendChild(image);

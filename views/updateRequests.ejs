@@ -9,6 +9,7 @@
     <link href="/import/bootstrap.min.css" rel="stylesheet">
     <script src="/import/bootstrap.min.js"></script>
     <script src="/javascript/idb-utility.js"></script>
+    <script src="/javascript/updateRequests.js"></script>
 </head>
 <body>
     <div class="container">
@@ -59,7 +60,6 @@
                         requests.forEach(request => {
                             tbody.append(
                                 `<tr>
-                                <td>${request.plantId || 'N/A'}</td>
                                 <td>${request.plantName || 'N/A'}</td>
                                 <td>${request.statusOfRequest || 'in-progress'}</td>
                                 <td>${request.date ? new Date(request.date).toLocaleDateString() : 'Unknown'}</td>

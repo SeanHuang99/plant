@@ -397,7 +397,7 @@ const getChatRecordById = async (store, plantId) => {
 
         getRequest.onsuccess = function (event) {
             const record = event.target.result;
-            resolve(record); // 将记录存在与否转换为布尔值并返回
+            resolve(record);
         };
 
         getRequest.onerror = function (event) {

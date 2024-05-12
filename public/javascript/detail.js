@@ -31,12 +31,12 @@ function generateDetailPage(){
             })
     }
     else {
-        openPlantsIDB().then(IDB => {
+        openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
                 console.log('plant found in IDB ----- ' + JSON.stringify(plant))
                 console.log(plant.plantId + '-------> ' + plant.description)
                 detailRender(plant);
-                // showMapInDetail(plant.location).then(r => console.log("Map load"));
+                document.getElementById("map").innerText='Cannot show map when offline'
             }).catch(err => {
                 console.log(err)
                 //todo: return to main page, and show alert of 'cannot find plant'

@@ -113,12 +113,19 @@ function getChatRecord(roomNo) {
             });
     } else {
         //todo get chat record from indexed db
-        openChatsIDB().then(IDB => {
-            getChatRecordById(IDB, roomNo).then(chatRecord => {
+        openChatIDB().then(IDB => {
+            const transaction = IDB.transaction(["chats","sync-chats"], "readonly");
+            const chatsStore = transaction.objectStore("chats");
+            const syncChatsStore = transaction.objectStore("sync-chats");
+            getChatRecordById(chatsStore, roomNo).then(chatRecord => {
                 console.log('chat record found in IDB ----- ' + JSON.stringify(chatRecord))
             }).catch(err => {
                 console.log(err)
 
+            })
+
+            getChatRecordById(syncChatsStore, roomNo).then(chatRecord => {
+                console.log('chat record found in IDB ----- ' + JSON.stringify(chatRecord))
             })
         })
 

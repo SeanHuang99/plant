@@ -352,7 +352,7 @@ const addNewChatToIDB = (db,plantId, chat) => {
         const chatsStore = transaction.objectStore("chats");
         const syncChatsStore = transaction.objectStore("sync-chats");
         //先查找有无对应当前plantId的记录
-        getChatRecordById(plantId).then(chatObj => {
+        getChatRecordById(syncChatsStore,plantId).then(chatObj => {
             if (chatObj != null) {
                 //如果有，插入到chatList
                 chatObj.chatList.push(chat)
@@ -360,7 +360,7 @@ const addNewChatToIDB = (db,plantId, chat) => {
                 // const updateRequest2 = chatsStore.put(chatObj);
                 const updateRequest1 = syncChatsStore.put(chatObj);
                 updateRequest1.addEventListener("success", () => {
-                    console.log("Updated chatObj to  chatsStore" + plantId);
+                    console.log("Updated chatObj to syncChatsStore" + plantId);
                     registerSync()
                     resolve();
                 });
@@ -391,10 +391,8 @@ function registerSync(){
         console.log("Sync registration failed: " + JSON.stringify(err))
     })
 }
-const getChatRecordById = async (IDB, plantId) => {
+const getChatRecordById = async (store, plantId) => {
     return new Promise((resolve, reject) => {
-        const transaction = IDB.transaction("sync-chats", "readonly");
-        const store = transaction.objectStore("sync-chats");
         const getRequest = store.get(plantId);
 
         getRequest.onsuccess = function (event) {

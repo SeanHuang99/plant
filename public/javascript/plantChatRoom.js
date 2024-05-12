@@ -42,9 +42,8 @@ function sendChatText() {
     }
     else{
         //todo upload chat to indexdb
-
-        // let who = userId === name ? 'Me' : userId;
-        writeOnHistory(`<b>Me:</b> ${chatText}`);
+        addNewChatsToIDB()
+        writeOnHistory(`<b>Me (Offline):</b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
 }
@@ -89,11 +88,9 @@ function getChatRecord(roomNo) {
     }else{
         //todo get chat record from indexed db
         openChatsIDB().then(IDB => {
-            getChatRecordById(IDB, plantId).then(plant => {
-                console.log('plant found in IDB ----- ' + JSON.stringify(plant))
-                console.log(plant.plantId + '-------> ' + plant.description)
-                detailRender(plant);
-                // showMapInDetail(plant.location).then(r => console.log("Map load"));
+            getChatRecordById(IDB, roomNo).then(chatRecord => {
+                console.log('plant found in IDB ----- ' + JSON.stringify(chatRecord))
+
             }).catch(err => {
                 console.log(err)
                 //todo: return to main page, and show alert of 'cannot find plant'

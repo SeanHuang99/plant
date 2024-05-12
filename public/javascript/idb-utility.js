@@ -374,9 +374,9 @@ const getChatRecordById = async (IDB, plantId) => {
     });
 }
 
-const addNewChatsToIDB = (plantIDB, chats) => {
+const addNewChatsToIDB = (chatIDB, chats) => {
     return new Promise((resolve, reject) => {
-        const transaction = plantIDB.transaction(["chats"], "readwrite");
+        const transaction = chatIDB.transaction(["chats"], "readwrite");
         const plantStore = transaction.objectStore("chats");
 
         const addPromises = chats.map(chat => {

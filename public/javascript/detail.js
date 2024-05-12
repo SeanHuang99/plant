@@ -12,6 +12,9 @@ function generateDetailPage(){
     if (plantId==null){
         console.log('plantId==null')
         //todo: return to main page, and show alert of 'cannot find plant'
+        alert("cannot find plant")
+        window.localStorage.setItem('lastURL', '/main');
+        window.location.href="/main";
     }
     if(navigator.onLine){
         fetch('/requestHandler/getPlants/'+plantId)

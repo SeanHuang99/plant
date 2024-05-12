@@ -14,7 +14,7 @@ exports.init = function(io) {
 
             socket.on('chat', function (plantId, nickName, chatText) {
                 io.sockets.to(plantId).emit('chat', plantId, nickName, chatText);
-                mongoApi.addChatRecord(plantId, nickName, chatText)
+                mongoApi.addChatRecord(plantId, nickName, chatText,new Date())
                     // .then(r  =>console.log(r));
                 console.log(`in room ${plantId},  ${nickName} says: ${chatText}`);
             });

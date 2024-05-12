@@ -294,8 +294,17 @@ router.get("/getChatRecordById/:id",function (req,res,next){
 
 
 router.post('/updateOfflineChatRecordToServer', async function (req, res, next) {
-    const { chatRecord } = req.params;
-    console.log(JSON.stringify(chatRecord));
+    // req.body;
+    console.log("updateOfflineChatRecordToServer: "+JSON.stringify(req.body));
+    let request=req.body;
+    for (let chatGroup of request){
+        let plantId=chatGroup.plantId;
+        console.log("offline chat group by plantId: "+JSON.stringify(chatGroup.chatList))
+        for(let chat of chatGroup.chatList){
+            // console.log(chat);
+            await mongoApi.addChatRecord(plantId, chat.nickName, chat.content, new Date(chat.date))
+        }
+    }
     res.status(200);
 })
 

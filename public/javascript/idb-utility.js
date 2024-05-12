@@ -249,10 +249,10 @@ async function openChatIDB() {
 }
 
 //syncIDB同步server时调用
-const getAllChatObjs = (plantIDB) => {
+const getSyncChatObjs = (plantIDB) => {
     return new Promise((resolve, reject) => {
-        const transaction = plantIDB.transaction(["chats"]);
-        const plantStore = transaction.objectStore("chats");
+        const transaction = plantIDB.transaction(["sync-chats"]);
+        const plantStore = transaction.objectStore("sync-chats");
         const getAllRequest = plantStore.getAll();
 
         // Handle success event
@@ -283,8 +283,8 @@ const updateWithClearedChatList = (store, chatObj) => {
 //syncIDB每次同步之后都会清空，下次在add时必然没有记录，就会创建新的chatObj，更新就会把server的记录覆盖
 //改为：同步后只清空chatList，保留当前记录
 const clearSyncChatFromIDB=(db, plantId)=>{
-    const transaction = db.transaction(["plants"], "readwrite");
-    const plantStore = transaction.objectStore("plants");
+    const transaction = db.transaction(["sync-chats"], "readwrite");
+    const plantStore = transaction.objectStore("sync-chats");
     return new Promise((resolve, reject) => {
         const getRequest = plantStore.get(plantId);
 

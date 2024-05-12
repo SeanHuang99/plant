@@ -144,22 +144,25 @@ function syncPlantToServer(){
 
 function syncChatToServer(){
     console.log('Service Worker: Syncing new chat');
-    openSyncChatsIDB().then((syncPostDB) => {
-        getAllChatObjs(syncPostDB).then((chatObjs) => {
-            for (const chatObj of chatObjs) {
+    openChatIDB().then((syncPostDB) => {
+        getSyncChatObjs(syncPostDB).then((chatObj) => {
+            // for (const chatObj of chatObjs) {
                 console.log('Service Worker: Syncing new Chat: ', chatObj);
 
                 // Fetch with FormData instead of JSON
                 //todo:添加addChat接口
-                fetch('http://localhost:3000/requestHandler/addPlants', {
+                fetch('http://localhost:3000/requestHandler/updateOfflineChatRecordToServer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(chatObj)
-                }).then(() => {
+                }).then((response) => {
+                    console.log("syncChatToServer response: "+response)
                     console.log('Service Worker: Syncing new Chat: ', chatObj, ' done');
-                    clearSyncChatFromIDB(syncPostDB, chatObj.plantId);
+                    //todo: clean the sync-chats indexdb
+
+                    // clearSyncChatFromIDB(syncPostDB, chatObj.plantId);
                     // Send a notification
                     self.registration.showNotification('Chat Synced', {
                         body: 'Chat synced successfully!',
@@ -168,7 +171,7 @@ function syncChatToServer(){
                 }).catch((err) => {
                     console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
                 });
-            }
+            // }
         });
     });
 }

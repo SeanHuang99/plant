@@ -194,14 +194,14 @@ async function changePlantNameOfPlant(id, newPlantName,link,name,description,gen
     return response;
 }
 
-async function addChatRecord(plantId,nickName,content){
+async function addChatRecord(plantId,nickName,content,date){
 
     var response;
-    const now = new Date();
+    // const now = new Date();
     const newChat = {
         nickName: nickName,
         content: content,
-        date: new Date() // 如果不指定日期，默认使用当前时间
+        date: date // 如果不指定日期，默认使用当前时间
     };
     try {
         const result = await ChatRecord.findOneAndUpdate(
@@ -209,7 +209,7 @@ async function addChatRecord(plantId,nickName,content){
             { $push: { chatList: newChat } }, // 要添加的聊天数据
             { new: true, upsert: true } // 选项: 返回更新后的文档，并在找不到时创建新文档
         );
-        console.log('Updated Chat Record:', result);
+        // console.log('Updated Chat Record:', result);
         if(result){
             response={'type':'success','content':''};
         }

@@ -11,6 +11,14 @@ window.onload = function () {
     getChatRecord(roomNo);
 }
 
+window.addEventListener('offline', function() {
+    // console.log("You are offline");
+    if (socket) {
+        socket.close();
+        console.log("WebSocket has been closed due to offline status.");
+    }
+});
+
 function init() {
     // Event listener for joining a room
     socket.on('joined', function (room, userId) {
@@ -119,7 +127,7 @@ function getChatRecord(roomNo) {
             const syncChatsStore = transaction.objectStore("sync-chats");
             //get server-side chat record
             getChatRecordById(chatsStore, roomNo).then(chatRecord => {
-                // console.log('server-side chat record found in IDB ----- ' + JSON.stringify(chatRecord))
+                console.log('server-side chat record found in IDB ----- ' + JSON.stringify(chatRecord))
                 for (let eachRecord of chatRecord.chatList) {
                     let who = getNickName() === eachRecord.nickName ? "Me" : eachRecord.nickName;
                     if (getNickName() === eachRecord.nickName) {

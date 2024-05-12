@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // console.log("location: "+infoWindowlocation);
         //transfer image/file to base64
-
     });
 });
 //todo

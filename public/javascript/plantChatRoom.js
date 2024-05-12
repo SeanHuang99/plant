@@ -26,7 +26,13 @@ function init() {
     socket.on('chat', function (room, userId, chatText) {
         console.log(`${getNickName()} say: ${chatText}`)
         let who = userId === name ? 'Me' : userId;
-        writeOnHistory(`<b>${who}:</b> ${chatText}`);
+        // writeOnHistory(`<b>${who}:</b> ${chatText}`);
+        if(getNickName()===userId) {
+            writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${chatText}`);
+        }
+        else{
+            writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${chatText}`);
+        }
     });
 
     connectToRoom();
@@ -43,7 +49,7 @@ function sendChatText() {
     else{
         //todo upload chat to indexdb
         addNewChatsToIDB()
-        writeOnHistory(`<b>Me (Offline):</b> ${chatText}`);
+        writeOnHistory(`<b><span style="color: green;">Me (Offline):</span></b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
 }
@@ -79,9 +85,13 @@ function getChatRecord(roomNo) {
             .then(data => {
                 for (let eachRecord of data.chatList) {
                     let who=getNickName()===eachRecord.nickName?"Me":eachRecord.nickName;
-                    writeOnHistory(`<b>${who}:</b> ${eachRecord.content}`);
+                    if(getNickName()===eachRecord.nickName) {
+                        writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${eachRecord.content}`);
+                    }
+                    else{
+                        writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${eachRecord.content}`);
+                    }
                 }
-                // console.log("Chat record: "+JSON.stringify(data));
             })
             .catch(error => {
                 console.error('Error occurred:', error);
@@ -94,7 +104,7 @@ function getChatRecord(roomNo) {
 
             }).catch(err => {
                 console.log(err)
-                //todo: return to main page, and show alert of 'cannot find plant'
+
             })
         })
 

@@ -58,14 +58,10 @@ function sendChatText() {
             date: Date.now(),
         }
         const plantId = roomNo
-        openChatsIDB().then(IDB => {
+        openChatIDB().then(IDB => {
+            //chats与sync-chats都插入
             addNewChatToIDB(IDB, plantId, chat).then(_ => {
                 console.log('add chat to IDB')
-            })
-        })
-        openSyncChatsIDB().then(syncIDB => {
-            addNewChatToIDB(syncIDB, plantId, chat).then(_ => {
-                console.log('add chat to syncIDB')
             })
         })
 

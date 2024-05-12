@@ -22,7 +22,7 @@ function init() {
         }
         //todo update indexdb from server
         console.log("do synChatRecordFromServer")
-        synChatRecordFromServer();
+        // synChatRecordFromServer();
     });
 
     // Event listener for receiving chat messages
@@ -30,15 +30,14 @@ function init() {
         console.log(`${getNickName()} say: ${chatText}`)
         let who = userId === name ? 'Me' : userId;
         // writeOnHistory(`<b>${who}:</b> ${chatText}`);
-        if(getNickName()===userId) {
+        if (getNickName() === userId) {
             writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${chatText}`);
-        }
-        else{
+        } else {
             writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${chatText}`);
         }
         //todo update indexdb from server
         console.log("do synChatRecordFromServer")
-        synChatRecordFromServer();
+        // synChatRecordFromServer();
     });
 
     connectToRoom();
@@ -58,8 +57,18 @@ function sendChatText() {
             content: chatText,
             date: Date.now(),
         }
-        const plantId=roomNo
-        addNewChatsToIDB(plantId, chat)
+        const plantId = roomNo
+        openChatsIDB().then(IDB => {
+            addNewChatToIDB(IDB, plantId, chat).then(_ => {
+                console.log('add chat to IDB')
+            })
+        })
+        openSyncChatsIDB().then(syncIDB => {
+            addNewChatToIDB(syncIDB, plantId, chat).then(_ => {
+                console.log('add chat to syncIDB')
+            })
+        })
+
         writeOnHistory(`<b><span style="color: red;">Me (Offline):</span></b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
@@ -96,10 +105,9 @@ function getChatRecord(roomNo) {
             .then(data => {
                 for (let eachRecord of data.chatList) {
                     let who = getNickName() === eachRecord.nickName ? "Me" : eachRecord.nickName;
-                    if(getNickName()===eachRecord.nickName) {
+                    if (getNickName() === eachRecord.nickName) {
                         writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${eachRecord.content}`);
-                    }
-                    else{
+                    } else {
                         writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${eachRecord.content}`);
                     }
                 }

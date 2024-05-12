@@ -121,6 +121,7 @@ async function submitRequests() {
 
         if (response.ok) {
             alert('Requests submitted successfully.');
+            window.location.reload();
         } else {
             throw new Error('Failed to submit requests');
         }

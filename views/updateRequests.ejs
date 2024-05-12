@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Update Requests</h1>
+<!--        <h1 class="mb-4">Update Requests</h1>-->
         <!-- Loading Indicator -->
         <div id="loadingIndicator" class="text-center" style="display:none;">
             <div class="spinner-border text-primary" role="status">
@@ -25,7 +25,8 @@
                 <th>Plant ID</th>
                 <th>Plant Name</th>
                 <th>Status</th>
-                <th>Date</th>
+                <th>Request Date</th>
+                <th>Decision</th>
             </tr>
             </thead>
             <tbody>
@@ -44,7 +45,7 @@
 
             // Proceed with the AJAX request
             $.ajax({
-                url: `/api/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`,
+                url: `requestHandler/api/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`,
                 type: 'GET',
                 success: function(response) {
                     console.log("AJAX call was successful, data received:", response);
@@ -62,6 +63,7 @@
                                 <td>${request.plantName || 'N/A'}</td>
                                 <td>${request.statusOfRequest || 'in-progress'}</td>
                                 <td>${request.date ? new Date(request.date).toLocaleDateString() : 'Unknown'}</td>
+                                <td>${request.decision || 'N/A'}</td>
                             </tr>`
                             );
                         });

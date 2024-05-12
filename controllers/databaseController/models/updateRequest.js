@@ -1,7 +1,4 @@
-// updateRequest.js
-
 const mongoose = require('mongoose');
-
 const UpdateRequestSchema = new mongoose.Schema({
     plantId: {
         type: String,
@@ -24,7 +21,11 @@ const UpdateRequestSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    decision: {
+        type: String,
+        enum: ['agree', 'disagree', ''],
+        default: '',
+    },
 });
-
 
 module.exports = mongoose.model('UpdateRequest', UpdateRequestSchema);

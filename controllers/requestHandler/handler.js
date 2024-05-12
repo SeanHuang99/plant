@@ -294,6 +294,7 @@ router.get("/getChatRecordById/:id",function (req,res,next){
 
 
 router.post('/updateOfflineChatRecordToServer', async function (req, res, next) {
+    const { chatRecord } = req.params;
 
     res.status(200);
 })

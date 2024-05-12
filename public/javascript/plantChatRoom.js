@@ -8,6 +8,7 @@ window.onload=function (){
     if(navigator.onLine){
         init()
     }
+    getChatRecord(roomNo);
 }
 
 function init() {
@@ -19,14 +20,25 @@ function init() {
         } else {
             writeOnHistory(`<b>${userId}</b> joined room ${room}`);
         }
-        getChatRecord(room);
+        //todo update indexdb from server
+        console.log("do synChatRecordFromServer")
+        synChatRecordFromServer();
     });
 
     // Event listener for receiving chat messages
     socket.on('chat', function (room, userId, chatText) {
         console.log(`${getNickName()} say: ${chatText}`)
         let who = userId === name ? 'Me' : userId;
-        writeOnHistory(`<b>${who}:</b> ${chatText}`);
+        // writeOnHistory(`<b>${who}:</b> ${chatText}`);
+        if(getNickName()===userId) {
+            writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${chatText}`);
+        }
+        else{
+            writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${chatText}`);
+        }
+        //todo update indexdb from server
+        console.log("do synChatRecordFromServer")
+        synChatRecordFromServer();
     });
 
     connectToRoom();
@@ -43,7 +55,7 @@ function sendChatText() {
     else{
         //todo upload chat to indexdb
         addNewChatsToIDB()
-        writeOnHistory(`<b>Me (Offline):</b> ${chatText}`);
+        writeOnHistory(`<b><span style="color: green;">Me (Offline):</span></b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
 }
@@ -79,9 +91,13 @@ function getChatRecord(roomNo) {
             .then(data => {
                 for (let eachRecord of data.chatList) {
                     let who=getNickName()===eachRecord.nickName?"Me":eachRecord.nickName;
-                    writeOnHistory(`<b>${who}:</b> ${eachRecord.content}`);
+                    if(getNickName()===eachRecord.nickName) {
+                        writeOnHistory(`<b><span style="color: green;">${who}:</span></b> ${eachRecord.content}`);
+                    }
+                    else{
+                        writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${eachRecord.content}`);
+                    }
                 }
-                // console.log("Chat record: "+JSON.stringify(data));
             })
             .catch(error => {
                 console.error('Error occurred:', error);
@@ -90,11 +106,10 @@ function getChatRecord(roomNo) {
         //todo get chat record from indexed db
         openChatsIDB().then(IDB => {
             getChatRecordById(IDB, roomNo).then(chatRecord => {
-                console.log('plant found in IDB ----- ' + JSON.stringify(chatRecord))
-
+                console.log('chat record found in IDB ----- ' + JSON.stringify(chatRecord))
             }).catch(err => {
                 console.log(err)
-                //todo: return to main page, and show alert of 'cannot find plant'
+
             })
         })
 

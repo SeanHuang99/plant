@@ -11,8 +11,18 @@
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/updateRequests.js"></script>
     <script src="/javascript/updateRequests.js"></script>
+    <style>
+        .container {
+            overflow-y: auto;
+            max-height: 80vh;  /* 根据页面高度调整这个值 */
+        }
+    </style>
 </head>
 <body>
+    <div class="text-center" style="margin-top: 20px;">
+        <button id="submitBtn" class="btn btn-primary" type="button">Submit</button>
+    </div>
+    <p></p>
     <div class="container">
 <!--        <h1 class="mb-4">Update Requests</h1>-->
         <!-- Loading Indicator -->
@@ -39,8 +49,7 @@
         </table>
     </div>
     <!-- Submit Button Container -->
-    <div class="text-center" style="margin-top: 20px;">
-        <button id="submitBtn" class="btn btn-primary">Submit</button>
-    </div>
+
+
 </body>
 </html>

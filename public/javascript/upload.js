@@ -1,93 +1,62 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("form");
     var base64Image;
+    //不论mySubmit返回什么，事件都会执行，放弃
     form.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent the form from submitting via the default action
 
-        //表单验证（非空判断）
-        // 检查是否至少有一个单选按钮被选中
-        const flowersYes = document.getElementById('flowersYes');
-        const flowersNo = document.getElementById('flowersNo');
-        if (!(flowersYes.checked || flowersNo.checked )) {
-            alert('Please select whether the plant has flowers.');
-            flowersYes.focus()
-            return; // 防止表单提交
-        }
-        if (!selectSunExposure()){
-            alert('Please choose the Sun Exposure.');
-            const sunExposure=document.getElementById("sunExposure")
-            sunExposure.focus()
-            return; // 防止表单提交
-        }
-        const color=document.getElementById("flowerColor")
-        if (color.value==null || color.value===""){
-            alert('Please choose the color.');
-            color.focus()
-            return; // 防止表单提交
-        }
-        const complete = document.getElementById('statusComplete');
-        const inProgress = document.getElementById('statusInProgress');
-        if (!(complete.checked || inProgress.checked )) {
-            alert('Please select the status of the identification.');
-            complete.focus()
-            return; // 防止表单提交
-        }
-        // if (getMarker()==null){
-        //     alert('Please select the location');
-        //     const map=document.getElementById('map')
-        //     map.focus()
-        //     return; // 防止表单提交
-        // }
-
-
-        const photo = form.elements['photo'].files[0];
-        var fileSize=photo.size;
-        console.log("file size: "+fileSize/(1024*1024)+"MB");
-        if((fileSize/(1024*1024))>4){
-            alert("Plant Image cannot exceed 4MB");
-            return;
-        }
         // console.log("location: "+infoWindowlocation);
         //transfer image/file to base64
-        if (photo) {
-            // photo.value = 'newemail@example.com';
-            // console.log(`Updated Email: ${photo.value}`);
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                base64Image = e.target.result;
-                const formData = new FormData(form);
-                formData.append("base64Image",base64Image);
-                formData.delete("photo");
 
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
-
-                fetch(form.action, {
-                    method: "POST",
-                    body: formData,
-                    })
-                    .then(async response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json(); // Assuming the server responds with JSON
-                    })
-                    .then(data => {
-                        // console.log("success data: "+data);
-                        // console.log(data);
-                        setPlantId(data)
-                        location.href=`/detail`;
-                        // Implement your success callback logic here
-                        // For example, you might want to redirect the user or display a success message
-                    })
-                    .catch(error => {
-                        console.error("Error:"+ error.message);
-                        // Implement your error handling logic here
-                        // For example, displaying an error message to the user
-                    });
-            };
-            reader.readAsDataURL(photo);
-        }
     });
 });
+//todo
+//取消form的action跳转
+//submit按钮先进行表单验证
+//表单全部非空之后，将newPlant插入syncIDB与IDB
+//之后在sw中的sync事件 实现addPlantToServer
+const addNewPlantButtonEventListener = () => {
+    // console.log('click submit button')
+    //先判空
+    //全部非空后，封装对象
+    //todo:修改表单提交方式，通过给按钮绑定click监听事件，使得离线时也能提交
+    const form = document.getElementById("myForm");
+    console.log(form)
+    let formData = new FormData(form);
+    <!--利用fromData对象的get方法获取表单数据-->
+    let description = formData.get('description');
+
+    console.log(description)
+    // const formObject = {};
+    // form.forEach((value, key) => {
+    //     formObject[key] = value;
+    // });
+    // console.log(formObject);
+
+    // const txt_val = document.getElementById("txt_in").value
+    // const id=createPlantId(txt_val)
+    // const plant={
+    //     plantId: createPlantId(form.)
+    // }
+
+    openSyncPlantsIDB().then((db) => {
+        addNewPlantToSync(db, plant);
+        console.log(111)
+    })
+
+    navigator.serviceWorker.ready
+        .then(function (serviceWorkerRegistration) {
+            serviceWorkerRegistration.showNotification("Plant App",
+                {
+                    body: "Plant added! - " + txt_val,
+                    icon: '/images/icon.webp'})
+                .then(r =>
+                    console.log(r)
+                );
+        });
+}
+
+// window.onload = function () {
+//     // Add event listeners to buttons
+//     const submit_btn = document.getElementById("submit_btn")
+//     submit_btn.addEventListener("click", addNewPlantButtonEventListener)
+// }

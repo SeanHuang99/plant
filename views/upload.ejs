@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
     <script type="module" src="/javascript/GoogleMap.js"></script>
     <script src="/javascript/upload.js"></script>
+    <script src="/javascript/idb-utility.js"></script>
     <style>
         label{
             font-size: 18px;
@@ -46,7 +47,8 @@
 <body>
 <div class="container mt-5" style="padding: 0 100px">
     <h1 class="mt-4">Add Plant</h1>
-    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data" id="myForm">
+<!--    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data" id="myForm">-->
+    <form enctype="multipart/form-data" id="myForm" onsubmit="return mySubmit(this)">
         <div class="form-group">
             <label for="description">Description:</label>
             <input type="text" class="form-control" id="description" name="description" required>
@@ -112,7 +114,7 @@
         <div class="form-group">
             <h3>Identification</h3>
             <label for="name">Plant Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="plantName" required>
 
             <label>Status</label><br>
             <div class="form-check form-check-inline">
@@ -138,11 +140,133 @@
         </div>
         <p> </p>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            <button id="submit_btn" type="submit" class="btn btn-primary btn-lg" >Submit</button>
         </div>
     </form>
 </div>
 <script>
+    var photo, base64Image
+    function checkForm(form){
+        // 检查是否至少有一个单选按钮被选中
+        const flowersYes = document.getElementById('flowersYes');
+        const flowersNo = document.getElementById('flowersNo');
+        if (!(flowersYes.checked || flowersNo.checked )) {
+            alert('Please select whether the plant has flowers.');
+            flowersYes.focus()
+            return false; // 防止表单提交
+        }
+        if (!selectSunExposure()){
+            alert('Please choose the Sun Exposure.');
+            const sunExposure=document.getElementById("sunExposure")
+            sunExposure.focus()
+            return false; // 防止表单提交
+        }
+        const color=document.getElementById("flowerColor")
+        if (color.value==null || color.value===""){
+            alert('Please choose the color.');
+            color.focus()
+            return false; // 防止表单提交
+        }
+        const complete = document.getElementById('statusComplete');
+        const inProgress = document.getElementById('statusInProgress');
+        if (!(complete.checked || inProgress.checked )) {
+            alert('Please select the status of the identification.');
+            complete.focus()
+            return false; // 防止表单提交
+        }
+        // if (getMarker()==null){
+        //     alert('Please select the location');
+        //     const map=document.getElementById('map')
+        //     map.focus()
+        //     return; // 防止表单提交
+        // }
+        //限制图片大小
+        photo = form.elements['photo'].files[0];
+        var fileSize=photo.size;
+        console.log("file size: "+fileSize/(1024*1024)+"MB");
+        if((fileSize/(1024*1024))>4){
+            alert("Plant Image cannot exceed 4MB");
+            return false;
+        }
+        return true
+    }
+
+    async function changeFormToObj(form) {
+        console.log('run changeFormToObj()')
+
+        let formData = new FormData(form);
+        formData.set('plantId',createPlantId(formData.get('name')))
+        formData = await changeImageFormat(formData);
+
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+            console.log(`${key}: ${value}`)
+        });
+        // console.log(formData)
+        return formObject;
+    }
+
+
+    async function changeImageFormat(formData) {
+        console.log('run changeImageFormat()')
+        return new Promise((resolve, reject) => {
+            if (photo) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64Image = e.target.result;
+                    formData.append("base64Image", base64Image);
+                    formData.delete("photo");
+                    resolve(formData);
+                };
+                reader.onerror = function(error) {
+                    reject(error);
+                };
+                reader.readAsDataURL(photo);
+            } else {
+                // 如果没有图片，直接返回 formData
+                resolve(formData);
+            }
+        });
+    }
+
+
+    function mySubmit(form){
+        console.log(form)
+        //做表单验证（非空+限制图片大小）
+        if (checkForm(form)){
+            console.log('处理表单')
+            changeFormToObj(form).then(plantObj=>{
+                console.log(plantObj)
+                if (plantObj!=null){
+                    console.log('plantObj!=null')
+                    const plants=[plantObj]
+                    openPlantsIDB().then(IDB=>{
+                        console.log('add new plant to IDB')
+                        addNewPlantsToIDB(IDB,plants)
+                    }).catch(err=>{
+                         console.log('err: '+err)
+                     })
+                    openSyncPlantsIDB().then(syncIDB=>{
+                        console.log('add new plant to syncIDB')
+                        addNewPlantToSync(syncIDB,plantObj)
+                    }).catch(err=>{
+                        console.log('err: '+err)
+                    }).finally(()=>{
+                        alert('submit successfully')
+                        return true
+                    })
+                }else {
+                    console.log('plantObj==null')
+                }
+
+            })
+        }else {
+            console.log('有空值')
+            return false
+        }
+        return false
+    }
     function selectSunExposure(){
         const select = document.querySelector('.sun');
         const reset = document.querySelector('.sun option:nth-child(2)');

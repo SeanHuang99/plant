@@ -39,7 +39,7 @@ async function initMap() {
     const {SearchBox} = await google.maps.importLibrary("places");
 
 
-    var Sheffield = new google.maps.LatLng(53.3921, -1.4898);
+    // var Sheffield = new google.maps.LatLng(53.3921, -1.4898);
     map = new Map(document.getElementById("map"), {
         //default location: Sheffield
         center: location,
@@ -141,7 +141,28 @@ async function initMap() {
     console.log(location)
     return location
 }
+async function showMap(location){
+    const { Map } = await google.maps.importLibrary("maps");v
 
+    map = new Map(document.getElementById("map"), {
+        //default location: Sheffield
+        center: location,
+        zoom: 11,
+        mapId: "DEMO_MAP_ID",
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_CENTER,
+        },
+    });
+    const marker =new AdvancedMarkerElement({
+        map: map,
+        position: location,
+        title: "chosen Location",
+    });
+    // 将地图中心设置为标记的位置
+    map.setCenter(lastMarker.position);
+}
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(

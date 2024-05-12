@@ -19,9 +19,12 @@ function synPlantFromServer() {
                         //如果是第一次连接（IDB没有数据：长度=0）
                         // if (plants.length === 0) {
                         //添加所有plant
-                        addNewPlantsToIDB(db, newPlants).then(() => {
-                            console.log("All new plants added to IDB")
+                        deleteAllExistingPlantsFromIDB(db).then(()=>{
+                            addNewPlantsToIDB(db, newPlants).then(() => {
+                                console.log("All new plants added to IDB")
+                            })
                         })
+
                         // }
                         //如果不是，判断plant的长度是否相同
                         // else {//相同 则正确
@@ -63,7 +66,7 @@ const addNewPlantToSync = (syncPlantIDB, plant) => {
         const plantStore = transaction.objectStore("sync-plants")
         const addRequest = plantStore.add(plant)
         addRequest.addEventListener("success", () => {
-            console.log("Added " + "#" + addRequest.result + ": " + plant.plantId+' --> '+plant.text)
+            console.log("Added " + "#" + addRequest.result + ": " + plant.plantId)
             const getRequest = plantStore.get(addRequest.result)
             getRequest.addEventListener("success", () => {
                 console.log("Found " + JSON.stringify(getRequest.result))
@@ -206,7 +209,8 @@ const deleteSyncPlantFromIDB = (syncPlantIDB, id) => {
     })
 }
 
-function openPlantsIDB() {
+async function openPlantsIDB() {
+    console.log('run openPlantsIDB()')
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("plants", 1);
 

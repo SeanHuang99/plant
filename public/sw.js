@@ -18,7 +18,6 @@ self.addEventListener('install', event => {
                 '/import/bootstrap.min.css',
                 '/import/bootstrap.min.js',
                 '/import/jquery-3.7.1.min.js',
-                '/javascript/add.js',
                 '/javascript/idb-utility.js',
                 '/javascript/index.js',
                 '/javascript/main.js',
@@ -111,21 +110,14 @@ self.addEventListener('sync', event => {
                 for (const syncPlant of syncPlants) {
                     console.log('Service Worker: Syncing new Plant: ', syncPlant);
                     console.log(syncPlant)
-                    //todo:封装一个addPlant(newPlant)方法， 添加plant到后端
-                    // Create a FormData object
-                    // const formData = new URLSearchParams();
-
-                    // Iterate over the properties of the JSON object and append them to FormData
-                    // formData.append("text", syncPlant.text);
-                    // formData.append("plantId", syncPlant.plantId);
 
                     // Fetch with FormData instead of JSON
-                    fetch('http://localhost:3000/addPlants', {
+                    fetch('http://localhost:3000/requestHandler/addPlants', {
                         method: 'POST',
-                        body: syncPlant,
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json'
                         },
+                        body: JSON.stringify(syncPlant)
                     }).then(() => {
                         console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
                         deleteSyncPlantFromIDB(syncPostDB, syncPlant.plantId);

@@ -111,13 +111,14 @@ async function submitRequest() {
     const nickName = getNickName();
     const preferredPlantName = document.getElementById('preferredPlantName').value;
     const creator = getNickNameOfPlant();
+    const plantOriginalName = getPlantOriginalName();
     // Post the data to the backend via the "/updatePlants" route
     const response = await fetch('/requestHandler/updatePlantsRequest', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator})
+        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator, plantOriginalName})
     });
 
     if (response.ok) {
@@ -138,6 +139,20 @@ function getNickNameOfPlant() {
 
     // Extract the text content from the element
     var text = nickNameElement.textContent;
+
+    // Assuming the format is "User Nickname: actual_nickname", split the text and retrieve the nickname
+    var parts = text.split(': ');
+
+    // Return the nickname part, if it exists, otherwise return an empty string
+    return parts.length > 1 ? parts[1] : '';
+}
+
+function getPlantOriginalName() {
+    // Get the element by its ID
+    var plantNameElement = document.getElementById('plantName');
+
+    // Extract the text content from the element
+    var text = plantNameElement.textContent;
 
     // Assuming the format is "User Nickname: actual_nickname", split the text and retrieve the nickname
     var parts = text.split(': ');

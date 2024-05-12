@@ -30,6 +30,10 @@ const UpdateRequestSchema = new mongoose.Schema({
         enum: ['agree', 'reject', ''],
         default: '',
     },
+    plantOriginalName: {
+        type: String,
+        required: true,
+    }
 });
 
 module.exports = mongoose.model('UpdateRequest', UpdateRequestSchema);

@@ -230,7 +230,7 @@ router.get("/api/getAllUpdateRequests", function (req, res, next){
 
 
 router.post('/updatePlantsRequest', async function (req, res, next) {
-    const { plantId, preferredPlantName, nickName,creator} = req.body;
+    const { plantId, preferredPlantName, nickName,creator, plantOriginalName} = req.body;
     const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
     if (originalNickName.type === 'fail') {
         return res.status(404).json({ message: 'Plant not found' });
@@ -296,7 +296,7 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
         }
     } else {
         // If not the same, add an update request
-        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName, creator);
+        const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName, creator, plantOriginalName);
         if (result.type === 'success') {
             res.status(200).send('Update request submitted successfully');
         } else {
@@ -315,7 +315,7 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
         //     return res.status(400).send('Bad request: Expected an array of requests');
         // }
         await Promise.all(requests.map(async request => {
-            const { plantId, plantName, date, decision, creator } = request;
+            const { plantId, plantName, date, decision, nickName } = request;
 
 
             const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(plantName)}`;
@@ -368,7 +368,7 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
 
             await mongoApi.changePlantNameOfPlant(plantId, plantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
 
-            await mongoApi.updateRequestFromUrPage(plantId, plantName, date, decision, creator);
+            await mongoApi.updateRequestFromUrPage(plantId, plantName, date, decision, nickName);
         }));
         res.status(200).send('All requests processed successfully.');
     } catch (error) {

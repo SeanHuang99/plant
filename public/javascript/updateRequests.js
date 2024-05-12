@@ -49,13 +49,15 @@ function renderTableRows(requests) {
         const agreeInput = disabled ? '' : `<input type="checkbox" class="form-check-input agree" name="decision${request.plantId}">`;
         const rejectInput = disabled ? '' : `<input type="checkbox" class="form-check-input reject" name="decision${request.plantId}">`;
         tbody.innerHTML += `
-            <tr id="${request.plantId}" data-full-date="${request.date}">
+            <tr id="${request.plantId}" data-full-date="${request.date}" nickName = "${request.nickName}">
+                <td>${request.plantOriginalName || 'N/A'}</td>
                 <td>${request.plantName || 'N/A'}</td>
                 <td>${request.statusOfRequest || 'in-progress'}</td>
                 <td>${new Date(request.date).toLocaleDateString()}</td>
                 <td>${request.decision || 'Pending decision'}</td>
                 <td>${agreeInput}</td>
                 <td>${rejectInput}</td>
+                
             </tr>
         `;
     });
@@ -74,47 +76,7 @@ function setupCheckboxBehavior() {
     });
 }
 
-async function submitRequests() {
-    const requests = [];
-    document.querySelectorAll('table tbody tr').forEach(row => {
-        const agreeChecked = row.querySelector('.agree').checked;
-        const rejectChecked = row.querySelector('.reject').checked;
-        if (agreeChecked || rejectChecked) {
-            requests.push({
-                plantId: row.id,
-                plantName: row.cells[0].textContent,
-                date: row.getAttribute('data-full-date'), // 获取完整的日期信息
-                decision: agreeChecked ? 'agree' : 'reject',
-                creator: getNickName() // Since it's synchronous, we can call it directly here too
-            });
-        }
-    });
 
-    if (requests.length === 0) {
-        alert('No requests selected.');
-        return;
-    }
-
-
-    try {
-        const response = await fetch('/requestHandler/updatePlantsRequestFromURPage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({requests})
-        });
-
-        if (response.ok) {
-            alert('Requests submitted successfully.');
-        } else {
-            throw new Error('Failed to submit requests');
-        }
-    } catch (error) {
-        alert('Failed to submit requests.');
-        console.error('Submission error:', error);
-    }
-}
 
 async function submitRequests() {
     const requests = [];
@@ -129,10 +91,12 @@ async function submitRequests() {
             if (agreeChecked || rejectChecked) {
                 requests.push({
                     plantId: row.id,
-                    plantName: row.cells[0].textContent,
+                    plantName: row.cells[1].textContent,
                     date: row.getAttribute('data-full-date'), // 获取完整的日期信息
                     decision: agreeChecked ? 'agree' : 'reject',
-                    creator: getNickName() // 因为它是同步的，所以可以在这里直接调用
+                    nickName: row.getAttribute('nickName')
+                    // creator: getNickName() // 因为它是同步的，所以可以在这里直接调用
+
                 });
             }
         } else {

@@ -249,10 +249,10 @@ async function getAllChatRecord(){
 }
 
 // Add or update plant edit request (plantId, plantName, nickName)
-async function addUpdateRequest(plantId, plantName, nickName, creator) {
+async function addUpdateRequest(plantId, plantName, nickName, creator, plantOriginalName) {
     var response;
     try {
-        const updateRequest = new UpdateRequest({ plantId, plantName, nickName, creator });
+        const updateRequest = new UpdateRequest({ plantId, plantName, nickName, creator, plantOriginalName});
         await updateRequest.save();
         response = { type: 'success', content: '' };
     } catch (error) {
@@ -290,24 +290,7 @@ async function getAllUpdateRequests() {
 }
 
 // Update plant edit request's approval status
-async function updateUpdateRequest(plantId, nickName, appOrdec) {
-    var response;
-    try {
-        const result = await UpdateRequest.findOneAndUpdate(
-            { plantId, nickName },
-            { statusOfRequest: status },
-            { new: true }
-        );
-        if (result) {
-            response = { type: 'success', content: result };
-        } else {
-            response = { type: 'fail', content: 'Update request not found or could not be updated' };
-        }
-    } catch (error) {
-        response = { type: 'fail', content: error.message };
-    }
-    return response;
-}
+
 
 async function getAllUpdateRequestsByNickName(creator) {
     let response;
@@ -320,13 +303,13 @@ async function getAllUpdateRequestsByNickName(creator) {
     return response;
 }
 
-async function updateRequestFromUrPage(plantId, plantName, date, decision, creator) {
+async function updateRequestFromUrPage(plantId, plantName, date, decision, nickName) {
     try {
         const result = await UpdateRequest.findOneAndUpdate(
             {
                 plantId: plantId,
                 date: date,
-                creator: creator
+                nickName: nickName
             },
             {
                 statusOfRequest: 'completed',
@@ -350,5 +333,5 @@ async function updateRequestFromUrPage(plantId, plantName, date, decision, creat
 
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, changePlantNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
-    getAllUpdateRequests, updateUpdateRequest, getAllUpdateRequestsByNickName, updateRequestFromUrPage};
+    getAllUpdateRequests, getAllUpdateRequestsByNickName, updateRequestFromUrPage};
 

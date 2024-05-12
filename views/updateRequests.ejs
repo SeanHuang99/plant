@@ -10,6 +10,7 @@
     <script src="/import/bootstrap.min.js"></script>
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/updateRequests.js"></script>
+    <script src="/javascript/updateRequests.js"></script>
 </head>
 <body>
     <div class="container">
@@ -36,60 +37,9 @@
             </tbody>
         </table>
     </div>
-
-<script>
-    $(document).ready(function() {
-        $('#loadingIndicator').show(); // Show loading indicator when the AJAX call starts
-        let nickName = getNickName();
-        // Assuming getNickName returns a promise and is available on the commonTools object or globally
-
-            console.log("Using nickname for AJAX call:", nickName);
-
-            // Proceed with the AJAX request
-            $.ajax({
-                url: `requestHandler/api/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`,
-                type: 'GET',
-                success: function(response) {
-                    console.log("AJAX call was successful, data received:", response);
-                    $('#loadingIndicator').hide(); // Hide the loading indicator on success
-
-                    if (response.type === 'success' && response.content.length > 0) {
-                        let requests = response.content;
-                        let tbody = $('table tbody');
-                        tbody.empty();
-                        console.log(requests);
-                        requests.forEach(request => {
-                            tbody.append(
-                                `<tr>
-                                <td>${request.plantName || 'N/A'}</td>
-                                <td>${request.statusOfRequest || 'in-progress'}</td>
-                                <td>${request.date ? new Date(request.date).toLocaleDateString() : 'Unknown'}</td>
-                                <td>${request.decision || 'Pending decision'}</td>
-                            </tr>`
-                            );
-                        });
-                    } else {
-                        $('table tbody').html('<tr><td colspan="4">No data found.</td></tr>');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error during AJAX call:', status, error, 'Response:', xhr.responseText);
-                    $('#loadingIndicator').hide(); // Hide the loading indicator on error
-                    $('table tbody').html('<tr><td colspan="4">Failed to load data.</td></tr>');
-                }
-            });
-        }).catch(error => {
-            console.error('Error fetching nickname:', error);
-            $('#loadingIndicator').hide(); // Hide the loading indicator if there's an error fetching nickname
-        });
-
-
-
-
-
-
-
-
-</script>
+    <!-- Submit Button Container -->
+    <div class="text-center" style="margin-top: 20px;">
+        <button id="submitBtn" class="btn btn-primary">Submit</button>
+    </div>
 </body>
 </html>

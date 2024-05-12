@@ -77,10 +77,11 @@ function getChatRecord(roomNo) {
         fetch(`/requestHandler/getChatRecordById/${roomNo}`)
             .then(response => response.json())
             .then(data => {
-                for (let eachRecord of data) {
+                for (let eachRecord of data.chatList) {
                     let who=getNickName()===eachRecord.nickName?"Me":eachRecord.nickName;
                     writeOnHistory(`<b>${who}:</b> ${eachRecord.content}`);
                 }
+                // console.log("Chat record: "+JSON.stringify(data));
             })
             .catch(error => {
                 console.error('Error occurred:', error);

@@ -232,6 +232,12 @@ router.get("/getChatRecordById/:id",function (req,res,next){
         })
 })
 
+
+router.post('/updateOfflineChatRecordToServer', async function (req, res, next) {
+
+    res.status(200);
+})
+
 router.get("/getAllChatRecord",function (req,res,next){
     mongoApi.getAllChatRecord()
         .then(function(response){
@@ -281,6 +287,8 @@ router.get("/api/getAllUpdateRequests", function (req, res, next){
             res.status(500).json({ type: 'fail', content: error.message });
         });
 });
+
+
 /*
 ------------------------------------------------------------------
  following content just for test api

@@ -92,10 +92,10 @@ const addNewPlantsToIDB = (plantIDB, plants) => {
             return new Promise((resolveAdd, rejectAdd) => {
                 const addRequest = plantStore.add(plant);
                 addRequest.addEventListener("success", () => {
-                    console.log("Added " + "#" + addRequest.result + ": " + plant);
+                    // console.log("Added " + "#" + addRequest.result + ": " + plant);
                     const getRequest = plantStore.get(addRequest.result);
                     getRequest.addEventListener("success", () => {
-                        console.log("Found " + JSON.stringify(getRequest.result));
+                        // console.log("Found " + JSON.stringify(getRequest.result));
                         // Assume insertplantInList is defined elsewhere
                         //plant:如何编写回调的返回值？
                         // insertPlantInList(getRequest.result);
@@ -374,9 +374,9 @@ const getChatRecordById = async (IDB, plantId) => {
     });
 }
 
-const addNewChatsToIDB = (plantIDB, chats) => {
+const addNewChatsToIDB = (chatIDB, chats) => {
     return new Promise((resolve, reject) => {
-        const transaction = plantIDB.transaction(["chats"], "readwrite");
+        const transaction = chatIDB.transaction(["chats"], "readwrite");
         const plantStore = transaction.objectStore("chats");
 
         const addPromises = chats.map(chat => {

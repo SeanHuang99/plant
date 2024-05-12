@@ -5,15 +5,15 @@ const ChatSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    nickName: {
-        type: String,
+    chatList:{
+        type: Array,
         required: true,
+        chat:{
+            nickName: {type: String, required: true,},
+            content: {type: String, required: true,},
+            date: { type: Date, default: Date.now }
+        }
     },
-    content: {
-        type: String,
-        required: true,
-    },
-    date: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('ChatRecord', ChatSchema);

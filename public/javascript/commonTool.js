@@ -15,3 +15,15 @@ function setPlantId(plantId){
 function getPlantId(){
     return window.localStorage.getItem("plantId")
 }
+
+function setPlantIsChange(){
+    window.localStorage.setItem("plantIsChanged","0");
+}
+
+function setPlantNotChange(){
+    window.localStorage.setItem("plantIsChanged","1");
+}
+
+function getPlantChangeStatus(){
+    window.localStorage.getItem("plantIsChanged");
+}

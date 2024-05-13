@@ -230,6 +230,7 @@ router.get("/api/getAllUpdateRequests", function (req, res, next){
 
 
 router.post('/updatePlantsRequest', async function (req, res, next) {
+    var response;
     const { plantId, preferredPlantName, nickName,creator, plantOriginalName} = req.body;
     const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
     if (originalNickName.type === 'fail') {
@@ -300,8 +301,11 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
         if (result.type === 'success') {
             res.status(200).send('Update request submitted successfully');
         } else {
-            console.error(`${result.content}`)
-            res.status(500).json({ message: result.content });
+            // console.error(`${result.content}`)
+            res.status(100).json({ message: result.content });
+            // response = { 'type': 'same fail', 'content': 'This suggestion has already been submitted by someone.' };
+            //
+            // return response;
         }
     }
 });

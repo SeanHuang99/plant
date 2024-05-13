@@ -107,11 +107,18 @@ function closeEditPopup() {
 
 // Function to submit a request to update the plant name
 async function submitRequest() {
+
     const plantId = getPlantId();
     const nickName = getNickName();
     const preferredPlantName = document.getElementById('preferredPlantName').value;
     const creator = getNickNameOfPlant();
     const plantOriginalName = getPlantOriginalName();
+    // Check if the preferred name is the same as the original name
+    if (preferredPlantName === plantOriginalName) {
+        alert("The same name as origin");
+        closeEditPopup(); // Assume this function closes your modal or popup
+        return; // Stop the function execution here
+    }
     // Post the data to the backend via the "/updatePlants" route
     const response = await fetch('/requestHandler/updatePlantsRequest', {
         method: 'POST',
@@ -125,9 +132,11 @@ async function submitRequest() {
         synPlantFromServer();
         generateDetailPage();
         alert('Request submitted successfully!');
-    } else {
-        alert('Error submitting request');
+    }  else {
+        // General error handler for all other cases
+        alert('Error submitting request'); // Provide more specific error information
     }
+
     // Close the modal after submitting
     // $('#editModal').modal('hide');
     closeEditPopup()

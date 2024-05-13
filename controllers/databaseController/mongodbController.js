@@ -13,10 +13,7 @@ const UpdateRequest = require('./models/updateRequest');
 const uri = "mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/web04?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
 
 // Connect to MongoDB using Mongoose
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect(uri);
 
 // callback
 mongoose.connection.on("open", async () => {
@@ -266,7 +263,15 @@ async function addUpdateRequest(plantId, plantName, nickName, creator, plantOrig
         await updateRequest.save();
         response = { type: 'success', content: '' };
     } catch (error) {
-        response = { type: 'fail', content: error.message };
+        // Check if the error is a duplicate key error
+        // console.log(error.name);
+        if (error.code === 11000) {
+            // Provide a custom message for duplicate key error
+            response = { type: 'fail', content: 'This suggestion has already been submitted by someone.' };
+        } else {
+            // Handle other kinds of errors normally
+            response = { type: 'fail', content: error.message };
+        }
     }
     return response;
 }

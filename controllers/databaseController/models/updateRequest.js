@@ -39,6 +39,9 @@ const UpdateRequestSchema = new mongoose.Schema({
     }
 });
 
+// Add a unique composite index for plantId and plantName
+UpdateRequestSchema.index({ plantId: 1, plantName: 1 }, { unique: true });
+
 // 创建复合索引
 UpdateRequestSchema.index({ statusOfRequest: -1, date: -1, plantName: 1 });
 

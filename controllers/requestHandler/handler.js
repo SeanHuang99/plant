@@ -174,7 +174,7 @@ router.post('/updateOfflineChatRecordToServer', async function (req, res, next) 
             await mongoApi.addChatRecord(plantId, chat.nickName, chat.content, new Date(chat.date))
         }
     }
-    res.status(200);
+    res.status(200).send();
 })
 
 router.get("/getAllChatRecord",function (req,res,next){

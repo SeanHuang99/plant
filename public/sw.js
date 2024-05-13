@@ -76,9 +76,6 @@ self.addEventListener('fetch', event => {
             console.log('bbb')
             event.request.url = 'http://localhost:3000/detail'//截去后面的id
             findCache(event)
-            //todo:如何截取路径并查找缓存？（报错：an object that was not a Response was passed to respondWith().）
-            // event.respondWith(findCache(url)); // 修改这里
-
         }
         else findCache(event)
     }
@@ -145,9 +142,9 @@ function syncPlantToServer(){
 function syncChatToServer(){
     console.log('Service Worker: Syncing new chat');
     openChatIDB().then((syncPostDB) => {
-        getSyncChatObjs(syncPostDB).then((chatObj) => {
+        getSyncChatObjs(syncPostDB).then((chatObjs) => {
             // for (const chatObj of chatObjs) {
-                console.log('Service Worker: Syncing new Chat: ', chatObj);
+                console.log('Service Worker: Syncing new Chats: ', chatObjs);
 
                 // Fetch with FormData instead of JSON
                 //todo:添加addChat接口
@@ -156,20 +153,22 @@ function syncChatToServer(){
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(chatObj)
+                    body: JSON.stringify(chatObjs)
                 }).then((response) => {
                     console.log("syncChatToServer response: "+response)
-                    console.log('Service Worker: Syncing new Chat: ', chatObj, ' done');
+                    console.log('Service Worker: Syncing new Chats: ', chatObjs, ' done');
                     //todo: clean the sync-chats indexdb
-
-                    // clearSyncChatFromIDB(syncPostDB, chatObj.plantId);
-                    // Send a notification
-                    self.registration.showNotification('Chat Synced', {
-                        body: 'Chat synced successfully!',
-                        icon: '/images/icon.webp'
-                    });
+                    deleteAllChatObjsFromIDB(syncPostDB,'sync-chats').then(()=>{
+                        console.log('deleteAllChatObjsFrom sync-chats successfully')
+                        // Send a notification
+                        self.registration.showNotification('Chat Synced', {
+                            body: 'Chat synced successfully!',
+                            icon: '/images/icon.webp'
+                        });
+                    })
+                    // clearSyncChatFromIDB(syncPostDB, chatObjs);
                 }).catch((err) => {
-                    console.error('Service Worker: Syncing new Plant: ', syncChat, ' failed');
+                    console.error('Service Worker: Syncing new Plant: ', chatObj, ' failed');
                 });
             // }
         });

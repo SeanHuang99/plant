@@ -1,7 +1,7 @@
 // sorted (at least) by date/time seen
 function sortByDate(order) {
     return new Promise((resolve, reject) => {
-        openPlantsIDB().then(IDB => {
+        openPlantIDB().then(IDB => {
             getAllPlants(IDB).then(plants => {
                 // 使用排序函数对植物数组进行排序
                 plants.sort((a, b) => {
@@ -39,7 +39,7 @@ function sortPlants(plants, key, order) {
 // whether identification is finished.
 function filterPlants(key, value) {
     return new Promise((resolve, reject) => {
-        openPlantsIDB().then(IDB => {
+        openPlantIDB().then(IDB => {
             getAllPlants(IDB).then(plants => {
                 // 过滤出指定状态的植物
                 const filteredPlants = plants.filter(plant => plant[key] === value);
@@ -58,18 +58,31 @@ function haveLoc(plant) {
 }
 
 // Sorting by distance away is a ‘stretch’ goal (i.e. nice to have).
+async function calculateDistances(plants, currentLoc) {
+    for (const plant of plants) {
+        try {
+            const distance = await computeDistanceBetween(currentLoc, plant.location);
+            plant.distance = distance;
+            console.log('computeDistance完毕');
+        } catch (error) {
+            console.error('计算距离时出错：', error);
+        }
+    }
+    return plants
+}
+
 function sortByDistance(currentLoc, order) {
     return new Promise((resolve, reject) => {
-        openPlantsIDB().then(IDB => {
+        openPlantIDB().then(IDB => {
             getAllPlants(IDB).then(plants => {
                 //delete plant without location
                 plants = plants.filter(plant => haveLoc(plant));
                 //calculate distance
-                plants.forEach(plant => {
-                    plant.distance = computeDistanceBetween(currentLoc, plant.location);
+                calculateDistances(plants,currentLoc).then(plants=>{
+                    console.log('sortPlants by distance')
+                    plants = sortPlants(plants, 'distance', order)
+                    resolve(plants);
                 })
-                plants = sortPlants(plants, 'distance', order)
-                resolve(plants);
             }).catch(error => {
                 reject(error); // 如果无法获取植物数组，则拒绝 Promise
             });

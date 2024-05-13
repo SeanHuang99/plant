@@ -242,20 +242,16 @@
                 console.log(plantObj)
                 if (plantObj!=null){
                     console.log('plantObj!=null')
-                    const plants=[plantObj]
-                    openPlantsIDB().then(IDB=>{
+                    // const plants=[plantObj]
+                    openPlantIDB().then(IDB=>{
                         console.log('add new plant to IDB')
-                        addNewPlantsToIDB(IDB,plants)
+                        addNewPlantsToIDB(IDB,[plantObj])
+                        addNewPlantToSync(IDB,plantObj)
                     }).catch(err=>{
                          console.log('err: '+err)
-                     })
-                    openSyncPlantsIDB().then(syncIDB=>{
-                        console.log('add new plant to syncIDB')
-                        addNewPlantToSync(syncIDB,plantObj)
-                    }).catch(err=>{
-                        console.log('err: '+err)
-                    }).finally(()=>{
-                        alert('submit successfully')
+                     }).finally(()=>{
+                         showAddPlantNotification()
+                        // alert('submit successfully')
                         // console.log("current plant id: "+plantObj.plantId);
                         setPlantId(plantObj.plantId)
                         window.location.href="/detail";

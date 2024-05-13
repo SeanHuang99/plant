@@ -26,28 +26,11 @@ function synPlantFromServer() {
             .then(function (newPlants) {
                 openPlantIDB().then((db) => {
                     getAllPlants(db).then(plants => {
-                        //如果是第一次连接（IDB没有数据：长度=0）
-                        // if (plants.length === 0) {
-                        //添加所有plant
                         deleteAllExistingPlantsFromIDB(db).then(() => {
                             addNewPlantsToIDB(db, newPlants).then(() => {
                                 console.log("All new plants added to IDB")
                             })
                         })
-
-                        // }
-                        //如果不是，判断plant的长度是否相同
-                        // else {//相同 则正确
-                        //     //否则重新添加
-                        //     if (plants.length !== newPlants.length) {
-                        //         deleteAllExistingPlantsFromIDB(db).then(() => {
-                        //             console.log('deleteAllExistingPlantsFromIDB')
-                        //             addNewPlantsToIDB(db, newPlants).then(() => {
-                        //                 console.log("All new plants added to IDB")
-                        //             })
-                        //         })
-                        //     }
-                        // }
                     })
                 })
             })
@@ -55,13 +38,13 @@ function synPlantFromServer() {
 }
 
 // Function to handle adding a new plant
-const addNewPlantToSync = (syncPlantIDB, plant) => {
+const addNewPlantToSync = (IDB, plant) => {
     // Retrieve plant text and add it to the IndexedDB
     if (plant !== null) {
         // const transaction = syncPlantIDB.transaction(["sync-plants"], "readwrite")
         // const plantStore = transaction.objectStore("sync-plants")
-        const transaction = syncPlantIDB.transaction(["plants"], "readwrite")
-        const plantStore = transaction.objectStore("plants")
+        const transaction = IDB.transaction(["sync-plants"], "readwrite")
+        const plantStore = transaction.objectStore("sync-plants")
         const addRequest = plantStore.add(plant)
         addRequest.addEventListener("success", () => {
             console.log("Added " + "#" + addRequest.result + ": " + plant.plantId)
@@ -69,14 +52,7 @@ const addNewPlantToSync = (syncPlantIDB, plant) => {
             getRequest.addEventListener("success", () => {
                 console.log("Found " + JSON.stringify(getRequest.result))
                 // Send a sync message to the service worker
-                navigator.serviceWorker.ready.then((sw) => {
-                    console.log('sw.sync.register("sync-plant")')
-                    sw.sync.register("sync-plant")
-                }).then(() => {
-                    console.log("Sync registered");
-                }).catch((err) => {
-                    console.log("Sync registration failed: " + JSON.stringify(err))
-                })
+                registerPlantSync()
             })
         })
     }
@@ -84,7 +60,7 @@ const addNewPlantToSync = (syncPlantIDB, plant) => {
 
 // Function to add new plants to IndexedDB and return a promise
 const addNewPlantsToIDB = (plantIDB, plants) => {
-    console.log('db名字：'+plantIDB.name)
+    // console.log('db名字：'+plantIDB.name)
     return new Promise((resolve, reject) => {
         const transaction = plantIDB.transaction(["plants"], "readwrite");
         const plantStore = transaction.objectStore("plants");
@@ -135,7 +111,7 @@ const deleteAllExistingPlantsFromIDB = (plantIDB) => {
     });
 };
 
-//todo: 能否复用getAll函数？
+
 // Function to get the plant list from the IndexedDB
 const getAllPlants = (plantIDB) => {
     return new Promise((resolve, reject) => {
@@ -154,22 +130,6 @@ const getAllPlants = (plantIDB) => {
         });
     });
 }
-// Function to get the plant list from the sync-IndexedDB
-// const getAllSyncPlants = (syncPlantIDB) => {
-//     return new Promise((resolve, reject) => {
-//         const transaction = syncPlantIDB.transaction(["sync-plants"]);
-//         const plantStore = transaction.objectStore("sync-plants");
-//         const getAllRequest = plantStore.getAll();
-//
-//         getAllRequest.addEventListener("success", () => {
-//             resolve(getAllRequest.result);
-//         });
-//
-//         getAllRequest.addEventListener("error", (event) => {
-//             reject(event.target.error);
-//         });
-//     });
-// }
 
 //call when jump into detail page(online and offline)
 const getDetailById = (IDB, id) => {
@@ -280,24 +240,30 @@ const updateWithClearedChatList = (store, chatObj) => {
         });
     });
 };
+
 //syncIDB每次同步之后都会清空，下次在add时必然没有记录，就会创建新的chatObj，更新就会把server的记录覆盖
 //改为：同步后只清空chatList，保留当前记录
-const clearSyncChatFromIDB=(db, plantId)=>{
+//todo: 改为后端判断，indexDB只需清除所有记录
+//改为调用deleteAllChatObjsFromIDB
+const clearSyncChatFromIDB=(db, chatObjs)=>{
     const transaction = db.transaction(["sync-chats"], "readwrite");
     const plantStore = transaction.objectStore("sync-chats");
     return new Promise((resolve, reject) => {
         const getRequest = plantStore.get(plantId);
-
+        console.log('getRequest: '+getRequest)
         getRequest.addEventListener("success", () => {
             const chatObj = getRequest.result;
+            console.log('chatObj: '+chatObj)
             chatObj.chatList=[]
             const updatePromises = updateWithClearedChatList(plantStore, chatObj)
-
+            console.log('run updateWithClearedChatList()')
             Promise.all(updatePromises)
                 .then(() => {
+                    console.log('resolve')
                     resolve();
                 })
                 .catch((error) => {
+                    console.log('reject')
                     reject(error);
                 });
         });
@@ -308,10 +274,10 @@ const clearSyncChatFromIDB=(db, plantId)=>{
     });
 }
 
-const deleteAllChatObjsFromIDB = (db) => {
+const deleteAllChatObjsFromIDB = (db,objectStore) => {
     console.log('run deleteAllChatObjsFromIDB')
-    const transaction = db.transaction(["chats"], "readwrite");
-    const plantStore = transaction.objectStore("chats");
+    const transaction = db.transaction([objectStore], "readwrite");
+    const plantStore = transaction.objectStore(objectStore);
     const clearRequest = plantStore.clear();
 
     return new Promise((resolve, reject) => {
@@ -335,7 +301,8 @@ function synAllChatObjsFromServer() {
                 openChatIDB().then((db) => {
                     console.log('openChatsIDB successfully')
                     console.log(db.name)
-                    deleteAllChatObjsFromIDB(db).then(()=>{
+                    deleteAllChatObjsFromIDB(db,"chats").then(()=>{
+                        console.log('deleteAllChatObjsFrom chats successfully')
                         const store=db.transaction(["chats"], "readwrite").objectStore("chats");
                         chatObjs.forEach(chatObj => {
                             addChatObj(store, chatObj);
@@ -360,8 +327,8 @@ const addNewChatToIDB = (db,plantId, chat) => {
                 // const updateRequest2 = chatsStore.put(chatObj);
                 const updateRequest1 = syncChatsStore.put(chatObj);
                 updateRequest1.addEventListener("success", () => {
-                    console.log("Updated chatObj to syncChatsStore" + plantId);
-                    registerSync()
+                    console.log("Updated chatObj to syncChatsStore. plantOd: " + plantId);
+                    registerChatSync()
                     resolve();
                 });
                 updateRequest1.addEventListener("error", (event) => {
@@ -374,14 +341,18 @@ const addNewChatToIDB = (db,plantId, chat) => {
                     chatList: [chat]
                 }
                 //插入IDB
-                addChatObj(syncChatsStore,newChatObj)
+                addChatObj(syncChatsStore,newChatObj).then(()=>{
+                    console.log('newChatObj to syncChatsStore. plantId: ' + plantId);
+                    registerChatSync()
+                    return resolve();
+                })
             }
         })
     });
 };
 
 // Send a sync message to the service worker
-function registerSync(){
+function registerChatSync(){
     navigator.serviceWorker.ready.then((sw) => {
         console.log('sw.sync.register("sync-chat")')
         sw.sync.register("sync-chat")
@@ -391,6 +362,18 @@ function registerSync(){
         console.log("Sync registration failed: " + JSON.stringify(err))
     })
 }
+
+function registerPlantSync(){
+    navigator.serviceWorker.ready.then((sw) => {
+        console.log('sw.sync.register("sync-plant")')
+        sw.sync.register("sync-plant")
+    }).then(() => {
+        console.log("Sync plant registered");
+    }).catch((err) => {
+        console.log("Sync registration failed: " + JSON.stringify(err))
+    })
+}
+
 const getChatRecordById = async (store, plantId) => {
     return new Promise((resolve, reject) => {
         const getRequest = store.get(plantId);
@@ -407,6 +390,7 @@ const getChatRecordById = async (store, plantId) => {
 }
 
 function addChatObj(store,chatObj){
+    console.log('add '+chatObj)
     return new Promise((resolve, reject) => {
         const addRequest = store.add(chatObj);
         addRequest.addEventListener("success", () => {

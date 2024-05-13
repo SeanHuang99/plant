@@ -67,15 +67,26 @@ function sendChatText() {
         }
         const plantId = roomNo
         openChatIDB().then(IDB => {
-            //chats与sync-chats都插入
+            //只插入sync-chats
             addNewChatToIDB(IDB, plantId, chat).then(_ => {
                 console.log('add chat to IDB')
+                showAddChatNotification()
             })
         })
 
         writeOnHistory(`<b><span style="color: red;">Me (Offline):</span></b> ${chatText}`);
     }
     document.getElementById('chat_input').value = ''; // Clear input
+}
+
+function showAddChatNotification(){
+    navigator.serviceWorker.ready
+        .then(function (serviceWorkerRegistration) {
+            serviceWorkerRegistration.showNotification("Plant App",
+                {
+                    body: "Chat added!",
+                    icon: '/images/icon.webp'})
+        });
 }
 
 // Append new chat history entries to the container

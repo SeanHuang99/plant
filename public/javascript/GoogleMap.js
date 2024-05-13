@@ -1,19 +1,19 @@
 (g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__",
-    m = document, b = window;
+        m = document, b = window;
     b = b[c] || (b[c] = {});
     var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams,
-    u = () => h || (h = new Promise(async (f, n) => {
-    await (a = m.createElement("script"));
-    e.set("libraries", [...r] + "");
-    for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
-    e.set("callback", c + ".maps." + q);
-    a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-    d[q] = f;
-    a.onerror = () => h = n(Error(p + " could not load."));
-    a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-    m.head.append(a)
-}));
+        u = () => h || (h = new Promise(async (f, n) => {
+            await (a = m.createElement("script"));
+            e.set("libraries", [...r] + "");
+            for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+            e.set("callback", c + ".maps." + q);
+            a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+            d[q] = f;
+            a.onerror = () => h = n(Error(p + " could not load."));
+            a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+            m.head.append(a)
+        }));
     d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
 })({
     key: "AIzaSyB3kTOEPoJxIMqR_fU1VHr9CozUXxQvA7s",
@@ -25,12 +25,12 @@
 // // prompted by your browser. If you see the error "The Geolocation service
 // // failed.", it means you probably did not give permission for the browser to
 // // locate you.
-let map, infoWindow, location = {lat: 53.3921, lng: -1.4898};
+let map, infoWindow, Glocation = {lat: 53.3921, lng: -1.4898};
 var lastMarker = null;
-//初始化位置
-setLocation()
 
 async function initMap() {
+    //初始化位置
+    setLocation()
     const {Map} = await google.maps.importLibrary("maps");
     const {AdvancedMarkerView} = await google.maps.importLibrary("marker")
     const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
@@ -40,7 +40,7 @@ async function initMap() {
     // var Sheffield = new google.maps.LatLng(53.3921, -1.4898);
     map = new Map(document.getElementById("map"), {
         //default location: Sheffield
-        center: location,
+        center: Glocation,
         zoom: 11,
         mapId: "DEMO_MAP_ID",
         mapTypeControl: true,
@@ -58,9 +58,9 @@ async function initMap() {
             lastMarker.setMap(null);
         }
         // 获取点击位置的经纬度信息
-        location.lat = event.latLng.lat();
-        location.lng = event.latLng.lng();
-        console.log("Clicked at:", location.lat, location.lng);
+        Glocation.lat = event.latLng.lat();
+        Glocation.lng = event.latLng.lng();
+        console.log("Clicked at:", Glocation.lat, Glocation.lng);
         // 在地图上标记点击位置
         lastMarker = new AdvancedMarkerElement({
             map: map,
@@ -109,16 +109,16 @@ async function initMap() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    location.lat = position.coords.latitude;
-                    location.lng = position.coords.longitude;
-                    console.log("pan to:", location.lat, location.lng);
+                    Glocation.lat = position.coords.latitude;
+                    Glocation.lng = position.coords.longitude;
+                    console.log("pan to:", Glocation.lat, Glocation.lng);
 
                     if (lastMarker != null) {
                         lastMarker.setMap(null);
                     }
                     lastMarker = new AdvancedMarkerElement({
                         map: map,
-                        position: location,
+                        position: Glocation,
                         title: "current Location",
                     });
                     // 将地图中心设置为标记的位置
@@ -135,8 +135,7 @@ async function initMap() {
             handleLocationError(false, infoWindow, map.getCenter());
         }
     });
-    console.log(location)
-    return location
+    return Glocation
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -152,16 +151,19 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 const path = window.location.pathname
 if (path === '/upload') {
     initMap()
-}//否则执行showMapInDetail() （在detail.js中调用）
+}
+//否则执行showMapInDetail() （在detail.js中调用）
 
 function setLocation() {
-    document.getElementById("lat").value = location.lat;
-    document.getElementById("lng").value = location.lng;
+    document.getElementById("lat").value = Glocation.lat;
+    document.getElementById("lng").value = Glocation.lng;
 }
 
 //球面上的距离不能直接用勾股定理，直接调用Google封装的函数即可
 async function computeDistanceBetween(from, to) {
     const {spherical} = await google.maps.importLibrary("geometry")
     const distance = spherical.computeDistanceBetween(from, to)
+    // const distance=google.maps.geometry.spherical.computeDistanceBetween(from, to)
     console.log('distance' + distance)
+    return distance
 }

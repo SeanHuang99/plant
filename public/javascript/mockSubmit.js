@@ -1,4 +1,4 @@
-const testData = {
+var testData = {
     datetime: "2024-05-13T20:24",
     description: "testDescription",
     details: "testDetail",
@@ -8,7 +8,7 @@ const testData = {
     lat: "53.3921",
     lng: "-1.4898",
     nickName: "gyTest",
-    plantId: Math.random() * 10000 + 1,
+    plantId: null,
     plantName: "testName",
     status: "In Progress",
     sunExposure: "partialShade",
@@ -17,6 +17,8 @@ const testData = {
 function mockSubmit(){
     openPlantIDB().then(IDB => {
         console.log('add new plant to IDB')
+        testData.plantId=Math.random() * 10000 + 1
+        console.log(testData)
         addNewPlantsToIDB(IDB, [testData]).then(() => {
             console.log('finish addNewPlantsToIDB')
         })

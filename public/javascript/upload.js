@@ -1,3 +1,9 @@
+window.onload=function(){
+    if(getNickName()!==undefined && getNickName()!==""){
+        document.getElementById('nickname').value=getNickName()
+    }
+}
+
 //取消form的action跳转
 //submit按钮先进行表单验证
 //表单全部非空之后，将newPlant插入syncIDB与IDB

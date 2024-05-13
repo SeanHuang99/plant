@@ -24,6 +24,7 @@ window.onload = function () {
     updateNickname()
     showWelcomeOrIndex();
     synPlantFromServer();
+    synAllChatObjsFromServer();
 
     //from local storage, to load the last url record.
     if (storage.get("lastURL") !== undefined && storage.get("lastURL") !== null && storage.get("lastURL") !== "") {
@@ -41,9 +42,14 @@ window.onload = function () {
 
         // get link
         var href = $(this).attr('href');
+        //plant update page unavailable in offline
+        if(href==="/getAllUpdateRequests" && !navigator.onLine){
+            alert("Update request page is unavailable in offline");
+        }else{
+            // update iframe src to the link
+            $('#content-iframe').attr('src', href);
+        }
 
-        // update iframe src to the link
-        $('#content-iframe').attr('src', href);
 
         //add the url to the record
         storage.set("lastURL", href);

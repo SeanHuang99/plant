@@ -63,12 +63,12 @@ router.get('/mapTest',function (req, res) {
 })
 
 router.get('/huangtest', function (req, res) {
-    console.log('/huangtest')
+    // console.log('/huangtest')
     res.render('temptest')
 })
 
 router.get('/getAllUpdateRequests', function (req, res) {
-    console.log('/getAllUpdateRequests')
+    // console.log('/getAllUpdateRequests')
     res.render('updateRequests')
 })
 

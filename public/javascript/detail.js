@@ -10,7 +10,7 @@ function generateDetailPage(){
     const plantId=localStorage.getItem('plantId')
     // console.log('plantId: '+plantId)
     if (plantId==null){
-        console.log('plantId==null')
+        // console.log('plantId==null')
         //todo: return to main page, and show alert of 'cannot find plant'
         alert("cannot find plant")
         window.localStorage.setItem('lastURL', '/main');
@@ -33,8 +33,8 @@ function generateDetailPage(){
     else {
         openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
-                console.log('plant found in IDB ----- ' + JSON.stringify(plant))
-                console.log(plant.plantId + '-------> ' + plant.description)
+                console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
+                console.log(plant.plantId + ' detail-------> ' + plant.description)
                 detailRender(plant);
                 document.getElementById("map").innerText='Cannot show map when offline'
             }).catch(err => {

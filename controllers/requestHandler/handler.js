@@ -7,7 +7,7 @@ const mongoApi=require("../databaseController/mongodbController");
 const upload = multer();
 
 router.post("/addPlants",upload.none(),async function (req, res, next) {
-    console.log('offline addPlant')
+    console.log(`service worker addPlant: ${JSON.stringify(req.body)}`)
     let plantId=req.body.plantId;
     let nickname = req.body.nickname;
     let description = req.body.description;
@@ -18,8 +18,8 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     let lng = req.body.lng;
     let flowers = req.body.flowers;
     let sunExpose = req.body.sunExposure;
-    let flowerColor = req.body.flowerColor;
-    let plantName = req.body.name;
+    let flowerColor = req.body.flowerColorPicker;
+    let plantName = req.body.plantName;
     let status = req.body.status;
     let base64Image = req.body.base64Image;
 
@@ -147,7 +147,7 @@ router.get("/getAllPlants",function (req,res,next){
 
 router.get("/getChatRecordById/:id",function (req,res,next){
     const { id } = req.params;
-    console.log('receive chat record request: '+id);
+    // console.log('receive chat record request: '+id);
     mongoApi.getChatRecord(id)
         .then(function(response){
             if(response.type==='success'){
@@ -168,7 +168,7 @@ router.post('/updateOfflineChatRecordToServer', async function (req, res, next) 
     let request=req.body;
     for (let chatGroup of request){
         let plantId=chatGroup.plantId;
-        console.log("offline chat group by plantId: "+JSON.stringify(chatGroup.chatList))
+        // console.log("offline chat group by plantId: "+JSON.stringify(chatGroup.chatList))
         for(let chat of chatGroup.chatList){
             // console.log(chat);
             await mongoApi.addChatRecord(plantId, chat.nickName, chat.content, new Date(chat.date))

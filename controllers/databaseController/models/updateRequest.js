@@ -7,12 +7,13 @@ const UpdateRequestSchema = new mongoose.Schema({
     plantName: {
         type: String,
         required: true,
+        index: true  // 单字段索引
     },
     nickName: {
         type: String,
         required: true,
     },
-    creator:{
+    creator: {
         type: String,
         required: true,
     },
@@ -20,10 +21,12 @@ const UpdateRequestSchema = new mongoose.Schema({
         type: String,
         enum: ['completed', 'in-progress'],
         default: 'in-progress',
+        index: true  // 单字段索引
     },
     date: {
         type: Date,
         default: Date.now,
+        index: -1  // 单字段索引，降序
     },
     decision: {
         type: String,
@@ -36,4 +39,9 @@ const UpdateRequestSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('UpdateRequest', UpdateRequestSchema);
+// 创建复合索引
+UpdateRequestSchema.index({ statusOfRequest: -1, date: -1, plantName: 1 });
+
+const UpdateRequest = mongoose.model('UpdateRequest', UpdateRequestSchema);
+module.exports = UpdateRequest;
+

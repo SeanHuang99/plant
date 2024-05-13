@@ -13,12 +13,22 @@ const UpdateRequest = require('./models/updateRequest');
 const uri = "mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/web04?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
 
 // Connect to MongoDB using Mongoose
-mongoose.connect(uri)
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 // callback
-mongoose.connection.on("open", () => {
+mongoose.connection.on("open", async () => {
+
     // call back of connect success
     console.log("MongoDb connect success");
+    try {
+        await UpdateRequest.ensureIndexes(); // 确保所有在模型上定义的索引被创建
+        console.log("Indexes ensured successfully");
+    } catch (err) {
+        console.log("Error ensuring indexes:", err);
+    }
 });
 mongoose.connection.on("error", () => {
     // call back of error
@@ -308,18 +318,7 @@ async function getAllUpdateRequestsByNickName(creator) {
     try {
         const updateRequests = await UpdateRequest.aggregate([
             { $match: { creator: creator } },  // 过滤匹配的文档
-            { $addFields: {  // 添加一个新字段用于自定义排序
-                    sortPriority: {
-                        $switch: {
-                            branches: [
-                                { case: { $eq: ["$statusOfRequest", "in-progress"] }, then: 1 },
-                                { case: { $eq: ["$statusOfRequest", "completed"] }, then: 2 }
-                            ],
-                            default: 3  // 任何意外值
-                        }
-                    }
-                }},
-            { $sort: { sortPriority: 1, date: -1, plantName: 1 } },  // 根据新字段和其他字段排序
+            { $sort: { statusOfRequest: -1, date: -1, plantName: 1 } },// 根据新字段和其他字段排序
             { $project: { sortPriority: 0 } }  // 选择性地移除用于排序的临时字段
         ]);
         response = { 'type': 'success', 'content': updateRequests };

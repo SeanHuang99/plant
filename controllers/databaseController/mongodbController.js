@@ -292,16 +292,43 @@ async function getAllUpdateRequests() {
 // Update plant edit request's approval status
 
 
+// async function getAllUpdateRequestsByNickName(creator) {
+//     let response;
+//     try {
+//         const updateRequests = await UpdateRequest.find({ creator });
+//         response = { 'type': 'success', 'content': updateRequests };
+//     } catch (error) {
+//         response = { 'type': 'fail', 'content': error.message };
+//     }
+//     return response;
+// }
+
 async function getAllUpdateRequestsByNickName(creator) {
     let response;
     try {
-        const updateRequests = await UpdateRequest.find({ creator });
+        const updateRequests = await UpdateRequest.aggregate([
+            { $match: { creator: creator } },  // 过滤匹配的文档
+            { $addFields: {  // 添加一个新字段用于自定义排序
+                    sortPriority: {
+                        $switch: {
+                            branches: [
+                                { case: { $eq: ["$statusOfRequest", "in-progress"] }, then: 1 },
+                                { case: { $eq: ["$statusOfRequest", "completed"] }, then: 2 }
+                            ],
+                            default: 3  // 任何意外值
+                        }
+                    }
+                }},
+            { $sort: { sortPriority: 1, date: -1, plantName: 1 } },  // 根据新字段和其他字段排序
+            { $project: { sortPriority: 0 } }  // 选择性地移除用于排序的临时字段
+        ]);
         response = { 'type': 'success', 'content': updateRequests };
     } catch (error) {
         response = { 'type': 'fail', 'content': error.message };
     }
     return response;
 }
+
 
 async function updateRequestFromUrPage(plantId, plantName, date, decision, nickName) {
     try {

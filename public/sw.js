@@ -1,6 +1,5 @@
 importScripts('/javascript/idb-utility.js');
 
-
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
     console.log('Service Worker: Installing....');
@@ -83,7 +82,7 @@ self.addEventListener('fetch', event => {
     }
     //如果online则正常服务器请求
     else {
-        console.log('online 不拦截')
+        // console.log('online 不拦截')
     }
 });
 

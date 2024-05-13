@@ -1,6 +1,5 @@
 importScripts('/javascript/idb-utility.js');
 
-
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
     console.log('Service Worker: Installing....');
@@ -26,6 +25,8 @@ self.addEventListener('install', event => {
                 '/javascript/detail.js',
                 '/javascript/sort.js',
                 '/javascript/plantChatRoom.js',
+                '/javascript/GoogleMap.js',
+                '/javascript/detailMap.js',
                 '/stylesheets/style.css',
                 '/images/icon.webp',
                 '/manifest.json',
@@ -81,7 +82,7 @@ self.addEventListener('fetch', event => {
     }
     //如果online则正常服务器请求
     else {
-        console.log('online 不拦截')
+        // console.log('online 不拦截')
     }
 });
 
@@ -102,9 +103,11 @@ function findCache(event){
 self.addEventListener('sync', event => {
     console.log('prepare to sync')
     if (event.tag === 'sync-plant') {
+        console.log("ready to sync the plants")
         syncPlantToServer()
     }
     else if(event.tag === 'sync-chat'){
+        console.log("ready to sync the chat")
         syncChatToServer()
     }
 });
@@ -123,14 +126,23 @@ function syncPlantToServer(){
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(syncPlant)
-                }).then(() => {
-                    console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
-                    deleteSyncPlantFromIDB(db, syncPlant.plantId);
-                    // Send a notification
-                    self.registration.showNotification('Plant Synced', {
-                        body: 'Plant synced successfully!',
-                        icon: '/images/icon.webp'
-                    });
+                }).then(res => {
+                    if (res.ok){
+                        console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
+                        deleteSyncPlantFromIDB(db, syncPlant.plantId);
+                        // Send a notification
+                        self.registration.showNotification('Plant Synced', {
+                            body: 'Plant synced successfully!',
+                            icon: '/images/icon.webp'
+                        });
+                    }else {
+                        console.log('sync failed!!!')
+                        self.registration.showNotification('Plant Synced ', {
+                            body: 'Plant synced failed!',
+                            icon: '/images/icon.webp'
+                        });
+                    }
+
                 }).catch((err) => {
                     console.error('Service Worker: Syncing new Plant: ', syncPlant, ' failed');
                 });

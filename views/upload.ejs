@@ -10,7 +10,6 @@
     <script src="/javascript/commonTool.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
     <script type="module" src="/javascript/GoogleMap.js"></script>
-
     <script src="/javascript/idb-utility.js"></script>
     <style>
         label{
@@ -48,7 +47,8 @@
 <div class="container mt-5" style="padding: 0 100px">
     <h1 class="mt-4">Add Plant</h1>
 <!--    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data" id="myForm">-->
-    <form enctype="multipart/form-data" id="myForm" onsubmit="return mySubmit(this)">
+<!--    <form enctype="multipart/form-data" id="myForm" onsubmit="return mySubmit(this)">-->
+    <form enctype="multipart/form-data" id="myForm" onsubmit="return mockSubmit()">
         <div class="form-group">
             <label for="description">Description:</label>
             <input type="text" class="form-control" id="description" name="description" required>
@@ -136,7 +136,7 @@
 
         <div class="form-group">
             <label for="nickname">User Nickname:</label>
-            <input type="text" class="form-control" id="nickname" name="nickname" required>
+            <input type="text" class="form-control" id="nickName" name="nickName" required>
         </div>
         <p> </p>
         <div class="text-center" style="padding-bottom: 20px">

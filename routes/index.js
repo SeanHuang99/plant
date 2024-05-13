@@ -72,4 +72,8 @@ router.get('/getAllUpdateRequests', function (req, res) {
     res.render('updateRequests')
 })
 
+router.get('/mockSubmit', function (req, res) {
+    // console.log('/getAllUpdateRequests')
+    res.render('mockSubmit')
+})
 module.exports = router;

@@ -1,0 +1,89 @@
+<div>
+    <style>
+        /* Scope the styles to only affect the welcomePage and its children */
+        .welcomePage{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;  /* 宽度可以根据需要调整 */
+            max-width: 400px;  /* 最大宽度，确保不会过宽 */
+            min-height: 150px;  /* 最小高度，确保所有元素适当显示 */
+            padding: 10px;  /* 减少内边距以减小总高度 */
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1050;
+        }
+
+        /*.welcomePage .container {*/
+        /*    background-color: rgba(255, 255, 255, 0.7); !* Slight transparency *!*/
+        /*    backdrop-filter: blur(5px); !* Blur effect *!*/
+        /*    padding: 2em;*/
+        /*    border-radius: 10px;*/
+        /*    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);*/
+        /*    width: 200%;*/
+        /*    max-width: 600px;*/
+        /*}*/
+
+        .welcomePage h2 {
+            text-align: center; /* 确保标题居中 */
+            margin: 0; /* 移除边距，减少空间 */
+            padding: 10px 0; /* 上下内边距 */
+        }
+        .welcomePage .form-control {
+            width: 100%; /* 输入框宽度 */
+            height: 40px; /* 控制高度 */
+            margin-bottom: 1em; /* 与下一个元素的间距 */
+        }
+
+        .welcomePage .btn {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .welcomePage .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /*!* Additional styling for the body only when welcomePage is active *!*/
+        /*body.show-welcomePage {*/
+        /*    !*background-image: url('path_to_your_background_image.jpg'); !* Add your background image path *!*!*/
+        /*    background-size: cover;*/
+        /*    height: 100vh;*/
+        /*}*/
+    </style>
+    <div id="welcomePage" style="display:none" class="container welcomePage">
+
+        <script>
+            // 显示 welcomePage
+            function showWelcomePage() {
+                var welcomePage = document.getElementById('welcomePage');
+                welcomePage.style.display = 'flex'; // 使用 flex 来保持内部元素的布局
+            }
+
+            // 隐藏 welcomePage
+            function hideWelcomePage() {
+                var welcomePage = document.getElementById('welcomePage');
+                welcomePage.style.display = 'none';
+            }
+
+
+        </script>
+        <h2>Login</h2>
+        <div class="form-group">
+            <input type="text" id="nickname" name="nickname" placeholder="Enter your nickname here" required class="form-control">
+        </div>
+        <button onclick="handleNickname()" class="btn">Submit</button>
+        <p id="error-message" style="color: red; display: none;">Please enter a nickname.</p>
+    </div>
+</div>

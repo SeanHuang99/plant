@@ -106,6 +106,7 @@ router.post("/addPlants",async function (req, res, next) {
             console.log("error: " + error.message);
             res.status(504).send(error.message);
         })
+    res.status(200)
 })
 
 

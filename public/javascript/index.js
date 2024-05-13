@@ -21,8 +21,9 @@ var storage = {
 // Register service worker to control making site work offline
 window.onload = function () {
     //insert nickname to index page
-    updateNickname()
-    showWelcomeOrIndex();
+    // updateNickname()
+    // showWelcomeOrIndex();
+    showWelcome()
     synPlantFromServer();
     synAllChatObjsFromServer();
 
@@ -128,7 +129,8 @@ function handleNickname() {
         errorMessage.style.display = 'none';
         console.log("Nickname entered:", nickname);
         updateNickname()
-        showWelcomeOrIndex();
+        showWelcome()
+        // showWelcomeOrIndex();
         // Continue with any additional logic such as AJAX requests, local storage, etc.
     }
 }
@@ -145,6 +147,23 @@ function showWelcomeOrIndex(){
         indexPage.style.display='block';
     }
 }
+
+function showWelcome(){
+    var welcomePage = document.getElementById('welcomePage');
+    var indexPage = document.getElementById('indexPage');
+    if(getNickName()===null || getNickName()===undefined || getNickName()===''){
+        setNickName("new user");
+        updateNickname();
+    }
+    welcomePage.style.display = 'none';
+    indexPage.style.display='block';
+}
+
+// function showIndex(){
+//     welcomePage.style.display = 'none';
+//     indexPage.style.display='block';
+// }
+
 function updateNickname(){
     const username = getNickName();  // This function is assumed to be defined in your commonTool.js
     const userGreeting = document.getElementById('userGreeting');

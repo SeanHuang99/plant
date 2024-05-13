@@ -139,12 +139,12 @@ function mySubmit(form) {
                 console.log('plantObj!=null')
                 // const plants=[plantObj]
                 console.log(plantObj)
-                openPlantIDB().then(IDB => {
+                openPlantIDB().then(async IDB => {
                     console.log('add new plant to IDB')
-                    addNewPlantsToIDB(IDB, [plantObj]).then(() => {
+                    await addNewPlantsToIDB(IDB, [plantObj]).then(() => {
                         console.log('finish addNewPlantsToIDB')
                     })
-                    addNewPlantToSync(IDB, plantObj).then(() => {
+                    await addNewPlantToSync(IDB, plantObj).then(() => {
                         console.log('finish addNewPlantToSync')
                     })
                 }).catch(err => {
@@ -161,7 +161,6 @@ function mySubmit(form) {
             } else {
                 console.log('plantObj==null')
             }
-
         })
     } else {
         console.log('有空值')

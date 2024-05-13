@@ -136,7 +136,7 @@ function syncPlantToServer(){
                             icon: '/images/icon.webp'
                         });
                     }else {
-                        console.log('sync failed!!!')
+                        console.log(`sync failed, reason: ${JSON.stringify(res)}`)
                         self.registration.showNotification('Plant Synced ', {
                             body: 'Plant synced failed!',
                             icon: '/images/icon.webp'

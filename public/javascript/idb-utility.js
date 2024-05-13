@@ -69,7 +69,7 @@ const addNewPlantToSync = async (IDB, plant) => {
 
 
 // Function to add new plants to IndexedDB and return a promise
-const addNewPlantsToIDB = (plantIDB, plants) => {
+const addNewPlantsToIDB = async (plantIDB, plants) => {
     // console.log('db名字：'+plantIDB.name)
     return new Promise((resolve, reject) => {
         const transaction = plantIDB.transaction(["plants"], "readwrite");

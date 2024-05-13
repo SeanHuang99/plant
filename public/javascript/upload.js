@@ -121,7 +121,7 @@ async function mySubmit(form) {
                 console.log(plantObj)
                 openPlantIDB().then(async IDB => {
                     console.log('start add new plant to IDB')
-                    addNewPlantToSync(IDB, plantObj)
+                    await addNewPlantToSync(IDB, plantObj)
                         .then(() => {
                             console.log('finish addNewPlantToSync');
                             return addNewPlantsToIDB(IDB, [plantObj]); // 在这里返回 addNewPlantsToIDB 的 Promise

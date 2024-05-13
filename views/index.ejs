@@ -11,16 +11,29 @@
     <script src="/javascript/index.js"></script>
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/commonTool.js"></script>
+    <link rel="preload" href="/fonts/roboto-medium-Nav.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/roboto-medium-Nav.woff2" as="font" type="font/ttf" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
     <!--    <link rel="stylesheet" href="/stylesheets/login.css">-->
     <style>
         /* 自定义样式 */
+        /* Custom styles */
+        @font-face {
+            font-family: 'Roboto';
+            src: url('/fonts/roboto-medium-Nav.ttf') format('truetype'),
+            url('/fonts/roboto-medium-Nav.woff2') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+
         html,
         body {
             margin: 0;
             height: 100%;
             width: 100%;
-            /*overflow: auto;*/
-            font-family: 'Arial', sans-serif;
+            /*overflow: hidden;*/
+            font-family: 'Roboto', 'PoetsenOne', Arial, sans-serif;
             background: #f4f4f9; /* lighter gray background */
         }
 
@@ -38,8 +51,52 @@
         }
 
         .navbar {
-            /*height: 80px;*/
-            padding: 10px 20px;
+            background-color: #ffffff !important; /* White background */
+            border-bottom: 1px solid transparent !important; /* Transparent border */
+            padding: 10px 20px !important; /* Adjust padding */
+        }
+
+        .navbar a {
+            font-family: 'Roboto';
+            color: #1d572c !important; /* Dark text color */
+            margin-right: 20px !important; /* Space between links */
+        }
+
+        .navbar a:hover {
+            color: #000000 !important; /* Darker on hover */
+        }
+
+        .navbar .navbar-brand {
+            margin-right: 30px !important; /* Space after brand logo */
+        }
+
+        .navbar .btn-primary {
+            background-color: #ff3366 !important; /* Pink button color */
+            border-color: #ff3366 !important; /* Match border color */
+            color: #ffffff !important; /* White text */
+            margin-left: 20px !important; /* Space before button */
+        }
+
+        .navbar .btn-primary:hover {
+            background-color: #ff0033 !important; /* Darker pink on hover */
+            border-color: #ff0033 !important; /* Match border color */
+        }
+
+        .navbar .nav-item .nav-link {
+            color: #006e50 !important; /* Dark text color */
+        }
+
+        .navbar .nav-item .nav-link:hover {
+            color: #000000 !important; /* Darker on hover */
+        }
+
+        .navbar .navbar-nav.ml-auto .nav-item.nav-link {
+            margin-left: auto !important; /* Pushes to the right */
+            color: #333333 !important; /* Dark text color */
+        }
+
+        .navbar .navbar-nav.ml-auto .nav-item.nav-link:hover {
+            color: #000000 !important; /* Darker on hover */
         }
 
     </style>
@@ -49,6 +106,7 @@
     <style>
         /* Scope the styles to only affect the welcomePage and its children */
         /**/
+
         .welcomePage .container {
             background-color: rgba(255, 255, 255, 0.7); /* Slight transparency */
             backdrop-filter: blur(5px); /* Blur effect */
@@ -64,7 +122,6 @@
             margin: 1em; /* 移除边距，减少空间 */
             padding: 10px 0; /* 上下内边距 */
         }
-
         .welcomePage .form-control {
             width: 100%; /* 输入框宽度 */
             height: 100%; /* 控制高度 */
@@ -92,7 +149,7 @@
         /*    height: 100vh;*/
         /*}*/
     </style>
-    <div id="welcomePage" style="display:none" class="container welcomePage">
+    <div id="welcomePage" style="display:none" class="container welcomePage" >
 
         <script>
             // 显示 welcomePage
@@ -185,6 +242,7 @@
     }
 
 
+
     #welcomePage {
         display: flex;
         flex-direction: column;
@@ -194,13 +252,13 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 100%; /* 宽度可以根据需要调整 */
-        max-width: 400px; /* 最大宽度，确保不会过宽 */
+        width: 100%;  /* 宽度可以根据需要调整 */
+        max-width: 400px;  /* 最大宽度，确保不会过宽 */
         height: 50%;
-        padding: 2em; /* 减少内边距以减小总高度 */
+        padding: 2em;  /* 减少内边距以减小总高度 */
         background: rgba(255, 255, 255, 0.8);
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         z-index: 1050;
     }
 

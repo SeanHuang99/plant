@@ -125,7 +125,7 @@ function syncPlantToServer(){
                     body: JSON.stringify(syncPlant)
                 }).then(() => {
                     console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
-                    deleteSyncPlantFromIDB(syncPostDB, syncPlant.plantId);
+                    deleteSyncPlantFromIDB(db, syncPlant.plantId);
                     // Send a notification
                     self.registration.showNotification('Plant Synced', {
                         body: 'Plant synced successfully!',

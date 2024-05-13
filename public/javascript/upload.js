@@ -128,12 +128,12 @@ function inputTest() {
 }
 
 
-function mySubmit(form) {
+async function mySubmit(form) {
     console.log("ready to submit: " + form)
     //做表单验证（非空+限制图片大小）
     if (checkForm(form)) {
         console.log('处理表单')
-        changeFormToObj(form).then(plantObj => {
+        changeFormToObj(form).then(async plantObj => {
             console.log(plantObj)
             if (plantObj != null) {
                 console.log('plantObj!=null')
@@ -141,22 +141,22 @@ function mySubmit(form) {
                 console.log(plantObj)
                 openPlantIDB().then(async IDB => {
                     console.log('add new plant to IDB')
+                    await addNewPlantToSync(IDB, plantObj).then(() => {
+                        console.log('finish addNewPlantToSync');
+                    })
                     await addNewPlantsToIDB(IDB, [plantObj]).then(() => {
                         console.log('finish addNewPlantsToIDB')
+
+                        console.log('finally')
+                        alert('submit successfully')
+                        showAddPlantNotification()
+                        console.log("current plant id: "+plantObj.plantId);
+                        setPlantId(plantObj.plantId)
+                        window.location.href = "/detail";
                     })
-                    await addNewPlantToSync(IDB, plantObj).then(() => {
-                        console.log('finish addNewPlantToSync')
-                    })
+
                 }).catch(err => {
                     console.log('err: ' + err)
-                }).finally(() => {
-                    console.log('finally')
-                    alert('submit successfully')
-                    showAddPlantNotification()
-                    // console.log("current plant id: "+plantObj.plantId);
-                    // setPlantId(plantObj.plantId)
-                    // window.location.href = "/detail";
-                    return true
                 })
             } else {
                 console.log('plantObj==null')
@@ -164,7 +164,7 @@ function mySubmit(form) {
         })
     } else {
         console.log('有空值')
-        return false
+        // return false
     }
     return false
 }

@@ -47,7 +47,7 @@
 <div class="container mt-5" style="padding: 0 100px">
     <h1 class="mt-4">Add Plant</h1>
 <!--    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data" id="myForm">-->
-    <form enctype="multipart/form-data" id="myForm" onsubmit="return mySubmit(this)">
+    <form id="myForm" >
         <div class="form-group">
             <label for="description">Description:</label>
             <input type="text" class="form-control" id="description" name="description" required>
@@ -139,7 +139,7 @@
         </div>
         <p> </p>
         <div class="text-center" style="padding-bottom: 20px">
-            <button id="submit_btn" type="submit" class="btn btn-primary btn-lg" >Submit</button>
+            <button id="submit_btn" type="button" class="btn btn-primary btn-lg" onclick="mySubmit(this.form)">Submit</button>
         </div>
     </form>
 </div>

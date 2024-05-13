@@ -7,7 +7,7 @@ const mongoApi=require("../databaseController/mongodbController");
 const upload = multer();
 
 router.post("/addPlants",upload.none(),async function (req, res, next) {
-    console.log(`service worker addPlant: ${JSON.stringify(req.body)}`)
+    console.log(`service worker addPlant: ${req.body.plantId}`)
     let plantId=req.body.plantId;
     let nickname = req.body.nickname;
     let description = req.body.description;
@@ -21,7 +21,7 @@ router.post("/addPlants",upload.none(),async function (req, res, next) {
     let flowerColor = req.body.flowerColorPicker;
     let plantName = req.body.plantName;
     let status = req.body.status;
-    let base64Image = req.body.base64Image;
+    let base64Image = req.body.photo;
 
     // console.log(`lat: ${lat}, lng: ${lng}`);
 

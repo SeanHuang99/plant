@@ -91,8 +91,8 @@ async function changeImageFormat(formData) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 base64Image = e.target.result;
-                formData.append("base64Image", base64Image);
                 formData.delete("photo");
+                formData.append("photo", base64Image);
                 resolve(formData);
             };
             reader.onerror = function(error) {

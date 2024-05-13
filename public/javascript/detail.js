@@ -3,7 +3,7 @@ if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.get
 }
 // synPlantFromServer();
 // console.log("wel to detail");
-generateDetailPage();
+let getData=setInterval(generateDetailPage,500);
 
 
 function generateDetailPage(){
@@ -22,9 +22,12 @@ function generateDetailPage(){
                 return res.json();
             })
             .then(function (newPlant) {
-                //todo: showMapInDetail is not defined?
-                detailRender(newPlant)
-                showMapInDetail(newPlant.location).then(r => console.log("Map loaded online"));
+                if(newPlant){
+                    clearInterval(getData)
+                    detailRender(newPlant)
+                    showMapInDetail(newPlant.location).then(r => console.log("Map loaded online"));
+                }
+
             })
             .catch(function (e){
                 console.log(e.message)
@@ -33,10 +36,13 @@ function generateDetailPage(){
     else {
         openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
-                console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
-                console.log(plant.plantId + ' detail-------> ' + plant.description)
-                detailRender(plant);
-                document.getElementById("map").innerText='Cannot show map when offline'
+                if(plant) {
+                    clearInterval(getData)
+                    console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
+                    console.log(plant.plantId + ' detail-------> ' + plant.description)
+                    detailRender(plant);
+                    document.getElementById("map").innerText = 'Cannot show map when offline'
+                }
             }).catch(err => {
                 console.log(err)
                 //todo: return to main page, and show alert of 'cannot find plant'

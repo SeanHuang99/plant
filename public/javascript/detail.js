@@ -144,28 +144,24 @@ async function submitRequest() {
 
 function getNickNameOfPlant() {
     // Get the element by its ID
-    var nickNameElement = document.getElementById('nickName');
-
-    // Extract the text content from the element
-    var text = nickNameElement.textContent;
-
-    // Assuming the format is "User Nickname: actual_nickname", split the text and retrieve the nickname
-    var parts = text.split(': ');
-
-    // Return the nickname part, if it exists, otherwise return an empty string
-    return parts.length > 1 ? parts[1] : '';
+    try {
+        const nickNameText = document.getElementById('nickName').textContent;
+        const parts = nickNameText.split(': ');
+        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+    } catch (error) {
+        console.error('Error retrieving nickname of plant:', error);
+        return ''; // Return empty string in case of any error
+    }
 }
 
 function getPlantOriginalName() {
     // Get the element by its ID
-    var plantNameElement = document.getElementById('plantName');
-
-    // Extract the text content from the element
-    var text = plantNameElement.textContent;
-
-    // Assuming the format is "User Nickname: actual_nickname", split the text and retrieve the nickname
-    var parts = text.split(': ');
-
-    // Return the nickname part, if it exists, otherwise return an empty string
-    return parts.length > 1 ? parts[1] : '';
+    try {
+        const plantNameText = document.getElementById('plantName').textContent;
+        const parts = plantNameText.split(': ');
+        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+    } catch (error) {
+        console.error('Error retrieving plant original name:', error);
+        return ''; // Return empty string in case of any error
+    }
 }

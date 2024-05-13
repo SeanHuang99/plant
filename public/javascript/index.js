@@ -160,3 +160,4 @@ function changeUserName(){
     welcomePage.style.display = 'block';
     indexPage.style.display='none';
 }
+

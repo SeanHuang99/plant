@@ -11,7 +11,7 @@
     <script src="/javascript/index.js"></script>
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/commonTool.js"></script>
-<!--    <link rel="stylesheet" href="/stylesheets/login.css">-->
+    <!--    <link rel="stylesheet" href="/stylesheets/login.css">-->
     <style>
         /* 自定义样式 */
         html,
@@ -19,7 +19,7 @@
             margin: 0;
             height: 100%;
             width: 100%;
-            /*overflow: hidden;*/
+            /*overflow: auto;*/
             font-family: 'Arial', sans-serif;
             background: #f4f4f9; /* lighter gray background */
         }
@@ -45,23 +45,10 @@
     </style>
 </head>
 <body>
-<!--<div id="welcomePage" style="display:none" class="container">-->
-<!--    <header>-->
-<!--        <h1>Welcome to the Plant Enthusiast's Corner!</h1>-->
-<!--        <p>Please enter your nickname to continue:</p>-->
-<!--    </header>-->
-<!--    <input type="text" id="nickname" placeholder="Enter your nickname here" required>-->
-<!--    <button onclick="handleNickname()">Submit</button>-->
-<!--    <p id="error-message" style="color: red; display: none;">Please enter a nickname.</p>-->
-<!--</div>-->
-
-
-
 <div>
     <style>
         /* Scope the styles to only affect the welcomePage and its children */
         /**/
-
         .welcomePage .container {
             background-color: rgba(255, 255, 255, 0.7); /* Slight transparency */
             backdrop-filter: blur(5px); /* Blur effect */
@@ -77,6 +64,7 @@
             margin: 1em; /* 移除边距，减少空间 */
             padding: 10px 0; /* 上下内边距 */
         }
+
         .welcomePage .form-control {
             width: 100%; /* 输入框宽度 */
             height: 100%; /* 控制高度 */
@@ -104,33 +92,32 @@
         /*    height: 100vh;*/
         /*}*/
     </style>
-<div id="welcomePage" style="display:none" class="container welcomePage" >
+    <div id="welcomePage" style="display:none" class="container welcomePage">
 
-    <script>
-        // 显示 welcomePage
-        function showWelcomePage() {
-            var welcomePage = document.getElementById('welcomePage');
-            welcomePage.style.display = 'flex'; // 使用 flex 来保持内部元素的布局
-        }
+        <script>
+            // 显示 welcomePage
+            function showWelcomePage() {
+                var welcomePage = document.getElementById('welcomePage');
+                welcomePage.style.display = 'flex'; // 使用 flex 来保持内部元素的布局
+            }
 
-        // 隐藏 welcomePage
-        function hideWelcomePage() {
-            var welcomePage = document.getElementById('welcomePage');
-            welcomePage.style.display = 'none';
-        }
+            // 隐藏 welcomePage
+            function hideWelcomePage() {
+                var welcomePage = document.getElementById('welcomePage');
+                welcomePage.style.display = 'none';
+            }
 
 
-    </script>
-    <h2>Login</h2>
-    <div class="form-group">
-        <input type="text" id="nickname" name="nickname" placeholder="Enter your nickname here" required class="form-control">
+        </script>
+        <h2>Login</h2>
+        <div class="form-group">
+            <input type="text" id="nickname" name="nickname" placeholder="Enter your nickname here" required
+                   class="form-control">
+        </div>
+        <button onclick="handleNickname()" class="btn">Submit</button>
+        <p id="error-message" style="color: red; display: none;">Please enter a nickname.</p>
     </div>
-    <button onclick="handleNickname()" class="btn">Submit</button>
-    <p id="error-message" style="color: red; display: none;">Please enter a nickname.</p>
 </div>
-</div>
-
-
 
 
 <div id="indexPage" style="display:none" class="full-height">
@@ -168,11 +155,14 @@
             <span class="nav-item nav-link" id="userGreeting">Welcome, Username</span>
 
         </div>
-        <button type="button" class="btn btn-primary align-content-center" style="width: 6%" onclick="changeUserName()">Change</button>
+        <button type="button" class="btn btn-primary align-content-center" style="width: 6%" onclick="changeUserName()">
+            Change
+        </button>
     </nav>
 
     <div class="mainContent" style="height:100%;width: 100%;margin-top: 60px;">
-        <iframe id="content-iframe" src="/main" width="100%" height="100%" style="border: none; overflow: hidden;"></iframe>
+        <iframe id="content-iframe" src="/main" width="100%" height="100%"
+                style="border: none; "></iframe>
     </div>
 </div>
 
@@ -195,7 +185,6 @@
     }
 
 
-
     #welcomePage {
         display: flex;
         flex-direction: column;
@@ -205,13 +194,13 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 100%;  /* 宽度可以根据需要调整 */
-        max-width: 400px;  /* 最大宽度，确保不会过宽 */
+        width: 100%; /* 宽度可以根据需要调整 */
+        max-width: 400px; /* 最大宽度，确保不会过宽 */
         height: 50%;
-        padding: 2em;  /* 减少内边距以减小总高度 */
+        padding: 2em; /* 减少内边距以减小总高度 */
         background: rgba(255, 255, 255, 0.8);
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         z-index: 1050;
     }
 

@@ -1,10 +1,10 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Select all elements with the class 'card-link'
     const cardLinks = document.querySelectorAll('.card-link');
 
     // Add click event listener to each link
     cardLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
+        link.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent the default anchor action
             const href = this.getAttribute('href'); // Get the href attribute of the clicked link
             location.href = href; // Redirect using top.location.href
@@ -13,31 +13,39 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-
 if (navigator.onLine) {
     console.log('onLine mode')
     fetch('/requestHandler/getAllPlants')
         .then(function (res) {
             return res.json();
         })
-        .then( function (newPlants) {
-            //only need to sync from server when plant was changed
-             deleteAllPlantsDOM().then(()=>renderPlantList(newPlants))
-            // renderPlantList(newPlants)
+        .then(function (newPlants) {
+            if (newPlants.length === 0) {
+                const container=document.getElementById("container")
+                container.innerText = 'no data'
+                container.style.textAlign='center'
+                container.style.lineHeight='600px';
+                container.style.fontSize='20px';
+                //set sort unavailable
+                document.getElementById('dropdown').disabled="disabled"
+            } else {
+                //only need to sync from server when plant was changed
+                deleteAllPlantsDOM().then(() => renderPlantList(newPlants))
+            }
+
         })
-}
-else {
+} else {
     console.log("Offline mode")
     openPlantIDB().then((db) => {
         //直接从IDB获取所有plants（未同步的plant已在点击添加时加入IDB）
-        getAllPlants(db,"plants").then(allPlants => {
+        getAllPlants(db, "plants").then(allPlants => {
             // return allPlants
             renderPlantList(allPlants)
         });
     })
 }
 
-function renderPlantList(plantList){
+function renderPlantList(plantList) {
     // 获取要渲染植物的容器元素
     const plantContainer = document.getElementsByClassName('container')[0];
 
@@ -52,7 +60,7 @@ function renderPlantList(plantList){
         }
         // 创建植物卡片元素
         const plantCard = document.createElement('div');
-        plantCard.classList.add('col-lg-3', 'col-md-6', 'mb-4','plant-card', 'text-center');
+        plantCard.classList.add('col-lg-3', 'col-md-6', 'mb-4', 'plant-card', 'text-center');
 
         // 创建卡片链接
         const cardLink = document.createElement('a');
@@ -61,7 +69,7 @@ function renderPlantList(plantList){
         cardLink.href = `/detail`;
         cardLink.classList.add('card-link');
         // 添加点击事件监听器
-        cardLink.addEventListener('click', function(event) {
+        cardLink.addEventListener('click', function (event) {
             // 阻止默认行为，即防止链接的默认导航行为
             // event.preventDefault();
             setPlantId(plant.plantId)
@@ -70,7 +78,7 @@ function renderPlantList(plantList){
             // 这里可以根据 plantId 执行相应的操作，比如跳转到详情页
             // window.location.href = `/detail?plantId=${plantId}`;
         });
-        console.log("plant features:     ",plant)
+        console.log("plant features:     ", plant)
         // 创建图片元素
         const image = document.createElement('img');
         image.src = plant.photo;
@@ -81,7 +89,7 @@ function renderPlantList(plantList){
         const description = document.createElement('div');
         description.classList.add('mt-3');
         description.innerHTML = `<h3>${plant.plantName}</h3><p>${plant.description}</p>`;
-        description.style.color='black'
+        description.style.color = 'black'
 
         // 将图片和描述添加到链接中
         cardLink.appendChild(image);
@@ -97,7 +105,7 @@ function renderPlantList(plantList){
 }
 
 //排序前先删除之前渲染的plantList
-async function deleteAllPlantsDOM(){
+async function deleteAllPlantsDOM() {
     const plantContainer = document.getElementsByClassName('container')[0];
     console.log(plantContainer)
     while (plantContainer.firstChild) {//可能有多个同级子节点

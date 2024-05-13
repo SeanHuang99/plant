@@ -37,8 +37,42 @@ function synPlantFromServer() {
     }
 }
 
+const addPlantToBothIDB = (db, plant) => {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(["plants", "sync-plants"], "readwrite");
+        const plantStore = transaction.objectStore("plants");
+        const syncPlantStore = transaction.objectStore("sync-plants");
+
+        const addRequest1 = plantStore.add(plant);
+        const addRequest2 = syncPlantStore.add(plant);
+
+        addRequest1.addEventListener("success", () => {
+            console.log("Added plant to plants table with ID: " + addRequest1.result);
+            resolve();
+        });
+        addRequest1.addEventListener("error", (event) => {
+            console.error("Error adding plant to plants table: " + event.target.error);
+            reject(event.target.error);
+        });
+
+        addRequest2.addEventListener("success", () => {
+            console.log("Added plant to sync-plants table with ID: " + addRequest2.result);
+            // 发送同步消息到 Service Worker（如果定义了 registerPlantSync()）
+            if (typeof registerPlantSync === "function") {
+                registerPlantSync();
+            }
+            resolve();
+        });
+        addRequest2.addEventListener("error", (event) => {
+            console.error("Error adding plant to sync-plants table: " + event.target.error);
+            reject(event.target.error);
+        });
+    });
+};
+
 // Function to handle adding a new plant
-const addNewPlantToSync = async (IDB, plant) => {
+const addNewPlantToSync = (IDB, plant) => {
+    console.log('run addNewPlantToSync()')
     if (plant !== null) {
         const transaction = IDB.transaction(["sync-plants"], "readwrite");
         const plantStore = transaction.objectStore("sync-plants");
@@ -69,7 +103,8 @@ const addNewPlantToSync = async (IDB, plant) => {
 
 
 // Function to add new plants to IndexedDB and return a promise
-const addNewPlantsToIDB = async (plantIDB, plants) => {
+const addNewPlantsToIDB = (plantIDB, plants) => {
+    console.log('run addNewPlantsToIDB()')
     // console.log('db名字：'+plantIDB.name)
     return new Promise((resolve, reject) => {
         const transaction = plantIDB.transaction(["plants"], "readwrite");
@@ -79,15 +114,16 @@ const addNewPlantsToIDB = async (plantIDB, plants) => {
             return new Promise((resolveAdd, rejectAdd) => {
                 const addRequest = plantStore.add(plant);
                 addRequest.addEventListener("success", () => {
-                    // console.log("Added " + "#" + addRequest.result + ": " + plant);
-                    const getRequest = plantStore.get(addRequest.result);
-                    getRequest.addEventListener("success", () => {
-                        // console.log("Found " + JSON.stringify(getRequest.result));
-                        resolveAdd(getRequest.result); // Resolve the add promise
-                    });
-                    getRequest.addEventListener("error", (event) => {
-                        rejectAdd(event.target.error); // Reject the add promise if there's an error
-                    });
+                    console.log("plantIDB: Added " + "#" + addRequest.result + ": " + plant);
+                    resolveAdd()
+                    // const getRequest = plantStore.get(addRequest.result);
+                    // getRequest.addEventListener("success", () => {
+                    //     // console.log("Found " + JSON.stringify(getRequest.result));
+                    //     resolveAdd(getRequest.result); // Resolve the add promise
+                    // });
+                    // getRequest.addEventListener("error", (event) => {
+                    //     rejectAdd(event.target.error); // Reject the add promise if there's an error
+                    // });
                 });
                 addRequest.addEventListener("error", (event) => {
                     rejectAdd(event.target.error); // Reject the add promise if there's an error

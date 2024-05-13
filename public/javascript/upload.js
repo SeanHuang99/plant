@@ -2,7 +2,6 @@ window.onload = function () {
     if (getNickName() !== undefined && getNickName() !== "") {
         document.getElementById('nickName').value = getNickName()
     }
-    inputTest()
 }
 
 //取消form的action跳转
@@ -109,25 +108,6 @@ async function changeImageFormat(formData) {
     });
 }
 
-function inputTest() {
-
-
-    // 获取表单元素
-    // const form = document.getElementById("myForm");
-    // // 填充表单字段
-    // Object.keys(testData).forEach(key => {
-    //     form.elements[key]=testData[key];
-    //     const input = form.elements[key];
-    //     if (input) {
-    //         input.value = testData[key];
-    //     }
-    // });
-    // console.log(form.ele)
-    // 模拟提交表单（可选）
-    // form.submit();
-}
-
-
 async function mySubmit(form) {
     console.log("ready to submit: " + form)
     //做表单验证（非空+限制图片大小）
@@ -140,23 +120,24 @@ async function mySubmit(form) {
                 // const plants=[plantObj]
                 console.log(plantObj)
                 openPlantIDB().then(async IDB => {
-                    console.log('add new plant to IDB')
-                    await addNewPlantToSync(IDB, plantObj).then(() => {
-                        console.log('finish addNewPlantToSync');
-                    })
-                    await addNewPlantsToIDB(IDB, [plantObj]).then(() => {
-                        console.log('finish addNewPlantsToIDB')
-
-                        console.log('finally')
-                        alert('submit successfully')
-                        showAddPlantNotification()
-                        console.log("current plant id: "+plantObj.plantId);
-                        setPlantId(plantObj.plantId)
-                        window.location.href = "/detail";
-                    })
-
-                }).catch(err => {
-                    console.log('err: ' + err)
+                    console.log('start add new plant to IDB')
+                    addNewPlantToSync(IDB, plantObj)
+                        .then(() => {
+                            console.log('finish addNewPlantToSync');
+                            return addNewPlantsToIDB(IDB, [plantObj]); // 在这里返回 addNewPlantsToIDB 的 Promise
+                        })
+                        .then(() => {
+                            console.log('finish addNewPlantsToIDB');
+                            console.log('finally');
+                            alert('submit successfully');
+                            showAddPlantNotification();
+                            console.log("current plant id: " + plantObj.plantId);
+                            setPlantId(plantObj.plantId);
+                            window.location.href = "/detail";
+                        })
+                        .catch(error => {
+                            console.error("Error occurred:", error);
+                        });
                 })
             } else {
                 console.log('plantObj==null')

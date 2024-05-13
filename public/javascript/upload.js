@@ -1,6 +1,6 @@
 window.onload=function(){
     if(getNickName()!==undefined && getNickName()!==""){
-        document.getElementById('nickname').value=getNickName()
+        document.getElementById('nickName').value=getNickName()
     }
 }
 

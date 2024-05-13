@@ -9,7 +9,7 @@ const upload = multer();
 router.post("/addPlants",upload.none(),async function (req, res, next) {
     console.log(`service worker addPlant: ${req.body.plantId}`)
     let plantId=req.body.plantId;
-    let nickname = req.body.nickname;
+    let nickname = req.body.nickName;
     let description = req.body.description;
     let details = req.body.details;
     let datetime = req.body.datetime;

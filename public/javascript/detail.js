@@ -3,8 +3,17 @@ if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.get
 }
 // synPlantFromServer();
 // console.log("wel to detail");
+let updateTimer=5;
 let getData=setInterval(generateDetailPage,500);
 
+function updateDetail(){
+    if(updateTimer===0){
+        clearInterval(getData)
+    }
+    else{
+        updateTimer=updateTimer-1;
+    }
+}
 
 function generateDetailPage(){
     const plantId=localStorage.getItem('plantId')
@@ -27,10 +36,13 @@ function generateDetailPage(){
                     detailRender(newPlant)
                     showMapInDetail(newPlant.location).then(r => console.log("Map loaded online"));
                 }
-
+                else {
+                    updateDetail();
+                }
             })
             .catch(function (e){
                 console.log(e.message)
+                clearInterval(getData)
             })
     }
     else {
@@ -43,8 +55,12 @@ function generateDetailPage(){
                     detailRender(plant);
                     document.getElementById("map").innerText = 'Cannot show map when offline'
                 }
+                else {
+                    updateDetail()
+                }
             }).catch(err => {
                 console.log(err)
+                clearInterval(getData)
                 //todo: return to main page, and show alert of 'cannot find plant'
             })
         })

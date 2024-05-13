@@ -102,9 +102,11 @@ function findCache(event){
 self.addEventListener('sync', event => {
     console.log('prepare to sync')
     if (event.tag === 'sync-plant') {
+        console.log("ready to sync the plants")
         syncPlantToServer()
     }
     else if(event.tag === 'sync-chat'){
+        console.log("ready to sync the chat")
         syncChatToServer()
     }
 });

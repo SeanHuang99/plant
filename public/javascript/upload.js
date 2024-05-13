@@ -131,8 +131,8 @@ function mySubmit(form){
                     alert('submit successfully')
                     showAddPlantNotification()
                     // console.log("current plant id: "+plantObj.plantId);
-                    setPlantId(plantObj.plantId)
-                    window.location.href="/detail";
+                    // setPlantId(plantObj.plantId)
+                    // window.location.href="/detail";
                     return true
                 })
             }else {

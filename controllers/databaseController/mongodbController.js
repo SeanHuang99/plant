@@ -278,11 +278,13 @@ async function addUpdateRequest(plantId,
             response = { type: 'fail', content: 'This suggestion has already been submitted by someone.' };
         } else {
             // Handle other kinds of errors normally
-            response = { type: 'fail', content: error.message };
+            response = { type: 'fail', content: 'Error processing request: ' + error.message };
         }
     }
     return response;
 }
+
+
 
 // Get plant edit request by plantId
 async function getUpdateRequestById(plantId) {

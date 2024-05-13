@@ -140,7 +140,8 @@ async function submitRequest() {
         alert('Request submitted successfully!');
     }  else {
         // General error handler for all other cases
-        alert('Error submitting request'); // Provide more specific error information
+        const errorData = await response.json();
+        alert(`Error submitting request: ${errorData.message}`);
     }
 
     // Close the modal after submitting

@@ -301,11 +301,8 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
         if (result.type === 'success') {
             res.status(200).send('Update request submitted successfully');
         } else {
-            // console.error(`${result.content}`)
-            res.status(100).json({ message: result.content });
-            // response = { 'type': 'same fail', 'content': 'This suggestion has already been submitted by someone.' };
-            //
-            // return response;
+            // This else clause handles both duplicate requests and other errors
+            res.status(400).json({ message: result.content });
         }
     }
 });

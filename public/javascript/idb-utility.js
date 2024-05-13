@@ -140,6 +140,45 @@ const addNewPlantsToIDB = (plantIDB, plants) => {
     });
 };
 
+
+const addPlantToBothStores = async (db, plant) => {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(["plants", "sync-plants"], "readwrite");
+        const plantStore = transaction.objectStore("plants");
+        const syncPlantStore = transaction.objectStore("sync-plants");
+
+        const addRequest1 = plantStore.add(plant);
+        const addRequest2 = syncPlantStore.add(plant);
+
+        let addCount = 0; // 用于追踪添加操作是否完成
+
+        function checkCompletion() {
+            addCount++;
+            if (addCount === 2) {
+                resolve();
+            }
+        }
+
+        addRequest1.onsuccess = () => {
+            console.log("Added plant to plants table with ID: " + addRequest1.result);
+            checkCompletion();
+        };
+        addRequest1.onerror = (event) => {
+            console.error("Error adding plant to plants table: " + event.target.error);
+            reject(event.target.error);
+        };
+
+        addRequest2.onsuccess = () => {
+            console.log("Added plant to sync-plants table with ID: " + addRequest2.result);
+            checkCompletion();
+        };
+        addRequest2.onerror = (event) => {
+            console.error("Error adding plant to sync-plants table: " + event.target.error);
+            reject(event.target.error);
+        };
+    });
+};
+
 // Function to remove all plants from idb
 const deleteAllExistingPlantsFromIDB = (plantIDB) => {
     const transaction = plantIDB.transaction(["plants"], "readwrite");

@@ -121,23 +121,31 @@ async function mySubmit(form) {
                 console.log(plantObj)
                 openPlantIDB().then(async IDB => {
                     console.log('start add new plant to IDB')
-                    await addNewPlantToSync(IDB, plantObj)
-                        .then(() => {
-                            console.log('finish addNewPlantToSync');
-                            return addNewPlantsToIDB(IDB, [plantObj]); // 在这里返回 addNewPlantsToIDB 的 Promise
-                        })
-                        .then(() => {
-                            console.log('finish addNewPlantsToIDB');
-                            console.log('finally');
-                            alert('submit successfully');
-                            showAddPlantNotification();
-                            console.log("current plant id: " + plantObj.plantId);
-                            setPlantId(plantObj.plantId);
-                            window.location.href = "/detail";
-                        })
-                        .catch(error => {
-                            console.error("Error occurred:", error);
-                        });
+                    // await addNewPlantToSync(IDB, plantObj)
+                    //     .then(() => {
+                    //         console.log('finish addNewPlantToSync');
+                    //         return addNewPlantsToIDB(IDB, [plantObj]); // 在这里返回 addNewPlantsToIDB 的 Promise
+                    //     })
+                    //     .then(() => {
+                    //         console.log('finish addNewPlantsToIDB');
+                    //         console.log('finally');
+                    //         alert('submit successfully');
+                    //         showAddPlantNotification();
+                    //         console.log("current plant id: " + plantObj.plantId);
+                    //         setPlantId(plantObj.plantId);
+                    //         window.location.href = "/detail";
+                    //     })
+                    //     .catch(error => {
+                    //         console.error("Error occurred:", error);
+                    //     });
+                    await addPlantToBothStores(IDB, plantObj).then(()=>{
+                        console.log('finally');
+                        alert('submit successfully');
+                        showAddPlantNotification();
+                        console.log("current plant id: " + plantObj.plantId);
+                        setPlantId(plantObj.plantId);
+                        window.location.href = "/detail";
+                    })
                 })
             } else {
                 console.log('plantObj==null')

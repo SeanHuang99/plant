@@ -118,8 +118,12 @@ function mySubmit(form){
                 // const plants=[plantObj]
                 openPlantIDB().then(IDB=>{
                     console.log('add new plant to IDB')
-                    addNewPlantsToIDB(IDB,[plantObj])
-                    addNewPlantToSync(IDB,plantObj)
+                    addNewPlantsToIDB(IDB,[plantObj]).then(()=>{
+                        console.log('finish addNewPlantsToIDB')
+                    })
+                    addNewPlantToSync(IDB,plantObj).then(()=>{
+                        console.log('finish addNewPlantToSync')
+                    })
                 }).catch(err=>{
                     console.log('err: '+err)
                 }).finally(()=>{

@@ -26,10 +26,10 @@ function synPlantFromServer() {
             .then(function (newPlants) {
                 openPlantIDB().then((db) => {
                     // getAllPlants(db,"plants").then(plants => {
-                        deleteAllExistingPlantsFromIDB(db).then(() => {
-                            addNewPlantsToIDB(db, newPlants).then(() => {
-                                console.log("All new plants added to IDB")
-                            })
+                    deleteAllExistingPlantsFromIDB(db).then(() => {
+                        addNewPlantsToIDB(db, newPlants).then(() => {
+                            console.log("All new plants added to IDB")
+                        })
                         // })
                     })
                 })
@@ -38,25 +38,35 @@ function synPlantFromServer() {
 }
 
 // Function to handle adding a new plant
-const addNewPlantToSync = (IDB, plant) => {
-    // Retrieve plant text and add it to the IndexedDB
+const addNewPlantToSync = async (IDB, plant) => {
     if (plant !== null) {
-        // const transaction = syncPlantIDB.transaction(["sync-plants"], "readwrite")
-        // const plantStore = transaction.objectStore("sync-plants")
-        const transaction = IDB.transaction(["sync-plants"], "readwrite")
-        const plantStore = transaction.objectStore("sync-plants")
-        const addRequest = plantStore.add(plant)
-        addRequest.addEventListener("success", () => {
-            console.log("Added " + "#" + addRequest.result + ": " + plant.plantId)
-            const getRequest = plantStore.get(addRequest.result)
-            getRequest.addEventListener("success", () => {
-                console.log("Found " + JSON.stringify(getRequest.result))
-                // Send a sync message to the service worker
-                registerPlantSync()
-            })
-        })
+        const transaction = IDB.transaction(["sync-plants"], "readwrite");
+        const plantStore = transaction.objectStore("sync-plants");
+
+        return new Promise((resolve, reject) => {
+            const addRequest = plantStore.add(plant);
+            addRequest.addEventListener("success", () => {
+                console.log("Added plant with ID: " + addRequest.result);
+                const getRequest = plantStore.get(addRequest.result);
+                getRequest.addEventListener("success", () => {
+                    console.log("Retrieved plant from IDB: " + JSON.stringify(getRequest.result));
+                    // Send a sync message to the service worker if registerPlantSync() is defined
+                    registerPlantSync();
+                    resolve();
+                });
+                getRequest.addEventListener("error", (event) => {
+                    console.error("Error retrieving plant from IDB: " + event.target.error);
+                    reject(event.target.error);
+                });
+            });
+            addRequest.addEventListener("error", (event) => {
+                console.error("Error adding plant to IDB: " + event.target.error);
+                reject(event.target.error);
+            });
+        });
     }
-}
+};
+
 
 // Function to add new plants to IndexedDB and return a promise
 const addNewPlantsToIDB = (plantIDB, plants) => {
@@ -113,7 +123,7 @@ const deleteAllExistingPlantsFromIDB = (plantIDB) => {
 
 
 // Function to get the plant list from the IndexedDB
-const getAllPlants = (plantIDB,store) => {
+const getAllPlants = (plantIDB, store) => {
     return new Promise((resolve, reject) => {
         const transaction = plantIDB.transaction([store]);
         const plantStore = transaction.objectStore(store);
@@ -136,7 +146,7 @@ const getDetailById = (IDB, id) => {
     // 返回一个 Promise 对象，以便在调用该函数的地方能够使用 then() 方法获取结果
     return new Promise((resolve, reject) => {
         // 调用 getAllPlants 函数获取所有植物数据
-        getAllPlants(IDB,"plants").then(plants => {
+        getAllPlants(IDB, "plants").then(plants => {
             // 根据 ID 查找对应的植物
             const foundPlant = plants.find(plant => plant.plantId === id);
             // 如果找到了对应的植物，则将其传递给 resolve 函数
@@ -245,16 +255,16 @@ const updateWithClearedChatList = (store, chatObj) => {
 //改为：同步后只清空chatList，保留当前记录
 //todo: 改为后端判断，indexDB只需清除所有记录
 //改为调用deleteAllChatObjsFromIDB
-const clearSyncChatFromIDB=(db, chatObjs)=>{
+const clearSyncChatFromIDB = (db, chatObjs) => {
     const transaction = db.transaction(["sync-chats"], "readwrite");
     const plantStore = transaction.objectStore("sync-chats");
     return new Promise((resolve, reject) => {
         const getRequest = plantStore.get(plantId);
-        console.log('getRequest: '+getRequest)
+        console.log('getRequest: ' + getRequest)
         getRequest.addEventListener("success", () => {
             const chatObj = getRequest.result;
-            console.log('chatObj: '+chatObj)
-            chatObj.chatList=[]
+            console.log('chatObj: ' + chatObj)
+            chatObj.chatList = []
             const updatePromises = updateWithClearedChatList(plantStore, chatObj)
             console.log('run updateWithClearedChatList()')
             Promise.all(updatePromises)
@@ -274,7 +284,7 @@ const clearSyncChatFromIDB=(db, chatObjs)=>{
     });
 }
 
-const deleteAllChatObjsFromIDB = (db,objectStore) => {
+const deleteAllChatObjsFromIDB = (db, objectStore) => {
     console.log('run deleteAllChatObjsFromIDB')
     const transaction = db.transaction([objectStore], "readwrite");
     const plantStore = transaction.objectStore(objectStore);
@@ -301,9 +311,9 @@ function synAllChatObjsFromServer() {
                 openChatIDB().then((db) => {
                     console.log('openChatsIDB successfully')
                     console.log(db.name)
-                    deleteAllChatObjsFromIDB(db,"chats").then(()=>{
+                    deleteAllChatObjsFromIDB(db, "chats").then(() => {
                         console.log('deleteAllChatObjsFrom chats successfully')
-                        const store=db.transaction(["chats"], "readwrite").objectStore("chats");
+                        const store = db.transaction(["chats"], "readwrite").objectStore("chats");
                         chatObjs.forEach(chatObj => {
                             addChatObj(store, chatObj);
                         })
@@ -313,13 +323,13 @@ function synAllChatObjsFromServer() {
     }
 }
 
-const addNewChatToIDB = (db,plantId, chat) => {
+const addNewChatToIDB = (db, plantId, chat) => {
     return new Promise((resolve, reject) => {
-        const transaction = db.transaction(["chats","sync-chats"], "readwrite");
+        const transaction = db.transaction(["chats", "sync-chats"], "readwrite");
         const chatsStore = transaction.objectStore("chats");
         const syncChatsStore = transaction.objectStore("sync-chats");
         //先查找有无对应当前plantId的记录
-        getChatRecordById(syncChatsStore,plantId).then(chatObj => {
+        getChatRecordById(syncChatsStore, plantId).then(chatObj => {
             if (chatObj != null) {
                 //如果有，插入到chatList
                 chatObj.chatList.push(chat)
@@ -341,7 +351,7 @@ const addNewChatToIDB = (db,plantId, chat) => {
                     chatList: [chat]
                 }
                 //插入IDB
-                addChatObj(syncChatsStore,newChatObj).then(()=>{
+                addChatObj(syncChatsStore, newChatObj).then(() => {
                     console.log('newChatObj to syncChatsStore. plantId: ' + plantId);
                     registerChatSync()
                     return resolve();
@@ -352,7 +362,7 @@ const addNewChatToIDB = (db,plantId, chat) => {
 };
 
 // Send a sync message to the service worker
-function registerChatSync(){
+function registerChatSync() {
     navigator.serviceWorker.ready.then((sw) => {
         console.log('sw.sync.register("sync-chat")')
         sw.sync.register("sync-chat")
@@ -363,7 +373,7 @@ function registerChatSync(){
     })
 }
 
-function registerPlantSync(){
+function registerPlantSync() {
     navigator.serviceWorker.ready.then((sw) => {
         console.log('sw.sync.register("sync-plant")')
         sw.sync.register("sync-plant")
@@ -389,8 +399,8 @@ const getChatRecordById = async (store, plantId) => {
     });
 }
 
-function addChatObj(store,chatObj){
-    console.log('add '+chatObj)
+function addChatObj(store, chatObj) {
+    console.log('add ' + chatObj)
     return new Promise((resolve, reject) => {
         const addRequest = store.add(chatObj);
         addRequest.addEventListener("success", () => {

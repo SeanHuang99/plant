@@ -26,6 +26,8 @@ self.addEventListener('install', event => {
                 '/javascript/detail.js',
                 '/javascript/sort.js',
                 '/javascript/plantChatRoom.js',
+                '/javascript/GoogleMap.js',
+                '/javascript/detailMap.js',
                 '/stylesheets/style.css',
                 '/images/icon.webp',
                 '/manifest.json',
@@ -125,14 +127,23 @@ function syncPlantToServer(){
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(syncPlant)
-                }).then(() => {
-                    console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
-                    deleteSyncPlantFromIDB(db, syncPlant.plantId);
-                    // Send a notification
-                    self.registration.showNotification('Plant Synced', {
-                        body: 'Plant synced successfully!',
-                        icon: '/images/icon.webp'
-                    });
+                }).then(res => {
+                    if (res.ok){
+                        console.log('Service Worker: Syncing new Plant: ', syncPlant, ' done');
+                        deleteSyncPlantFromIDB(db, syncPlant.plantId);
+                        // Send a notification
+                        self.registration.showNotification('Plant Synced', {
+                            body: 'Plant synced successfully!',
+                            icon: '/images/icon.webp'
+                        });
+                    }else {
+                        console.log('sync failed!!!')
+                        self.registration.showNotification('Plant Synced ', {
+                            body: 'Plant synced failed!',
+                            icon: '/images/icon.webp'
+                        });
+                    }
+
                 }).catch((err) => {
                     console.error('Service Worker: Syncing new Plant: ', syncPlant, ' failed');
                 });

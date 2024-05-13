@@ -2,7 +2,7 @@
 function sortByDate(order) {
     return new Promise((resolve, reject) => {
         openPlantIDB().then(IDB => {
-            getAllPlants(IDB).then(plants => {
+            getAllPlants(IDB,"plants").then(plants => {
                 // 使用排序函数对植物数组进行排序
                 plants.sort((a, b) => {
                     // 根据排序方向决定排序顺序
@@ -40,7 +40,7 @@ function sortPlants(plants, key, order) {
 function filterPlants(key, value) {
     return new Promise((resolve, reject) => {
         openPlantIDB().then(IDB => {
-            getAllPlants(IDB).then(plants => {
+            getAllPlants(IDB,"plants").then(plants => {
                 // 过滤出指定状态的植物
                 const filteredPlants = plants.filter(plant => plant[key] === value);
                 resolve(filteredPlants);
@@ -74,7 +74,7 @@ async function calculateDistances(plants, currentLoc) {
 function sortByDistance(currentLoc, order) {
     return new Promise((resolve, reject) => {
         openPlantIDB().then(IDB => {
-            getAllPlants(IDB).then(plants => {
+            getAllPlants(IDB,"plants").then(plants => {
                 //delete plant without location
                 plants = plants.filter(plant => haveLoc(plant));
                 //calculate distance

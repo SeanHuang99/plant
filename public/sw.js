@@ -111,8 +111,8 @@ self.addEventListener('sync', event => {
 
 function syncPlantToServer(){
     console.log('Service Worker: Syncing new Plants');
-    openSyncPlantsIDB().then((syncPostDB) => {
-        getAllPlants(syncPostDB).then((syncPlants) => {
+    openPlantIDB().then((db) => {
+        getAllPlants(db,"sync-plants").then((syncPlants) => {
             for (const syncPlant of syncPlants) {
                 console.log('Service Worker: Syncing new Plant: ', syncPlant);
 

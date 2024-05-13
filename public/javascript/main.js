@@ -30,7 +30,7 @@ else {
     console.log("Offline mode")
     openPlantIDB().then((db) => {
         //直接从IDB获取所有plants（未同步的plant已在点击添加时加入IDB）
-        getAllPlants(db).then(allPlants => {
+        getAllPlants(db,"plants").then(allPlants => {
             // return allPlants
             renderPlantList(allPlants)
         });

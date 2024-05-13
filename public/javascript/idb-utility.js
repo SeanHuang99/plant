@@ -25,12 +25,12 @@ function synPlantFromServer() {
             })
             .then(function (newPlants) {
                 openPlantIDB().then((db) => {
-                    getAllPlants(db).then(plants => {
+                    // getAllPlants(db,"plants").then(plants => {
                         deleteAllExistingPlantsFromIDB(db).then(() => {
                             addNewPlantsToIDB(db, newPlants).then(() => {
                                 console.log("All new plants added to IDB")
                             })
-                        })
+                        // })
                     })
                 })
             })
@@ -113,10 +113,10 @@ const deleteAllExistingPlantsFromIDB = (plantIDB) => {
 
 
 // Function to get the plant list from the IndexedDB
-const getAllPlants = (plantIDB) => {
+const getAllPlants = (plantIDB,store) => {
     return new Promise((resolve, reject) => {
-        const transaction = plantIDB.transaction(["plants"]);
-        const plantStore = transaction.objectStore("plants");
+        const transaction = plantIDB.transaction([store]);
+        const plantStore = transaction.objectStore(store);
         const getAllRequest = plantStore.getAll();
 
         // Handle success event
@@ -136,7 +136,7 @@ const getDetailById = (IDB, id) => {
     // 返回一个 Promise 对象，以便在调用该函数的地方能够使用 then() 方法获取结果
     return new Promise((resolve, reject) => {
         // 调用 getAllPlants 函数获取所有植物数据
-        getAllPlants(IDB).then(plants => {
+        getAllPlants(IDB,"plants").then(plants => {
             // 根据 ID 查找对应的植物
             const foundPlant = plants.find(plant => plant.plantId === id);
             // 如果找到了对应的植物，则将其传递给 resolve 函数

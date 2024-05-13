@@ -92,7 +92,7 @@
         switch (selectedText) {
             case 'None':
                 openPlantIDB().then(IDB => {
-                    getAllPlants(IDB).then(plantList => {
+                    getAllPlants(IDB,"plants").then(plantList => {
                         deleteAllPlantsDOM();
                         renderPlantList(plantList);
                     });

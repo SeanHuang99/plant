@@ -256,10 +256,18 @@ async function getAllChatRecord(){
 }
 
 // Add or update plant edit request (plantId, plantName, nickName)
-async function addUpdateRequest(plantId, plantName, nickName, creator, plantOriginalName) {
+async function addUpdateRequest(plantId,
+                                plantName,
+                                nickName,
+                                creator,
+                                plantOriginalName) {
     var response;
     try {
-        const updateRequest = new UpdateRequest({ plantId, plantName, nickName, creator, plantOriginalName});
+        const updateRequest = new UpdateRequest({  plantId,
+                                                                                        plantName,
+                                                                                        nickName,
+                                                                                        creator,
+                                                                                        plantOriginalName});
         await updateRequest.save();
         response = { type: 'success', content: '' };
     } catch (error) {

@@ -62,7 +62,7 @@ function checkForm(form) {
     photo = form.elements['photo'].files[0];
     var fileSize = photo.size;
     console.log("file size: " + fileSize / (1024 * 1024) + "MB");
-    if ((fileSize / (1024 * 1024)) > 4) {
+    if ((fileSize / (1024 * 1024)) > 3) {
         alert("Plant Image cannot exceed 3MB");
         return false;
     }

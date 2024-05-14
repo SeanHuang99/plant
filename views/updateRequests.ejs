@@ -30,9 +30,24 @@
             font-weight: 500;
             font-style: normal;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            /*border: 1px solid #ddd;*/
+            padding: 8px;
+            text-align: center; /* Center align text in table cells */
+            border: 1px solid transparent; /* Make borders transparent */
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
 
         .table-dark th {
-            background-color: #333AFF; /* 深蓝色背景 */
+            background-color: #c42e2e; /* 深蓝色背景 */
             color: white; /* 白色文本 */
         }
 
@@ -63,6 +78,47 @@
         .text-center button:hover {
             background-color: #ff0033 !important; /* Darker pink on hover */
             border-color: #ff0033 !important; /* Match border color */
+        }
+
+        .form-check-input.agree,
+        .form-check-input.reject {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+        }
+        .custom-checkbox:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%; /* Make it round */
+            border: 2px solid #ccc; /* Default border color */
+            background-color: white; /* Background color */
+            transition: all 0.2s;
+        }
+        .form-check-input.agree:checked + .custom-checkbox:before,
+        .form-check-input.reject:checked + .custom-checkbox:before {
+            background-color: #007bff; /* Checked background color */
+            border-color: #007bff; /* Checked border color */
+        }
+        .form-check-input.agree:checked + .custom-checkbox:after,
+        .form-check-input.reject:checked + .custom-checkbox:after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%; /* Inner circle */
+            background: white;
         }
     </style>
 </head>

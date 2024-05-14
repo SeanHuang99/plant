@@ -1,10 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Team04</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <!-- Bootstrap CSS -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    所有导入必须使用本地文件而不是cdn链接，以保证离线可用-->
+    <script src="/import/jquery-3.7.1.min.js"></script>
+    <link href="/import/bootstrap.min.css" rel="stylesheet">
+    <script src="/import/bootstrap.min.js"></script>
+    <script src="/javascript/index.js"></script>
+    <script src="/javascript/idb-utility.js"></script>
+    <script src="/javascript/commonTool.js"></script>
+    <link rel="preload" href="/fonts/roboto-medium-Nav.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/roboto-medium-Nav.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/sedansc-regular-sub.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/sedansc-regular-sub.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <style>
+        @font-face {
+            font-family: 'PoetsenOne';
+            src: url('/fonts/PoetsenOne-Regular-AllPlants.ttf') format('truetype'),
+            url('/fonts/PoetsenOne-Regular-AllPlants.woff2') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'sedansc';
+            src: url('/fonts/sedansc-regular-sub.ttf') format('truetype'),
+            url('/fonts/sedansc-regular-sub.woff2') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'sedansc', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .display-4 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .lead {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .custom-heading{
+            font-family: 'PoetsenOne';
+            font-size: 60px; /* 设置字体大小 */
+            font-weight: 500; /* 设置字体粗细 */
+            color: black; /* 设置字体颜色 */
+            padding-left: 10px;
+            margin: 0;
+        }
+        .custom-headingForP{
+            font-family: 'sedansc';
+            font-size: 30px; /* 设置字体大小 */
+            font-weight: 500; /* 设置字体粗细 */
+            color: black; /* 设置字体颜色 */
+            padding-left: 10px;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Team04</h1>
+<div class="container">
+    <h1 class="custom-heading">About us</h1>
+    <h1 class="custom-heading">Writers: Zicong Chen; Yuan Gao; Shengchun Huang</h1>
+    <p class="custom-headingForP">Welcome to our Plant Recognition Progressive Web Application! This web application has been designed to help users record and identify various plant species, providing a seamless experience whether you're online or offline. Below is an overview of the application's features and functionalities.
+    <p class="custom-headingForP">Key Features
+        Record Plant Sightings:
+
+        Users can easily add new plant sightings by providing details such as the date and time seen, location (via geolocation or map selection), a short description, plant size (height and spread), plant characteristics (flowers, leaves, fruits/seeds, sun exposure, flower color), and a photo.
+        Each sighting is tagged with the user's nickname for easy identification and interaction.
+        View and Sort Plant Sightings:
+
+        All users can view a list of plant sightings added by themselves or others. The list can be sorted by date/time seen or identification status (completed or in-progress). As an additional feature, sorting by distance from the user's location is available as a stretch goal.
+        Clicking on a plant in the list will display detailed information about the sighting.
+    </p>
+    <p class="custom-headingForP">
+        Plant Identification:
+
+        Users can supply a name for the plant or allow others to suggest names. The original user can approve suggestions to finalize the identification.
+        The identification status can be marked as completed or in-progress, and is linked to information from the DBpedia knowledge graph, including a common name/scientific name, an English description, and a URI to the DBpedia page.
+    </p>
+    <p class="custom-headingForP">
+        Chat and Comment:
+
+        Each plant sighting has a dedicated chat section where users can comment and discuss the sighting in real-time. This chat feature supports both online and offline interactions.
+        Users can add new chat messages, which will sync when the device is back online, ensuring no data is lost.
+    </p>
+    <p class="custom-headingForP">
+        Offline Functionality:
+
+        The web application supports offline interactions, allowing users to add new plants and chat messages even without an internet connection. Changes are stored locally and synced with the server once the device is back online.
+    </p>
+</div>
 </body>
 </html>

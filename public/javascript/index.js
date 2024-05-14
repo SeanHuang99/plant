@@ -52,8 +52,6 @@ window.onload = function () {
             // update iframe src to the link
             $('#content-iframe').attr('src', href);
         }
-
-
         //add the url to the record
         storage.set("lastURL", href);
     });

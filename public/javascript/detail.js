@@ -1,10 +1,21 @@
+//store user browser history
 if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.getItem("lastURL")===undefined) {
     window.localStorage.setItem('lastURL', '/detail');
 }
+
 // synPlantFromServer();
 // console.log("wel to detail");
 let updateTimer=5;
 let getData=setInterval(generateDetailPage,1000);
+generateDetailPage();
+// before user leave the detail page, clean the refresh interval
+window.addEventListener('beforeunload', function (event) {
+    // 可以设置一个确认对话框，询问用户是否真的要离开页面
+    if (updateTimer>0){
+        clearInterval(getData);
+    }
+});
+
 
 
 function generateDetailPage(){
@@ -29,11 +40,9 @@ function generateDetailPage(){
                     showMapInDetail(newPlant.location).then(r => console.log("Map loaded online"));
                 }
                 else {
-                    if(updateTimer===0){
+                    if (--updateTimer <= 0) {
                         clearInterval(getData);
-                    }
-                    else{
-                        updateTimer=updateTimer-1;
+                        // alert('Failed to load data after several attempts.');
                     }
                 }
             })
@@ -53,11 +62,9 @@ function generateDetailPage(){
                     document.getElementById("map").innerText = 'Cannot show map when offline'
                 }
                 else {
-                    if(updateTimer===0){
+                    if (--updateTimer <= 0) {
                         clearInterval(getData);
-                    }
-                    else{
-                        updateTimer=updateTimer-1;
+                        // alert('Failed to load data after several attempts.');
                     }
                 }
             }).catch(err => {

@@ -150,7 +150,7 @@
       <!-- Heading with the Edit button right after it -->
       <div style="display: flex; align-items: center;">
         <h1 style="margin-right: 10px;">Plant Details</h1>
-        <button type="button" class="btn btn-danger ml-2" onclick="openEditPopup()">Update Name</button>
+        <button type="button" class="btn btn-danger ml-2" onclick="openEditPopup()">Update</button>
       </div>
       <div class="card mb-4">
         <div class="card-body">
@@ -227,8 +227,34 @@
     <p>Please input your preferred plant name:</p>
     <input type="text" id="preferredPlantName" class="form-control mb-2">
     <button type="button" class="btn btn-secondary me-2" onclick="closeEditPopup()">Cancel</button>
-    <button type="button" class="btn btn-primary" onclick="submitRequest()">Submit Request</button>
+    <button type="button" class="btn btn-primary" onclick="submitRequestForUser()">Submit Request</button>
   </div>
 </div>
+
+<div class="popup" id="editPopupForNameAndStatus">
+  <div class="popup-content">
+    <div class="popup-header">
+      <h5>Edit Plant Name</h5>
+      <span class="popup-close" onclick="closeEditPopupForCreator()">&times;</span>
+    </div>
+    <p>Please input your preferred plant name:</p>
+    <input type="text" id="preferredPlantNameForCreator" class="form-control mb-2">
+
+    <% const uniqueId = 'status' + Math.random().toString(36).substr(2, 9); %>
+    <label>Status</label><br>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" id="<%= uniqueId %>Complete" name="status" value="Completed" data-unique-id="<%= uniqueId %>">
+      <div class="form-check-label" for="<%= uniqueId %>Complete">Completed</div>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" id="<%= uniqueId %>InProgress" name="status" value="In Progress" data-unique-id="<%= uniqueId %>">
+      <div class="form-check-label" for="<%= uniqueId %>InProgress">In Progress</div>
+    </div>
+    <p></p>
+    <button type="button" class="btn btn-secondary me-2" onclick="closeEditPopupForCreator()">Cancel</button>
+    <button type="button" class="btn btn-primary" onclick="submitRequestForCreator()">Submit Request</button>
+  </div>
+</div>
+
 </body>
 </html>

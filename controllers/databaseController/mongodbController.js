@@ -100,6 +100,7 @@ async function addPlant(plantId,
 async function getPlant(id) {
     try {
         const plantInfo = await Plant.findOne({plantId: id});
+        // console.log(plantInfo)
         var response;
         if (plantInfo) {
             response={'type':'success','content':plantInfo};
@@ -198,6 +199,61 @@ async function changePlantNameOfPlant(id, newPlantName,link,name,description,gen
         };
     }
     // Return the response
+    return response;
+}
+
+async function findPlantByObjId(id) {
+    try {
+        // 确保 id 是一个有效的 ObjectId
+        const objectId = new mongoose.Types.ObjectId(id);
+        const plant = await Plant.findById(objectId);
+        if (!plant) {
+            return { type: 'fail', content: 'Plant not found' };
+        }
+        return { type: 'success', content: plant };
+    } catch (error) {
+        return { type: 'fail', content: error.message };
+    }
+}
+
+async function changePlantNameOfPlantForCreator(id, preferredPlantName, resource, DBpediaName, DBpediaDescription, DBpediagenus, status) {
+    let response;
+    try {
+        const objectId = new mongoose.Types.ObjectId(id);
+        // 更新植物记录
+        const result = await Plant.findByIdAndUpdate(
+            objectId,
+            {
+                plantName: preferredPlantName,
+                dbpedia: {
+                    link: resource,
+                    name: DBpediaName,
+                    description: DBpediaDescription,
+                    genus: DBpediagenus
+                },
+                status: status
+            },
+            { new: true }
+        );
+
+        if (result) {
+            response = {
+                type: 'success',
+                content: 'Plant name and status updated successfully'
+            };
+        } else {
+            response = {
+                type: 'fail',
+                content: 'Failed to update plant'
+            };
+        }
+    } catch (error) {
+        response = {
+            type: 'fail',
+            content: error.message
+        };
+    }
+
     return response;
 }
 
@@ -374,5 +430,5 @@ async function updateRequestFromUrPage(plantId, plantName, date, decision, nickN
 
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, changePlantNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
-    getAllUpdateRequests, getAllUpdateRequestsByNickName, updateRequestFromUrPage};
+    getAllUpdateRequests, getAllUpdateRequestsByNickName, updateRequestFromUrPage, changePlantNameOfPlantForCreator, findPlantByObjId};
 

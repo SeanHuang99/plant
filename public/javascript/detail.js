@@ -16,8 +16,12 @@ window.addEventListener('beforeunload', function (event) {
     }
 });
 
-
-
+// 定义全局变量 currentPlant
+let currentPlant = null;
+let isCreator = null;
+// 将uniqueId传递给JavaScript变量
+var uniqueId = "<%= uniqueId %>";
+// let objId = null;
 function generateDetailPage(){
     const plantId=localStorage.getItem('plantId')
     // console.log('plantId: '+plantId)
@@ -36,6 +40,7 @@ function generateDetailPage(){
             .then(function (newPlant) {
                 if(newPlant){
                     clearInterval(getData)
+                    currentPlant = newPlant  // 更新全局变量
                     detailRender(newPlant)
                     showMapInDetail(newPlant.location).then(r => console.log("Map loaded online"));
                 }
@@ -58,6 +63,7 @@ function generateDetailPage(){
                     clearInterval(getData)
                     console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
                     console.log(plant.plantId + ' detail-------> ' + plant.description)
+                    currentPlant = newPlant;  // 更新全局变量
                     detailRender(plant);
                     document.getElementById("map").innerText = 'Cannot show map when offline'
                 }
@@ -79,7 +85,10 @@ function generateDetailPage(){
 
     //render the page manully
 function detailRender(plant){
-    console
+    const objId = plant._id; // 确保正确地获取 _id
+    // console.log(objId)
+    // 使用闭包来存储 objId
+    ObjIdManager.setObjId(objId);
     document.getElementById('plantName').textContent = `Plant Name: ${plant.plantName}`;
     document.getElementById('plantDescription').textContent = `Description: ${plant.description}`;
     document.getElementById('plantDetail').textContent = `Detail: ${plant.details}`;
@@ -90,6 +99,7 @@ function detailRender(plant){
     document.getElementById('flowers').textContent = `Flowers: ${plant.flowers}`;
     document.getElementById('sunExposure').textContent = `Sun Exposure: ${plant.sunExposure}`;
     document.getElementById('status').textContent = `Status: ${plant.status}`;
+
 
     document.getElementById('photo').src = plant.photo;
     document.getElementById('who_you_are').textContent = `You are in room: ${plant.plantId}`;
@@ -125,8 +135,17 @@ function detailRender(plant){
 
 
 function openEditPopup() {
+    const nickName = getNickName();  // 获取当前用户的昵称
     if (navigator.onLine){
-        document.getElementById('editPopupForName').style.display = 'flex';
+        if (currentPlant && currentPlant.nickName !== nickName) {
+            document.getElementById('editPopupForName').style.display = 'flex';
+            isCreator = 'False'
+
+        } else {
+            document.getElementById('editPopupForNameAndStatus').style.display = 'flex';
+            isCreator = 'True'
+        }
+        // document.getElementById('editPopupForName').style.display = 'flex';
     }else {
         alert(' You cannot update when offline')
     }
@@ -135,16 +154,22 @@ function openEditPopup() {
 function closeEditPopup() {
     document.getElementById('editPopupForName').style.display = 'none';
 }
+function closeEditPopupForCreator() {
+    document.getElementById('editPopupForNameAndStatus').style.display = 'none';
 
+}
 
 // Function to submit a request to update the plant name
-async function submitRequest() {
+async function submitRequestForUser() {
 
     const plantId = getPlantId();
     const nickName = getNickName();
-    const preferredPlantName = document.getElementById('preferredPlantName').value;
-    const creator = getNickNameOfPlant();
     const plantOriginalName = getPlantOriginalName();
+    let preferredPlantName = null
+
+    preferredPlantName = document.getElementById('preferredPlantName').value;
+    // console.log(preferredPlantName)
+    const creator = getNickNameOfPlant();
     // Check if the preferred name is the same as the original name
     if (preferredPlantName === plantOriginalName) {
         alert("The same name as origin");
@@ -174,6 +199,53 @@ async function submitRequest() {
     closeEditPopup()
 }
 
+async function submitRequestForCreator() {
+    const plantOriginalName = getPlantOriginalName();
+    const preferredPlantName = document.getElementById('preferredPlantNameForCreator').value;
+    const creator = getNickNameOfPlant();
+    const objId = ObjIdManager.getObjId(); // 从闭包获取 objId
+    console.log(objId)
+    const statusComplete = document.querySelector(`input[name="status"][id*="Complete"]`);
+    const statusInProgress = document.querySelector(`input[name="status"][id*="InProgress"]`);
+    let status = null;
+
+    if (statusComplete && statusComplete.checked) {
+        status = statusComplete.value;
+    } else if (statusInProgress && statusInProgress.checked) {
+        status = statusInProgress.value;
+    }
+
+    if (!preferredPlantName && !status) {
+        alert("Cannot submit empty form!");
+        return;
+    }
+
+    if (preferredPlantName === plantOriginalName) {
+        alert("The same name as origin");
+        closeEditPopup();
+        return;
+    }
+
+    const response = await fetch('/requestHandler/updatePlantsRequestForCreator', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ objId, preferredPlantName, plantOriginalName, status })
+    });
+
+    if (response.ok) {
+        synPlantFromServer();
+        generateDetailPage();
+        alert('Request submitted successfully!');
+    } else {
+        const errorData = await response.json();
+        alert(`Error submitting request: ${errorData.message}`);
+    }
+
+    closeEditPopup();
+}
+
 function getNickNameOfPlant() {
     // Get the element by its ID
     try {
@@ -197,3 +269,18 @@ function getPlantOriginalName() {
         return ''; // Return empty string in case of any error
     }
 }
+
+// 闭包来存储 objId
+const ObjIdManager = (function() {
+    let objId = null;
+
+    return {
+        getObjId: function() {
+            return objId;
+        },
+        setObjId: function(id) {
+            objId = id;
+        }
+    };
+})();
+

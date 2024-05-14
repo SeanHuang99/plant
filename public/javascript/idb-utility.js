@@ -37,38 +37,38 @@ function synPlantFromServer() {
     }
 }
 
-const addPlantToBothIDB = (db, plant) => {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(["plants", "sync-plants"], "readwrite");
-        const plantStore = transaction.objectStore("plants");
-        const syncPlantStore = transaction.objectStore("sync-plants");
-
-        const addRequest1 = plantStore.add(plant);
-        const addRequest2 = syncPlantStore.add(plant);
-
-        addRequest1.addEventListener("success", () => {
-            console.log("Added plant to plants table with ID: " + addRequest1.result);
-            resolve();
-        });
-        addRequest1.addEventListener("error", (event) => {
-            console.error("Error adding plant to plants table: " + event.target.error);
-            reject(event.target.error);
-        });
-
-        addRequest2.addEventListener("success", () => {
-            console.log("Added plant to sync-plants table with ID: " + addRequest2.result);
-            // 发送同步消息到 Service Worker（如果定义了 registerPlantSync()）
-            if (typeof registerPlantSync === "function") {
-                registerPlantSync();
-            }
-            resolve();
-        });
-        addRequest2.addEventListener("error", (event) => {
-            console.error("Error adding plant to sync-plants table: " + event.target.error);
-            reject(event.target.error);
-        });
-    });
-};
+// const addPlantToBothIDB = (db, plant) => {
+//     return new Promise((resolve, reject) => {
+//         const transaction = db.transaction(["plants", "sync-plants"], "readwrite");
+//         const plantStore = transaction.objectStore("plants");
+//         const syncPlantStore = transaction.objectStore("sync-plants");
+//
+//         const addRequest1 = plantStore.add(plant);
+//         const addRequest2 = syncPlantStore.add(plant);
+//
+//         addRequest1.addEventListener("success", () => {
+//             console.log("Added plant to plants table with ID: " + addRequest1.result);
+//             resolve();
+//         });
+//         addRequest1.addEventListener("error", (event) => {
+//             console.error("Error adding plant to plants table: " + event.target.error);
+//             reject(event.target.error);
+//         });
+//
+//         addRequest2.addEventListener("success", () => {
+//             console.log("Added plant to sync-plants table with ID: " + addRequest2.result);
+//             // 发送同步消息到 Service Worker（如果定义了 registerPlantSync()）
+//             if (typeof registerPlantSync === "function") {
+//                 registerPlantSync();
+//             }
+//             resolve();
+//         });
+//         addRequest2.addEventListener("error", (event) => {
+//             console.error("Error adding plant to sync-plants table: " + event.target.error);
+//             reject(event.target.error);
+//         });
+//     });
+// };
 
 // Function to handle adding a new plant
 const addNewPlantToSync = (IDB, plant) => {
@@ -141,7 +141,7 @@ const addNewPlantsToIDB = (plantIDB, plants) => {
 };
 
 
-const addPlantToBothStores = async (db, plant) => {
+const addPlantToBothStores =  async (db, plant) => {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(["plants", "sync-plants"], "readwrite");
         const plantStore = transaction.objectStore("plants");
@@ -155,6 +155,7 @@ const addPlantToBothStores = async (db, plant) => {
         function checkCompletion() {
             addCount++;
             if (addCount === 2) {
+                console.log("addPlantToBothStores() complete")
                 registerPlantSync();
                 resolve();
             }

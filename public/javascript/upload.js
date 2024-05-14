@@ -63,7 +63,7 @@ function checkForm(form) {
     var fileSize = photo.size;
     console.log("file size: " + fileSize / (1024 * 1024) + "MB");
     if ((fileSize / (1024 * 1024)) > 4) {
-        alert("Plant Image cannot exceed 4MB");
+        alert("Plant Image cannot exceed 3MB");
         return false;
     }
     return true
@@ -120,7 +120,6 @@ async function mySubmit(form) {
                 // const plants=[plantObj]
                 console.log(plantObj)
                 openPlantIDB().then(async IDB => {
-                    console.log('start add new plant to IDB')
                     // await addNewPlantToSync(IDB, plantObj)
                     //     .then(() => {
                     //         console.log('finish addNewPlantToSync');
@@ -135,11 +134,9 @@ async function mySubmit(form) {
                     //         setPlantId(plantObj.plantId);
                     //         window.location.href = "/detail";
                     //     })
-                    //     .catch(error => {
-                    //         console.error("Error occurred:", error);
-                    //     });
+                    console.log('start add new plant to IDB')
                     await addPlantToBothStores(IDB, plantObj).then(()=>{
-                        console.log('finally');
+                        // console.log('finally');
                         alert('submit successfully');
                         showAddPlantNotification();
                         console.log("current plant id: " + plantObj.plantId);

@@ -73,12 +73,13 @@ self.addEventListener('fetch', event => {
         // 提取请求的 URL
         var url = new URL(event.request.url);
         // 如果是详情页面的请求
-        if (url.pathname==='/detail') {
-            console.log('bbb')
-            event.request.url = 'http://localhost:3000/detail'//截去后面的id
-            findCache(event)
-        }
-        else findCache(event)
+        // if (url.pathname==='/detail') {
+        //     console.log('bbb')
+        //     event.request.url = 'http://localhost:3000/detail'//截去后面的id
+        //     findCache(event)
+        // }
+        // else
+        findCache(event)
     }
     //如果online则正常服务器请求
     else {
@@ -120,7 +121,7 @@ function syncPlantToServer(){
                 console.log('Service Worker: Syncing new Plant: ', syncPlant);
 
                 // Fetch with FormData instead of JSON
-                fetch('http://localhost:3000/requestHandler/addPlants', {
+                fetch('/requestHandler/addPlants', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -160,7 +161,7 @@ function syncChatToServer(){
 
                 // Fetch with FormData instead of JSON
                 //todo:添加addChat接口
-                fetch('http://localhost:3000/requestHandler/updateOfflineChatRecordToServer', {
+                fetch('/requestHandler/updateOfflineChatRecordToServer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

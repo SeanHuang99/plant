@@ -16,9 +16,6 @@ function showAddPlantNotification() {
                     body: "Plant added!",
                     icon: '/images/icon.webp'
                 })
-                .then(r =>
-                    console.log(r)
-                );
         });
 }
 

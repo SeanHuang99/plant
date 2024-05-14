@@ -311,19 +311,22 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
 
 router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
     const { objId, preferredPlantName, plantOriginalName, status } = req.body;
-    console.log(objId)
-    console.log(JSON.stringify(req.body))
+    console.log("Received objId:", objId);
+
     try {
-        // console.log(objId)
         // 通过 objId 查找植物记录
         const plantResult = await mongoApi.findPlantByObjId(objId);
         if (plantResult.type === 'fail') {
-            return res.status(504).json({ message: plantResult.content });
+            return res.status(404).json({ message: plantResult.content });
         }
         const plant = plantResult.content;
 
-        // 检查 preferredPlantName 和 plantOriginalName 是否相同
-        if (preferredPlantName !== plantOriginalName) {
+        const updateFields = {
+            status: status,
+            dbpedia: plant.dbpedia // 保留现有的 dbpedia 字段
+        };
+
+        if (preferredPlantName && preferredPlantName !== plantOriginalName) {
             // 构建 DBpedia 资源链接
             const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(preferredPlantName)}`;
             const endpointUrl = 'https://dbpedia.org/sparql';
@@ -361,16 +364,22 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
                     return res.status(504).send(error.message);
                 });
 
-            // 调用封装的控制器函数来更新植物记录
-            const result = await mongoApi.changePlantNameOfPlantForCreator(objId, preferredPlantName, resource, DBpediaName, DBpediaDescription, DBpediagenus, status);
+            updateFields.plantName = preferredPlantName;
+            updateFields.dbpedia = {
+                link: resource,
+                name: DBpediaName,
+                description: DBpediaDescription,
+                genus: DBpediagenus
+            };
+        }
 
-            if (result.type === 'success') {
-                res.status(200).send(result.content);
-            } else {
-                res.status(500).json({ message: result.content });
-            }
+        // 调用封装的控制器函数来更新植物记录
+        const result = await mongoApi.changePlantNameOfPlantForCreator(objId, updateFields);
+
+        if (result.type === 'success') {
+            res.status(200).send(result.content);
         } else {
-            res.status(400).json({ message: 'Preferred plant name is the same as the original name' });
+            res.status(500).json({ message: result.content });
         }
     } catch (error) {
         console.error(error);

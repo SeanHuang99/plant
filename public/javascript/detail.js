@@ -204,7 +204,7 @@ async function submitRequestForCreator() {
     const preferredPlantName = document.getElementById('preferredPlantNameForCreator').value;
     const creator = getNickNameOfPlant();
     const objId = ObjIdManager.getObjId(); // 从闭包获取 objId
-    console.log(objId)
+    console.log("Submitting objId:", objId);
     const statusComplete = document.querySelector(`input[name="status"][id*="Complete"]`);
     const statusInProgress = document.querySelector(`input[name="status"][id*="InProgress"]`);
     let status = null;
@@ -221,9 +221,19 @@ async function submitRequestForCreator() {
     }
 
     if (preferredPlantName === plantOriginalName) {
-        alert("The same name as origin");
-        closeEditPopup();
+        alert("The same name as origin")
         return;
+    }
+
+    const currentStatus = getStatusOfDetailPage();
+    if (status === currentStatus) {
+        alert("The selected status is the same as the current status.");
+        return;
+    }
+
+    const requestBody = { objId, plantOriginalName, status };
+    if (preferredPlantName) {
+        requestBody.preferredPlantName = preferredPlantName;
     }
 
     const response = await fetch('/requestHandler/updatePlantsRequestForCreator', {
@@ -231,19 +241,20 @@ async function submitRequestForCreator() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ objId, preferredPlantName, plantOriginalName, status })
+        body: JSON.stringify(requestBody)
     });
 
     if (response.ok) {
         synPlantFromServer();
         generateDetailPage();
         alert('Request submitted successfully!');
+        closeEditPopupForCreator();
     } else {
         const errorData = await response.json();
         alert(`Error submitting request: ${errorData.message}`);
     }
 
-    closeEditPopup();
+
 }
 
 function getNickNameOfPlant() {
@@ -263,6 +274,18 @@ function getPlantOriginalName() {
     try {
         const plantNameText = document.getElementById('plantName').textContent;
         const parts = plantNameText.split(': ');
+        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+    } catch (error) {
+        console.error('Error retrieving plant original name:', error);
+        return ''; // Return empty string in case of any error
+    }
+}
+
+function getStatusOfDetailPage() {
+    // Get the element by its ID
+    try {
+        const statusOfDPText = document.getElementById('status').textContent;
+        const parts = statusOfDPText.split(': ');
         return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
     } catch (error) {
         console.error('Error retrieving plant original name:', error);

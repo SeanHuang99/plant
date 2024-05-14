@@ -216,23 +216,14 @@ async function findPlantByObjId(id) {
     }
 }
 
-async function changePlantNameOfPlantForCreator(id, preferredPlantName, resource, DBpediaName, DBpediaDescription, DBpediagenus, status) {
+async function changePlantNameOfPlantForCreator(id, updateFields) {
     let response;
     try {
         const objectId = new mongoose.Types.ObjectId(id);
         // 更新植物记录
         const result = await Plant.findByIdAndUpdate(
             objectId,
-            {
-                plantName: preferredPlantName,
-                dbpedia: {
-                    link: resource,
-                    name: DBpediaName,
-                    description: DBpediaDescription,
-                    genus: DBpediagenus
-                },
-                status: status
-            },
+            updateFields,
             { new: true }
         );
 

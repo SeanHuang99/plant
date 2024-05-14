@@ -80,6 +80,8 @@
             border-color: #ff0033 !important; /* Match border color */
         }
 
+
+
         .form-check-input.agree,
         .form-check-input.reject {
             position: absolute;
@@ -119,6 +121,16 @@
             height: 8px;
             border-radius: 50%; /* Inner circle */
             background: white;
+        }
+
+        /* New CSS for hover effect */
+        tbody tr {
+            transition: transform 0.2s; /* Smooth transition for the transform property */
+        }
+
+        tbody tr:hover {
+            transform: scale(1.05); /* Enlarge the row by 5% when hovered */
+            background-color: #f0f0f0; /* Optional: change the background color on hover */
         }
     </style>
 </head>

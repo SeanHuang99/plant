@@ -47,12 +47,16 @@ function renderTableRows(requests) {
     requests.forEach(request => {
         const disabled = request.statusOfRequest === 'completed';
         const agreeInput = disabled ? '' : `
-                    <input type="checkbox" class="form-check-input agree" id="agree${request.plantId}" name="decision${request.plantId}">
-                    <label class="custom-checkbox" for="agree${request.plantId}"></label>
+                <label class="cell-label">
+                <input type="checkbox" class="form-check-input agree" id="agree${request.plantId}" name="decision${request.plantId}">
+                <span class="custom-checkbox"></span>
+                </label>
                 `;
         const rejectInput = disabled ? '' : `
-                    <input type="checkbox" class="form-check-input reject" id="reject${request.plantId}" name="decision${request.plantId}">
-                    <label class="custom-checkbox" for="reject${request.plantId}"></label>
+                <label class="cell-label">
+                <input type="checkbox" class="form-check-input reject" id="reject${request.plantId}" name="decision${request.plantId}">
+                <span class="custom-checkbox"></span>
+                </label>
                 `;
         tbody.innerHTML += `
             <tr id="${request.plantId}" data-full-date="${request.date}" nickName = "${request.nickName}">

@@ -19,7 +19,7 @@ window.addEventListener('beforeunload', function (event) {
 // 定义全局变量 currentPlant
 let currentPlant = null;
 let isCreator = null;
-
+// var uniqueId="<%=uniqueId%>"
 
 // let objId = null;
 function generateDetailPage(){

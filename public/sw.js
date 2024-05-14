@@ -28,6 +28,7 @@ self.addEventListener('install', event => {
                 '/javascript/GoogleMap.js',
                 '/javascript/detailMap.js',
                 '/stylesheets/style.css',
+                '/stylesheets/map.css',
                 '/images/icon.webp',
                 '/manifest.json',
             ]

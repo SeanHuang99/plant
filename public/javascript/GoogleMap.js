@@ -92,8 +92,8 @@ async function initMap() {
             position: place.geometry.location,
             title: place.name,
         });
+        Glocation=place.geometry.location
         map.setCenter(place.geometry.location);
-        setLocation()
     });
 
 
@@ -123,8 +123,7 @@ async function initMap() {
                     });
                     // 将地图中心设置为标记的位置
                     map.setCenter(lastMarker.position);
-                    setLocation()
-                    //todo: store location to MongoDB
+
                 },
                 () => {
                     handleLocationError(true, infoWindow, map.getCenter());
@@ -150,7 +149,15 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 const path = window.location.pathname
 if (path === '/upload') {
-    initMap()
+    if (navigator.onLine){
+        console.log('initMap()')
+        initMap()
+    }
+    else {//do not show map when offline
+        console.log('hide map')
+        const mapForm=document.getElementById('mapForm')
+        mapForm.style.display = 'none'
+    }
 }
 //否则执行showMapInDetail() （在detail.js中调用）
 

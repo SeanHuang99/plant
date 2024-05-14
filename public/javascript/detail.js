@@ -72,6 +72,7 @@ function generateDetailPage(){
 
     //render the page manully
 function detailRender(plant){
+    console
     document.getElementById('plantName').textContent = `Plant Name: ${plant.plantName}`;
     document.getElementById('plantDescription').textContent = `Description: ${plant.description}`;
     document.getElementById('plantDetail').textContent = `Detail: ${plant.details}`;
@@ -118,14 +119,14 @@ function detailRender(plant){
 
 function openEditPopup() {
     if (navigator.onLine){
-        document.getElementById('editPopup').style.display = 'flex';
+        document.getElementById('editPopupForName').style.display = 'flex';
     }else {
-        alert(' You cannot edit when offline')
+        alert(' You cannot update when offline')
     }
 }
 
 function closeEditPopup() {
-    document.getElementById('editPopup').style.display = 'none';
+    document.getElementById('editPopupForName').style.display = 'none';
 }
 
 
@@ -163,7 +164,6 @@ async function submitRequest() {
     }
 
     // Close the modal after submitting
-    // $('#editModal').modal('hide');
     closeEditPopup()
 }
 

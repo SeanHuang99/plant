@@ -19,8 +19,8 @@ window.addEventListener('beforeunload', function (event) {
 // 定义全局变量 currentPlant
 let currentPlant = null;
 let isCreator = null;
-// 将uniqueId传递给JavaScript变量
-var uniqueId = "<%= uniqueId %>";
+
+
 // let objId = null;
 function generateDetailPage(){
     const plantId=localStorage.getItem('plantId')
@@ -57,13 +57,13 @@ function generateDetailPage(){
             })
     }
     else {
+        console.log()
         openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
                 if(plant) {
                     clearInterval(getData)
                     console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
                     console.log(plant.plantId + ' detail-------> ' + plant.description)
-                    currentPlant = newPlant;  // 更新全局变量
                     detailRender(plant);
                     document.getElementById("map").innerText = 'Cannot show map when offline'
                 }
@@ -85,10 +85,13 @@ function generateDetailPage(){
 
     //render the page manully
 function detailRender(plant){
-    const objId = plant._id; // 确保正确地获取 _id
-    // console.log(objId)
-    // 使用闭包来存储 objId
-    ObjIdManager.setObjId(objId);
+    if(navigator.onLine) {
+        const objId = plant._id; // 确保正确地获取 _id
+        // console.log("objid:  "+objId)
+        // 使用闭包来存储 objId
+        ObjIdManager.setObjId(objId);
+    }
+
     document.getElementById('plantName').textContent = `Plant Name: ${plant.plantName}`;
     document.getElementById('plantDescription').textContent = `Description: ${plant.description}`;
     document.getElementById('plantDetail').textContent = `Detail: ${plant.details}`;
@@ -147,7 +150,7 @@ function openEditPopup() {
         }
         // document.getElementById('editPopupForName').style.display = 'flex';
     }else {
-        alert(' You cannot update when offline')
+        alert(' You cannot update plant when offline')
     }
 }
 

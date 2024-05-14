@@ -155,6 +155,7 @@ const addPlantToBothStores = async (db, plant) => {
         function checkCompletion() {
             addCount++;
             if (addCount === 2) {
+                registerPlantSync();
                 resolve();
             }
         }

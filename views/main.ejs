@@ -75,12 +75,14 @@
             <div class="col-md-4">
                 <select id="dropdown" class="form-select">
                     <option value="option1">None</option>
-                    <option value="option2">Time up</option>
-                    <option value="option3">Time down</option>
+                    <option value="option2">Time Up</option>
+                    <option value="option3">Time Down</option>
                     <option value="option4">Completed</option>
                     <option value="option5">In Progress</option>
                     <option value="option6">Nearest Plant</option>
                     <option value="option6">Furthest Plant</option>
+                    <option value="option6">With Flowers</option>
+                    <option value="option6">Without Flowers</option>
                 </select>
             </div>
         </div>
@@ -115,13 +117,13 @@
                     });
                 });
                 break;
-            case 'Time up':
+            case 'Time Up':
                 sortByDate('asc').then(plantList => {
                     deleteAllPlantsDOM();
                     renderPlantList(plantList);
                 });
                 break;
-            case 'Time down':
+            case 'Time Down':
                 sortByDate('desc').then(plantList => {
                     deleteAllPlantsDOM();
                     renderPlantList(plantList);
@@ -159,6 +161,20 @@
                             renderPlantList(plantList);
                         })
                     }
+                })
+                break;
+            case 'With Flowers':
+                console.log('sort by with flowers---------------')
+                filterPlants("flowers","yes").then(async plantList => {
+                    await deleteAllPlantsDOM();
+                    renderPlantList(plantList);
+                })
+                break;
+            case 'Without Flowers':
+                console.log('sort by without flowers---------------')
+                filterPlants("flowers","no").then(async plantList => {
+                    await deleteAllPlantsDOM();
+                    renderPlantList(plantList);
                 })
                 break;
             default:

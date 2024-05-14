@@ -138,11 +138,13 @@ async function mySubmit(form) {
                     await addPlantToBothStores(IDB, plantObj).then(()=>{
                         // console.log('finally');
                         alert('submit successfully');
+                    })
+                    setTimeout(() => {
                         showAddPlantNotification();
                         console.log("current plant id: " + plantObj.plantId);
                         setPlantId(plantObj.plantId);
                         window.location.href = "/detail";
-                    })
+                    },1000);
                 })
             } else {
                 console.log('plantObj==null')

@@ -5,7 +5,13 @@
 //         synChatRecordFromServer();
 //     }
 // }
+function generateSixDigitNumber() {
+    const min = 100000;
+    const max = 999999;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 function createPlantId(plantName) {
+    const uid=generateSixDigitNumber();
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -14,7 +20,7 @@ function createPlantId(plantName) {
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
 
-    return `${plantName}${year}${month}${day}${hours}${minutes}${seconds}`;
+    return `${uid}${year}${month}${day}${hours}${minutes}${seconds}`;
 }
 
 function synPlantFromServer() {

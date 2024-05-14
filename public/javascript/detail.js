@@ -4,7 +4,7 @@ if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.get
 // synPlantFromServer();
 // console.log("wel to detail");
 let updateTimer=5;
-let getData=setInterval(generateDetailPage,2000);
+let getData=setInterval(generateDetailPage,1000);
 
 
 function generateDetailPage(){

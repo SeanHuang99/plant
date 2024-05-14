@@ -8,9 +8,29 @@
     <script src="/import/jquery-3.7.1.min.js"></script>
     <link href="/import/bootstrap.min.css" rel="stylesheet">
     <script src="/import/bootstrap.min.js"></script>
+    <link rel="preload" href="/fonts/roboto-medium-Nav.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/roboto-medium-Nav.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/roboto-medium-Nav.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/roboto-medium-Nav.woff2" as="font" type="font/woff2" crossorigin="anonymous">
     <script src="/javascript/idb-utility.js"></script>
     <script src="/javascript/updateRequests.js"></script>
     <style>
+        @font-face {
+            font-family: 'PoetsenOne';
+            src: url('/fonts/PoetsenOne-Regular-AllPlants.ttf') format('truetype'),
+            url('/fonts/PoetsenOne-Regular-AllPlants.woff2') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: url('/fonts/roboto-medium-Nav.ttf') format('truetype'),
+            url('/fonts/roboto-medium-Nav.woff2') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
         .table-dark th {
             background-color: #333AFF; /* 深蓝色背景 */
             color: white; /* 白色文本 */
@@ -19,6 +39,30 @@
         .container {
             overflow-y: auto;
             max-height: 80vh;  /* 根据页面高度调整这个值 */
+            font-family: Arial, sans-serif;
+        }
+
+        .container thead {
+            font-family: 'Roboto', Courier, monospace;
+            font-weight: bold;
+            font-size: larger;
+        }
+
+        .container tbody {
+            font-family: 'Arial Unicode MS', Times, serif;
+        }
+
+        .text-center button {
+            font-family: 'PoetsenOne';
+            background-color: #ff3366 !important; /* Pink button color */
+            border-color: #ff3366 !important; /* Match border color */
+            color: #ffffff !important; /* White text */
+            margin-left: 20px !important; /* Space before button */
+        }
+
+        .text-center button:hover {
+            background-color: #ff0033 !important; /* Darker pink on hover */
+            border-color: #ff0033 !important; /* Match border color */
         }
     </style>
 </head>

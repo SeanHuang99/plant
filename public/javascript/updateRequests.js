@@ -105,8 +105,6 @@ async function submitRequests() {
                     date: row.getAttribute('data-full-date'), // 获取完整的日期信息
                     decision: agreeChecked ? 'agree' : 'reject',
                     nickName: row.getAttribute('nickName')
-                    // creator: getNickName() // 因为它是同步的，所以可以在这里直接调用
-
                 });
             }
         } else {

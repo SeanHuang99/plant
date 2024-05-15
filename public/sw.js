@@ -31,6 +31,11 @@ self.addEventListener('install', event => {
                 '/stylesheets/map.css',
                 '/images/icon.webp',
                 '/manifest.json',
+                '/fonts/poetsenone-regular-sub.ttf',
+                '/fonts/roboto-medium-Nav.ttf',
+                '/fonts/roboto-medium-Nav.woff2',
+                '/fonts/sedansc-regular-sub.ttf',
+                '/fonts/sedansc-regular-sub.woff2'
             ]
             fileList.forEach(file => {
                 cache.add(file).catch(_ => console.error(`can't load ${file} to cache`))

@@ -75,7 +75,7 @@ function renderTableRows(requests) {
                 </label>
                 `;
         tbody.innerHTML += `
-            <tr id="${request.plantId}" data-full-date="${request.date}" nickName = "${request.nickName}">
+            <tr id="${request.plantId}" data-full-date="${request.date}" nickName="${request.nickName}">
                 <td>${request.plantOriginalName || 'N/A'}</td>
                 <td>${request.plantName || 'N/A'}</td>
                 <td>${request.statusOfRequest || 'in-progress'}</td>
@@ -83,10 +83,10 @@ function renderTableRows(requests) {
                 <td>${request.decision || 'Pending decision'}</td>
                 <td>${agreeInput}</td>
                 <td>${rejectInput}</td>
-                
             </tr>
         `;
     });
+
     setupCheckboxBehavior();
 }
 
@@ -98,6 +98,7 @@ function setupCheckboxBehavior() {
     document.querySelectorAll('input.agree, input.reject').forEach(input => {
         input.addEventListener('change', function() {
             const name = this.name;
+            // Ensure only one checkbox is selected at a time
             document.querySelectorAll(`input[name="${name}"]`).forEach(box => {
                 if (box !== this) box.checked = false;
             });
@@ -115,7 +116,7 @@ async function submitRequests() {
         const agreeInput = row.querySelector('.agree');
         const rejectInput = row.querySelector('.reject');
 
-        // 只有当复选框实际存在时，才尝试读取它们的状态并处理
+        // Only process if the checkboxes exist
         if (agreeInput && rejectInput) {
             const agreeChecked = agreeInput.checked;
             const rejectChecked = rejectInput.checked;
@@ -123,13 +124,13 @@ async function submitRequests() {
                 requests.push({
                     plantId: row.id,
                     plantName: row.cells[1].textContent,
-                    date: row.getAttribute('data-full-date'), // 获取完整的日期信息
+                    date: row.getAttribute('data-full-date'), // Get full date attribute
                     decision: agreeChecked ? 'agree' : 'reject',
                     nickName: row.getAttribute('nickName')
                 });
             }
         } else {
-            // 如果没有找到复选框，可以在这里添加一些调试信息
+            // Log debug information if checkboxes are not found
             console.log(`No checkboxes found for row: ${row.id}`);
         }
     });
@@ -140,12 +141,13 @@ async function submitRequests() {
     }
 
     try {
+        // Send the selected requests to the backend for processing
         const response = await fetch('/requestHandler/updatePlantsRequestFromURPage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({requests})
+            body: JSON.stringify({ requests })
         });
 
         if (response.ok) {

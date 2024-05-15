@@ -145,19 +145,17 @@ function detailRender(plant){
  * If the user is online and the current plant's nickname differs from the user's nickname, the edit popup is displayed.
  */
 function openEditPopup() {
-    const nickName = getNickName();  // 获取当前用户的昵称
-    if (navigator.onLine){
+    const nickName = getNickName();  // Get the current user's nickname
+    if (navigator.onLine) {
         if (currentPlant && currentPlant.nickName !== nickName) {
             document.getElementById('editPopupForName').style.display = 'flex';
-            isCreator = 'False'
-
+            isCreator = 'False';
         } else {
             document.getElementById('editPopupForNameAndStatus').style.display = 'flex';
-            isCreator = 'True'
+            isCreator = 'True';
         }
-        // document.getElementById('editPopupForName').style.display = 'flex';
-    }else {
-        alert(' You cannot update plant when offline')
+    } else {
+        alert('You cannot update plant when offline');
     }
 }
 
@@ -184,38 +182,36 @@ async function submitRequestForUser() {
     const plantId = getPlantId();
     const nickName = getNickName();
     const plantOriginalName = getPlantOriginalName();
-    let preferredPlantName = null
-
-    preferredPlantName = document.getElementById('preferredPlantName').value;
-    // console.log(preferredPlantName)
+    let preferredPlantName = document.getElementById('preferredPlantName').value;
     const creator = getNickNameOfPlant();
-    // Check if the preferred name is the same as the original name
+
+    // Check if the new plant name is the same as the original name
     if (preferredPlantName === plantOriginalName) {
         alert("The same name as origin");
-        closeEditPopup(); // Assume this function closes your modal or popup
-        return; // Stop the function execution here
+        closeEditPopup();  // Close the edit popup
+        return;
     }
-    // Post the data to the backend via the "/updatePlants" route
+
+    // Send update request to the backend
     const response = await fetch('/requestHandler/updatePlantsRequest', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator, plantOriginalName})
+        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator, plantOriginalName })
     });
 
+    // Handle the response
     if (response.ok) {
         synPlantFromServer();
         generateDetailPage();
         alert('Request submitted successfully!');
-    }  else {
-        // General error handler for all other cases
+    } else {
         const errorData = await response.json();
         alert(`Error submitting request: ${errorData.message}`);
     }
 
-    // Close the modal after submitting
-    closeEditPopup()
+    closeEditPopup();  // Close the edit popup after submitting
 }
 
 /**
@@ -226,29 +222,32 @@ async function submitRequestForCreator() {
     const plantOriginalName = getPlantOriginalName();
     const preferredPlantName = document.getElementById('preferredPlantNameForCreator').value;
     const creator = getNickNameOfPlant();
-    const objId = ObjIdManager.getObjId(); // 从闭包获取 objId
-    console.log("Submitting objId:", objId);
+    const objId = ObjIdManager.getObjId();  // Get objId from closure
     const statusComplete = document.querySelector(`input[name="status"][id*="Complete"]`);
     const statusInProgress = document.querySelector(`input[name="status"][id*="InProgress"]`);
     let status = null;
 
+    // Get the selected status
     if (statusComplete && statusComplete.checked) {
         status = statusComplete.value;
     } else if (statusInProgress && statusInProgress.checked) {
         status = statusInProgress.value;
     }
 
+    // Check if the form is empty
     if (!preferredPlantName && !status) {
         alert("Cannot submit empty form!");
         return;
     }
 
+    // Check if the new plant name is the same as the original name
     if (preferredPlantName === plantOriginalName) {
-        alert("The same name as origin")
+        alert("The same name as origin");
         return;
     }
 
     const currentStatus = getStatusOfDetailPage();
+    // Check if the new status is the same as the current status
     if (status === currentStatus) {
         alert("The selected status is the same as the current status.");
         return;
@@ -259,6 +258,7 @@ async function submitRequestForCreator() {
         requestBody.preferredPlantName = preferredPlantName;
     }
 
+    // Send update request to the backend
     const response = await fetch('/requestHandler/updatePlantsRequestForCreator', {
         method: 'POST',
         headers: {
@@ -267,6 +267,7 @@ async function submitRequestForCreator() {
         body: JSON.stringify(requestBody)
     });
 
+    // Handle the response
     if (response.ok) {
         synPlantFromServer();
         generateDetailPage();
@@ -276,8 +277,6 @@ async function submitRequestForCreator() {
         const errorData = await response.json();
         alert(`Error submitting request: ${errorData.message}`);
     }
-
-
 }
 
 
@@ -286,14 +285,13 @@ async function submitRequestForCreator() {
  * @returns {string} The nickname of the plant or an empty string if an error occurs.
  */
 function getNickNameOfPlant() {
-    // Get the element by its ID
     try {
         const nickNameText = document.getElementById('nickName').textContent;
         const parts = nickNameText.split(': ');
-        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+        return parts.length > 1 ? parts[1].trim() : '';  // Get the nickname and trim excess whitespace
     } catch (error) {
         console.error('Error retrieving nickname of plant:', error);
-        return ''; // Return empty string in case of any error
+        return '';  // Return an empty string in case of an error
     }
 }
 
@@ -302,14 +300,13 @@ function getNickNameOfPlant() {
  * @returns {string} The original name of the plant or an empty string if an error occurs.
  */
 function getPlantOriginalName() {
-    // Get the element by its ID
     try {
         const plantNameText = document.getElementById('plantName').textContent;
         const parts = plantNameText.split(': ');
-        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+        return parts.length > 1 ? parts[1].trim() : '';  // Get the plant original name and trim excess whitespace
     } catch (error) {
         console.error('Error retrieving plant original name:', error);
-        return ''; // Return empty string in case of any error
+        return '';  // Return an empty string in case of an error
     }
 }
 
@@ -318,14 +315,13 @@ function getPlantOriginalName() {
  * @returns {string} The status of the detail page or an empty string if an error occurs.
  */
 function getStatusOfDetailPage() {
-    // Get the element by its ID
     try {
         const statusOfDPText = document.getElementById('status').textContent;
         const parts = statusOfDPText.split(': ');
-        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+        return parts.length > 1 ? parts[1].trim() : '';  // Get the status of the detail page and trim excess whitespace
     } catch (error) {
         console.error('Error retrieving plant original name:', error);
-        return ''; // Return empty string in case of any error
+        return '';  // Return an empty string in case of an error
     }
 }
 

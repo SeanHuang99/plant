@@ -45,7 +45,6 @@ router.get('/detail', async function (req, res) {
  * @param {Object} res - Response object
  */
 router.get('/getAllUpdateRequests', function (req, res) {
-    // console.log('/getAllUpdateRequests')
     res.render('updateRequests')
 })
 

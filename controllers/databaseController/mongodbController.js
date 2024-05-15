@@ -152,11 +152,7 @@ async function getAllPlants(){
     return response;
 }
 
-/**
- * Get the nickname of a plant by its ID.
- * @param {string} id - The ID of the plant.
- * @returns {Promise<Object>} The response containing the nickname or an error message.
- */
+
 async function getNickNameOfPlant(id) {
     // Declare response at the start of the function
     let response = {
@@ -193,16 +189,7 @@ async function getNickNameOfPlant(id) {
     return response;
 }
 
-/**
- * Change the plant name of a plant by its ID.
- * @param {string} id - The ID of the plant.
- * @param {string} newPlantName - The new plant name.
- * @param {string} link - The DBpedia link.
- * @param {string} name - The DBpedia name.
- * @param {string} description - The DBpedia description.
- * @param {string} genus - The DBpedia genus.
- * @returns {Promise<Object>} The response indicating success or failure.
- */
+
 async function changePlantNameOfPlant(id, newPlantName,link,name,description,genus) {
     let response;
     try {
@@ -262,12 +249,7 @@ async function findPlantByObjId(id) {
     }
 }
 
-/**
- * Change the plant name and status for a plant by its ObjectId.
- * @param {string} id - The ObjectId of the plant.
- * @param {Object} updateFields - The fields to update.
- * @returns {Promise<Object>} The response indicating success or failure.
- */
+
 async function changePlantNameOfPlantForCreator(id, updateFields) {
     let response;
     try {

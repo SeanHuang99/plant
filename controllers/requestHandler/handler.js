@@ -28,20 +28,6 @@ router.post("/addPlants",async function (req, res, next) {
     // The DBpedia SPARQL endpoint URL
     const endpointUrl = 'https://dbpedia.org/sparql';
 
-    // <!--        PREFIX dbo: <http://dbpedia.org/ontology/>-->
-    // <!--        PREFIX dbr: <http://dbpedia.org/resource/>-->
-    // <!--        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>-->
-    // <!--        PREFIX foaf: <http://xmlns.com/foaf/0.1/>-->
-    // <!--        PREFIX dbp: <http://dbpedia.org/property/>-->
-    // <!--        SELECT ?name ?genus ?comment ?uri-->
-    // <!--        WHERE {-->
-    // <!--          BIND(dbr:Basil AS ?uri)-->
-    // <!--          OPTIONAL { ?uri dbp:name ?name . FILTER (langMatches(lang(?name), "en")) }-->
-    // <!--          OPTIONAL { ?uri dbp:genus ?genus . FILTER (langMatches(lang(?genus), "en")) }-->
-    // <!--          OPTIONAL { ?uri rdfs:comment ?comment . FILTER (langMatches(lang(?comment), "en")) }-->
-    // <!--        }-->
-    // <!--        LIMIT 1-->
-
     // The SPARQL query to retrieve data for the given resource
     const sparqlQuery = `
     PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -467,7 +453,8 @@ function capitalizeFirstLetterIfAlphabet(input) {
     // 第一个字符不是英文字母或输入不合法，返回原字符串
     return input;
 }
-/*
+
+/**
 ------------------------------------------------------------------
  following content just for test api
  */

@@ -111,28 +111,28 @@ function detailRender(plant){
     document.getElementById('photo').src = plant.photo;
     document.getElementById('who_you_are').textContent = `You are in room: ${plant.plantId}`;
 
-    if(plant.dbpedia.link!==undefined || plant.dbpedia.link!==""){
+    if(plant.dbpedia.link!==undefined && plant.dbpedia.link!==""){
         document.getElementById('DBpediaLink').href = `${plant.dbpedia.link}`;
     }
     else{
         document.getElementById('DBpediaLink').href = 'http://dbpedia.org/resource/';
     }
 
-    if(plant.dbpedia.name!==undefined || plant.dbpedia.name!==""){
+    if(plant.dbpedia.name!==undefined && plant.dbpedia.name!==""){
         document.getElementById('DBpediaName').textContent = `Common Name: ${plant.dbpedia.name}`;
     }
     else{
         document.getElementById('DBpediaName').textContent = `Common Name: None`;
     }
 
-    if(plant.dbpedia.description!==undefined || plant.dbpedia.description!==""){
+    if(plant.dbpedia.description!==undefined && plant.dbpedia.description!==""){
         document.getElementById('DBpediaDescription').textContent = `Plant Description: ${plant.dbpedia.description}`;
     }
     else{
         document.getElementById('DBpediaDescription').textContent = `Plant Description: None`;
     }
 
-    if(plant.dbpedia.genus!==undefined || plant.dbpedia.genus!==""){
+    if(plant.dbpedia.genus!==undefined && plant.dbpedia.genus!==""){
         document.getElementById('DBpediaGunes').textContent = `Plant Genus: ${plant.dbpedia.genus}`;
     }
     else{

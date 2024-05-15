@@ -3,11 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Plant = require('./models/Plant');
 const ChatRecord=require('./models/chatRecord');
-// mongodbcontroller.js
 const UpdateRequest = require('./models/updateRequest');
-
-// var app = express();
-// app.use(express.json());
 
 // MongoDB connection string
 const uri = "mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/web04?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000";
@@ -21,7 +17,7 @@ mongoose.connection.on("open", async () => {
     // call back of connect success
     console.log("MongoDb connect success");
     try {
-        await UpdateRequest.ensureIndexes(); // 确保所有在模型上定义的索引被创建
+        await UpdateRequest.ensureIndexes(); // Ensure that all indexes defined on the model are created
         console.log("Indexes ensured successfully");
     } catch (err) {
         console.log("Error ensuring indexes:", err);
@@ -37,10 +33,30 @@ mongoose.connection.on("close", () => {
 });
 
 
-// function createPlantId(plantName) {
-//     const now = new Date();
-//     return `${plantName}${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;;
-// }
+/**
+* Add a new plant to the database.
+* @param {string} plantId - The ID of the plant.
+* @param {string} plantName - The name of the plant.
+* @param {string} description - The description of the plant.
+* @param {string} details - The details of the plant.
+* @param {Date} datetime - The observation date and time.
+* @param {number} lat - The latitude of the plant's location.
+* @param {number} lng - The longitude of the plant's location.
+* @param {string} flowers - The flower information of the plant.
+* @param {string} sunExposure - The sun exposure information of the plant.
+* @param {string} flowerColor - The flower color of the plant.
+* @param {string} status - The identification status of the plant.
+* @param {string} nickName - The nickname of the user.
+* @param {string} photo - The base64 encoded photo of the plant.
+* @param {string} DBpediaLink - The DBpedia link of the plant.
+* @param {string} DBpediaName - The DBpedia name of the plant.
+* @param {string} DBpediaDescription - The DBpedia description of the plant.
+* @param {string} DBpediaGunes - The DBpedia genus of the plant.
+ *
+* @returns {Promise<{type: string, content: Object}>} The response containing the plant information or an error message.
+* @property {string} type - The type of the response, 'success' or 'fail'.
+* @property {Object} content - The content of the response, either the plant information or the error message.
+*/
 
 async function addPlant(plantId,
                         plantName,
@@ -96,6 +112,13 @@ async function addPlant(plantId,
     return response;
 }
 
+/**
+ * Get a plant by its ID.
+ * @param {string} id - The ID of the plant.
+ * @returns {Promise<{type: string, content: Object}>} The response containing the plant information or an error message.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {Object} content - The content of the response, either the plant information or the error message.
+ */
 
 async function getPlant(id) {
     try {
@@ -113,6 +136,10 @@ async function getPlant(id) {
     return response;
 }
 
+/**
+ * Get all plants.
+ * @returns {Promise<type: string, content: Plant[]>} The response containing all plants or an error message.
+ */
 
 async function getAllPlants(){
     var response;
@@ -125,7 +152,11 @@ async function getAllPlants(){
     return response;
 }
 
-
+/**
+ * Get the nickname of a plant by its ID.
+ * @param {string} id - The ID of the plant.
+ * @returns {Promise<Object>} The response containing the nickname or an error message.
+ */
 async function getNickNameOfPlant(id) {
     // Declare response at the start of the function
     let response = {
@@ -162,7 +193,16 @@ async function getNickNameOfPlant(id) {
     return response;
 }
 
-
+/**
+ * Change the plant name of a plant by its ID.
+ * @param {string} id - The ID of the plant.
+ * @param {string} newPlantName - The new plant name.
+ * @param {string} link - The DBpedia link.
+ * @param {string} name - The DBpedia name.
+ * @param {string} description - The DBpedia description.
+ * @param {string} genus - The DBpedia genus.
+ * @returns {Promise<Object>} The response indicating success or failure.
+ */
 async function changePlantNameOfPlant(id, newPlantName,link,name,description,genus) {
     let response;
     try {
@@ -202,6 +242,12 @@ async function changePlantNameOfPlant(id, newPlantName,link,name,description,gen
     return response;
 }
 
+
+/**
+ * Find a plant by its ObjectId.
+ * @param {string} id - The ObjectId of the plant.
+ * @returns {Promise<Object>} The response containing the plant information or an error message.
+ */
 async function findPlantByObjId(id) {
     try {
         // 确保 id 是一个有效的 ObjectId
@@ -216,6 +262,12 @@ async function findPlantByObjId(id) {
     }
 }
 
+/**
+ * Change the plant name and status for a plant by its ObjectId.
+ * @param {string} id - The ObjectId of the plant.
+ * @param {Object} updateFields - The fields to update.
+ * @returns {Promise<Object>} The response indicating success or failure.
+ */
 async function changePlantNameOfPlantForCreator(id, updateFields) {
     let response;
     try {
@@ -248,6 +300,14 @@ async function changePlantNameOfPlantForCreator(id, updateFields) {
     return response;
 }
 
+/**
+ * Add a chat record to a plant.
+ * @param {string} plantId - The ID of the plant.
+ * @param {string} nickName - The nickname of the user.
+ * @param {string} content - The chat content.
+ * @param {Date} date - The date of the chat.
+ * @returns {Promise<Object>} The response indicating success or failure.
+ */
 async function addChatRecord(plantId,nickName,content,date){
 
     var response;
@@ -276,6 +336,11 @@ async function addChatRecord(plantId,nickName,content,date){
     return response;
 }
 
+/**
+ * Get chat records for a plant.
+ * @param {string} plantId - The ID of the plant.
+ * @returns {Promise<Object>} The response containing the chat records or an error message.
+ */
 async function getChatRecord(plantId) {
     var response;
     try {
@@ -349,32 +414,6 @@ async function getUpdateRequestById(plantId) {
     return response;
 }
 
-// Get all plant edit requests
-async function getAllUpdateRequests() {
-    var response;
-    try {
-        const allRequests = await UpdateRequest.find({});
-        response = { type: 'success', content: allRequests };
-    } catch (error) {
-        response = { type: 'fail', content: error.message };
-    }
-    return response;
-}
-
-// Update plant edit request's approval status
-
-
-// async function getAllUpdateRequestsByNickName(creator) {
-//     let response;
-//     try {
-//         const updateRequests = await UpdateRequest.find({ creator });
-//         response = { 'type': 'success', 'content': updateRequests };
-//     } catch (error) {
-//         response = { 'type': 'fail', 'content': error.message };
-//     }
-//     return response;
-// }
-
 async function getAllUpdateRequestsByNickName(creator) {
     let response;
     try {
@@ -421,5 +460,5 @@ async function updateRequestFromUrPage(plantId, plantName, date, decision, nickN
 
 // Export the function
 module.exports = { addPlant, getPlant, getAllPlants, getNickNameOfPlant, changePlantNameOfPlant, addChatRecord,getChatRecord,getAllChatRecord, addUpdateRequest, getUpdateRequestById, getUpdateRequestById,
-    getAllUpdateRequests, getAllUpdateRequestsByNickName, updateRequestFromUrPage, changePlantNameOfPlantForCreator, findPlantByObjId};
+    getAllUpdateRequestsByNickName, updateRequestFromUrPage, changePlantNameOfPlantForCreator, findPlantByObjId};
 

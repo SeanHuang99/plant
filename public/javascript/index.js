@@ -135,18 +135,6 @@ function handleNickname() {
     }
 }
 
-function showWelcomeOrIndex(){
-    var welcomePage = document.getElementById('welcomePage');
-    var indexPage = document.getElementById('indexPage');
-    if(getNickName()===null){
-        welcomePage.style.display = 'block';
-        indexPage.style.display='none';
-    }
-    else{
-        welcomePage.style.display = 'none';
-        indexPage.style.display='block';
-    }
-}
 
 function showWelcome(){
     var welcomePage = document.getElementById('welcomePage');

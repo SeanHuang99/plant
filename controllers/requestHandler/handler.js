@@ -364,7 +364,7 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
                 })
                 .catch(function (error) {
                     console.log("error: " + error.message);
-                    return res.status(504).send(error.message);
+                    //return res.status(504).send(error.message);
                 });
 
             updateFields.plantName = preferredPlantName;
@@ -376,7 +376,7 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
             };
         }
 
-        // 调用封装的控制器函数来更新植物记录
+        // use mongo api to update the DBpedia field
         const result = await mongoApi.changePlantNameOfPlantForCreator(objId, updateFields);
 
         if (result.type === 'success') {
@@ -454,7 +454,7 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
                 })
                 .catch(function (error) {
                     console.log("error: " + error.message);
-                    res.status(504).send(error.message);
+                    //res.status(504).send(error.message);
                 });
 
 
@@ -470,15 +470,15 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
 });
 
 function capitalizeFirstLetterIfAlphabet(input) {
-    // 检查输入是否为字符串且不为空
+    // check input whether is string and not blank
     if (typeof input === 'string' && input.length > 0) {
         // 检查第一个字符是否为英文字母
         if (input[0].match(/[a-z]/i)) {
-            // 是字母，将第一个字符转为大写，其余部分不变
+            // the first char is alphabetic, turn the first char to uppercase
             return input[0].toUpperCase() + input.slice(1);
         }
     }
-    // 第一个字符不是英文字母或输入不合法，返回原字符串
+    // if the first char is not string, then return the original input
     return input;
 }
 

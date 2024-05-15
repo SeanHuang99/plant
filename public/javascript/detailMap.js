@@ -22,6 +22,11 @@
     v: 'weekly'
 })
 //初始化位置
+/**
+ *  show Google Map in detail page
+ * @param {Loc} loc location of current plant
+ * @returns {Promise<void>} need to wait for Google API
+ */
 async function showMapInDetail(loc){
     if (loc.lat!=null && loc.lng !=null){
         console.log('render map')
@@ -50,16 +55,4 @@ async function showMapInDetail(loc){
     else {
         document.getElementById("map").innerText='Location not set'
     }
-
-
-
-}
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
-        browserHasGeolocation
-            ? "Error: The Geolocation service failed."
-            : "Error: Your browser doesn't support geolocation.",
-    );
-    infoWindow.open(map);
 }

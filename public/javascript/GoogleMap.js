@@ -28,8 +28,12 @@
 let map, infoWindow, Glocation = {lat: 53.3921, lng: -1.4898};
 var lastMarker = null;
 
+/**
+ * Initialize the Google Map
+ * @returns {Promise<{lng: number, lat: number}>}
+ */
 async function initMap() {
-    //初始化位置
+    //Initialization location
     setLocation()
     const {Map} = await google.maps.importLibrary("maps");
     const {AdvancedMarkerView} = await google.maps.importLibrary("marker")

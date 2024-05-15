@@ -21,17 +21,18 @@ router.get('/upload',function (req, res){
 })
 
 router.get('/main',async function (req, res) {
-    console.log('/main')
-    // 使用fetch请求
-    fetch("http://localhost:3000/requestHandler/getAllPlants")
-        .then(response => {
-            //在解析之前，响应的主体内容是原始的未经处理的数据流
-            return response.json(); // 将响应主体解析为 JSON
-        })
-        .then(data => {
-            // console.log(data)
-            res.render('main', {title: 'Main', plantList: data})
-        })
+    // console.log('/main')
+    // // 使用fetch请求
+    // fetch("http://localhost:3000/requestHandler/getAllPlants")
+    //     .then(response => {
+    //         //在解析之前，响应的主体内容是原始的未经处理的数据流
+    //         return response.json(); // 将响应主体解析为 JSON
+    //     })
+    //     .then(data => {
+    //         // console.log(data)
+    //         res.render('main', {title: 'Main', plantList: data})
+    //     })
+    res.render('main')
 })
 router.get('/about', function (req, res) {
     console.log('/about')

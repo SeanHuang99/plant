@@ -1,4 +1,4 @@
-//store user browser history
+// store user browser history
 if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.getItem("lastURL")===undefined) {
     window.localStorage.setItem('lastURL', '/detail');
 }
@@ -10,13 +10,13 @@ let getData=setInterval(generateDetailPage,1000);
 generateDetailPage();
 // before user leave the detail page, clean the refresh interval
 window.addEventListener('beforeunload', function (event) {
-    // 可以设置一个确认对话框，询问用户是否真的要离开页面
+    // can set up a confirmation dialog that asks if the user really wants to leave the page
     if (updateTimer>0){
         clearInterval(getData);
     }
 });
 
-// 定义全局变量 currentPlant
+// Define global variables currentPlant
 let currentPlant = null;
 let isCreator = null;
 // var uniqueId="<%=uniqueId%>"
@@ -40,7 +40,7 @@ function generateDetailPage(){
             .then(function (newPlant) {
                 if(newPlant){
                     clearInterval(getData)
-                    currentPlant = newPlant  // 更新全局变量
+                    currentPlant = newPlant  //Update the global variable
                     detailRender(newPlant)
                     showMapInDetail(newPlant.location).then(r => console.log("Map loaded online"));
                 }
@@ -83,12 +83,16 @@ function generateDetailPage(){
 }
 
 
-    //render the page manully
+
+/**
+ * render the detail page manually
+ * @param {Plant} plant
+ */
 function detailRender(plant){
     if(navigator.onLine) {
-        const objId = plant._id; // 确保正确地获取 _id
+        const objId = plant._id; // Make sure you get _id correctly
         // console.log("objid:  "+objId)
-        // 使用闭包来存储 objId
+        // Use closures to store objId
         ObjIdManager.setObjId(objId);
     }
 

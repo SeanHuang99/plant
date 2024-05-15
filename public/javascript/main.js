@@ -30,7 +30,9 @@ if (navigator.onLine) {
                 document.getElementById('dropdown').disabled="disabled"
             } else {
                 //only need to sync from server when plant was changed
-                deleteAllPlantsDOM().then(() => renderPlantList(newPlants))
+                //刷新页面，当前的DOM会销毁，因此不用deleteAllPlantsDOM
+                // deleteAllPlantsDOM().then(() => renderPlantList(newPlants))
+                renderPlantList(newPlants)
             }
 
         })

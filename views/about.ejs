@@ -20,6 +20,16 @@
     <link rel="preload" href="/fonts/sedansc-regular-sub.ttf" as="font" type="font/ttf" crossorigin="anonymous">
     <link rel="preload" href="/fonts/sedansc-regular-sub.woff2" as="font" type="font/woff2" crossorigin="anonymous">
     <style>
+        .footer {
+            height: 60px; /* consistent footer height */
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            /*position: absolute;*/
+            /*bottom: 0;*/
+        }
         @font-face {
             font-family: 'PoetsenOne';
             src: url('/fonts/poetsenone-regular-sub.ttf') format('truetype');
@@ -83,6 +93,7 @@
     </style>
 </head>
 <body>
+
 <div class="container">
     <h1 class="custom-heading">About us</h1>
     <h1 class="custom-heading">Writers: Zicong Chen; Yuan Gao; Shengchun Huang</h1>
@@ -114,6 +125,11 @@
 
         The web application supports offline interactions, allowing users to add new plants and chat messages even without an internet connection. Changes are stored locally and synced with the server once the device is back online.
     </p>
+    <footer class="footer">
+        <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
+    </footer>
 </div>
+
+
 </body>
 </html>

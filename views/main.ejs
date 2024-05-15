@@ -49,6 +49,8 @@
             text-align: center;
             padding: 20px 0;
             width: 100%;
+            position: absolute;
+            bottom: 0;
         }
         .custom-heading {
             font-family: 'PoetsenOne';
@@ -60,8 +62,8 @@
         }
     </style>
 </head>
-<body>
-<div class="row align-items-center" style="height: 70px">
+<body style="height: 100%">
+<div class="row align-items-center" style="height: 70px;padding: 0 20px">
     <div class="col">
         <h3 class="custom-heading">All Plants</h3>
     </div>
@@ -90,12 +92,11 @@
 </div>
 
 <div>
-    <div id="container" class="container" style="min-height: 600px"></div>
-    <footer class="footer">
-        <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
-    </footer>
+    <div id="container" class="container" style=""></div>
 </div>
-
+<footer class="footer">
+    <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
+</footer>
 </body>
 <script>
     // 获取下拉列表和显示选项的容器

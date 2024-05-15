@@ -6,3 +6,13 @@ body {
 a {
   color: #00B7FF;
 }
+.footer {
+  height: 60px; /* consistent footer height */
+  background-color: #343a40;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}

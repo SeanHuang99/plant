@@ -9,9 +9,23 @@
     <script src="/import/bootstrap.min.js"></script>
     <script src="/javascript/commonTool.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/map.css"/>
+<!--    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css"/>-->
     <script type="module" src="/javascript/GoogleMap.js"></script>
     <script src="/javascript/idb-utility.js"></script>
     <style>
+        .container{
+            max-width: 100% !important;
+        }
+        .footer {
+            height: 60px; /* consistent footer height */
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            /*width: 100%;*/
+            /*position: absolute;*/
+            /*bottom: 0;*/
+        }
         label{
             font-size: 18px;
             font-weight: bold;
@@ -41,10 +55,11 @@
             display: none; /* Initially hide the image */
             border: 1px solid #ccc;  /* Optional: Add a border around the image */
         }
+
     </style>
 </head>
-<body>
-<div class="container mt-5" style="margin:0;padding: 0 100px">
+<body style="height: 100%">
+<div class="container mt-5" style="margin:0;padding: 0 160px;width: 100%">
     <h1 class="mt-4">Add Plant</h1>
 <!--    <form action="/requestHandler/addPlants" method="POST" enctype="multipart/form-data" id="myForm">-->
     <form id="myForm" >
@@ -143,6 +158,12 @@
         </div>
     </form>
 </div>
+<div>
+    <footer class="footer">
+        <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
+    </footer>
+</div>
+
 </body>
 <script src="/javascript/upload.js"></script>
 </html>

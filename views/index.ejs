@@ -142,22 +142,7 @@
     </style>
     <div id="welcomePage" style="display:none" class="container welcomePage" >
 
-        <script>
-            // 显示 welcomePage
-            function showWelcomePage() {
-                var welcomePage = document.getElementById('welcomePage');
-                welcomePage.style.display = 'flex'; // 使用 flex 来保持内部元素的布局
-            }
-
-            // 隐藏 welcomePage
-            function hideWelcomePage() {
-                var welcomePage = document.getElementById('welcomePage');
-                welcomePage.style.display = 'none';
-            }
-
-
-        </script>
-        <h2>Login</h2>
+        <h2>Welcome</h2>
         <div class="form-group">
             <input type="text" id="nickname" name="nickname" placeholder="Enter your nickname here" required
                    class="form-control">
@@ -192,15 +177,16 @@
                     <a class="nav-link" href="/getAllUpdateRequests">UpdateRequests</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/mockSubmit">mockSubmit</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="/about">About</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/mockSubmit">mockSubmit (Test)</a>
+                </li>
+
             </ul>
         </div>
         <div class="navbar-nav ml-auto">
-            <span class="nav-item nav-link" id="userGreeting">Welcome, Username</span>
+            <span class="nav-item nav-link" id="userGreeting">Welcome, User</span>
 
         </div>
         <button type="button" class="btn btn-primary align-content-center" style="width: 6%" onclick="changeUserName()">

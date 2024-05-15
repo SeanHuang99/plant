@@ -303,7 +303,7 @@ async function addChatRecord(plantId,nickName,content,date){
         const result = await ChatRecord.findOneAndUpdate(
             { plantId: plantId }, // 查询条件
             { $push: { chatList: newChat } }, // 要添加的聊天数据
-            { new: true, upsert: true } // 选项: 返回更新后的文档，并在找不到时创建新文档
+            { new: true, upsert: true } // return the updated data, and if the plantId is not exist, then create a new one
         );
         // console.log('Updated Chat Record:', result);
         if(result){

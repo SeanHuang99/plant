@@ -34,6 +34,19 @@
  *
  */
 
+/**
+ * UpdateRequest object
+ * @typedef {object} UpdateRequest
+ * @property {string} plantId - The ID of the plant
+ * @property {string} plantName - The new name of the plant
+ * @property {string} nickName - The nickname of the user making the request
+ * @property {string} creator - The nickname of the plant creator
+ * @property {string} plantOriginalName - The original name of the plant
+ * @property {string} date - The date of the request
+ * @property {string} statusOfRequest - The status of the request (e.g., completed, in-progress)
+ * @property {string} decision - The decision for the request (e.g., agree, reject)
+ */
+
 function getNickName(){
     let nickName=window.localStorage.getItem("userNickName")
     return nickName;

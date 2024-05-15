@@ -191,12 +191,15 @@ router.get("/getAllChatRecord",function (req,res,next){
 //         });
 // });
 
-router.get('/getAllUpdateRequests', function (req, res) {
-
-    res.render('updateRequests')
-})
-
-// API Route for fetching update requests by nickname
+/**
+ * API Route for fetching update requests by nickname.
+ * @name get/api/getAllUpdateRequests
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
 router.get("/api/getAllUpdateRequests", function (req, res, next){
     const nickName = req.query.nickName; // Assume nickname is passed as a query parameter
     mongoApi.getAllUpdateRequestsByNickName(nickName)
@@ -213,7 +216,15 @@ router.get("/api/getAllUpdateRequests", function (req, res, next){
 });
 
 
-
+/**
+ * API Route for updating plant requests.
+ * @name post/updatePlantsRequest
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
 router.post('/updatePlantsRequest', async function (req, res, next) {
     var response;
     const { plantId, preferredPlantName, nickName,creator, plantOriginalName} = req.body;
@@ -292,6 +303,15 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
     }
 });
 
+/**
+ * API Route for updating plant requests by creator.
+ * @name post/updatePlantsRequestForCreator
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
 router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
     const { objId, preferredPlantName, plantOriginalName, status } = req.body;
     console.log("Received objId:", objId);
@@ -370,6 +390,14 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
     }
 });
 
+/**
+ * API Route for processing update requests from the update requests page.
+ * @name post/updatePlantsRequestFromURPage
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 router.post('/updatePlantsRequestFromURPage', async function (req, res) {
     try {
         // console.log(req.body);

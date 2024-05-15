@@ -1,7 +1,12 @@
+// updateRequest.js
 document.addEventListener('DOMContentLoaded', function() {
     initializePage();
 });
 
+/**
+ * Initializes the update requests page.
+ * Fetches the update requests and sets up event listeners.
+ */
 function initializePage() {
     const loadingIndicator = document.getElementById('loadingIndicator');
     loadingIndicator.style.display = 'block'; // Show loading indicator when the AJAX call starts
@@ -25,6 +30,12 @@ function initializePage() {
     document.getElementById('submitBtn').addEventListener('click', submitRequests);
 }
 
+/**
+ * Fetches the update requests for the given nickname.
+ * @param {string} nickName - The nickname of the user.
+ * @returns {Promise<void>}
+ * @throws {Error} Throws an error if the fetch request fails.
+ */
 async function fetchUpdateRequests(nickName) {
     const url = `requestHandler/api/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`;
     const response = await fetch(url);
@@ -41,6 +52,11 @@ async function fetchUpdateRequests(nickName) {
     }
 }
 
+
+/**
+ * Renders the table rows for the update requests.
+ * @param {Array<Object>} requests - The update requests.
+ */
 function renderTableRows(requests) {
     const tbody = document.querySelector('table tbody');
     tbody.innerHTML = ''; // Clear existing rows
@@ -74,7 +90,10 @@ function renderTableRows(requests) {
     setupCheckboxBehavior();
 }
 
-
+/**
+ * Sets up the behavior for the agree and reject checkboxes.
+ * Ensures that only one checkbox is selected at a time.
+ */
 function setupCheckboxBehavior() {
     document.querySelectorAll('input.agree, input.reject').forEach(input => {
         input.addEventListener('change', function() {
@@ -86,8 +105,10 @@ function setupCheckboxBehavior() {
     });
 }
 
-
-
+/**
+ * Submits the selected update requests.
+ * Sends the requests to the backend for processing.
+ */
 async function submitRequests() {
     const requests = [];
     document.querySelectorAll('table tbody tr').forEach(row => {

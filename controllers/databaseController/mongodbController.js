@@ -152,7 +152,11 @@ async function getAllPlants(){
     return response;
 }
 
-
+/**
+ * Gets the nickname of a plant by its ID.
+ * @param {string} id - The ID of the plant.
+ * @returns {Promise<Object>} The response object containing the nickname of the plant or an error message.
+ */
 async function getNickNameOfPlant(id) {
     // Declare response at the start of the function
     let response = {
@@ -190,6 +194,16 @@ async function getNickNameOfPlant(id) {
 }
 
 
+/**
+ * Changes the name of a plant and updates its DBpedia information.
+ * @param {string} id - The ID of the plant.
+ * @param {string} newPlantName - The new name of the plant.
+ * @param {string} link - The DBpedia link for the plant.
+ * @param {string} name - The DBpedia name for the plant.
+ * @param {string} description - The DBpedia description for the plant.
+ * @param {string} genus - The DBpedia genus for the plant.
+ * @returns {Promise<Object>} The response object indicating success or failure.
+ */
 async function changePlantNameOfPlant(id, newPlantName,link,name,description,genus) {
     let response;
     try {
@@ -231,9 +245,9 @@ async function changePlantNameOfPlant(id, newPlantName,link,name,description,gen
 
 
 /**
- * Find a plant by its ObjectId.
- * @param {string} id - The ObjectId of the plant.
- * @returns {Promise<Object>} The response containing the plant information or an error message.
+ * Finds a plant by its object ID.
+ * @param {string} id - The object ID of the plant.
+ * @returns {Promise<Object>} The response object containing the plant information or an error message.
  */
 async function findPlantByObjId(id) {
     try {
@@ -249,7 +263,12 @@ async function findPlantByObjId(id) {
     }
 }
 
-
+/**
+ * Changes the name and status of a plant for the creator.
+ * @param {string} id - The object ID of the plant.
+ * @param {Object} updateFields - The fields to update.
+ * @returns {Promise<Object>} The response object indicating success or failure.
+ */
 async function changePlantNameOfPlantForCreator(id, updateFields) {
     let response;
     try {
@@ -349,7 +368,15 @@ async function getAllChatRecord(){
     return response;
 }
 
-// Add or update plant edit request (plantId, plantName, nickName)
+/**
+ * Adds an update request for a plant.
+ * @param {string} plantId - The ID of the plant.
+ * @param {string} plantName - The new name of the plant.
+ * @param {string} nickName - The nickname of the user making the request.
+ * @param {string} creator - The nickname of the plant creator.
+ * @param {string} plantOriginalName - The original name of the plant.
+ * @returns {Promise<Object>} The response object indicating success or failure.
+ */
 async function addUpdateRequest(plantId,
                                 plantName,
                                 nickName,
@@ -380,7 +407,11 @@ async function addUpdateRequest(plantId,
 
 
 
-// Get plant edit request by plantId
+/**
+ * Gets the update request by plant ID.
+ * @param {string} plantId - The ID of the plant.
+ * @returns {Promise<Object>} The response object containing the update request or an error message.
+ */
 async function getUpdateRequestById(plantId) {
     var response;
     try {
@@ -396,6 +427,11 @@ async function getUpdateRequestById(plantId) {
     return response;
 }
 
+/**
+ * Gets all update requests by nickname.
+ * @param {string} creator - The nickname of the creator.
+ * @returns {Promise<Object>} The response object containing the update requests or an error message.
+ */
 async function getAllUpdateRequestsByNickName(creator) {
     let response;
     try {
@@ -411,7 +447,16 @@ async function getAllUpdateRequestsByNickName(creator) {
     return response;
 }
 
-
+/**
+ * Updates the request from the update requests page.
+ * @param {string} plantId - The ID of the plant.
+ * @param {string} plantName - The new name of the plant.
+ * @param {string} date - The date of the request.
+ * @param {string} decision - The decision for the request (agree/reject).
+ * @param {string} nickName - The nickname of the user making the request.
+ * @returns {Promise<Object>} The updated request object.
+ * @throws {Error} Throws an error if no matching document is found.
+ */
 async function updateRequestFromUrPage(plantId, plantName, date, decision, nickName) {
     try {
         const result = await UpdateRequest.findOneAndUpdate(

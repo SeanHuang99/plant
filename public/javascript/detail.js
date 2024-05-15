@@ -140,7 +140,10 @@ function detailRender(plant){
     }
 }
 
-
+/**
+ * Opens the edit popup for updating the plant name and status.
+ * If the user is online and the current plant's nickname differs from the user's nickname, the edit popup is displayed.
+ */
 function openEditPopup() {
     const nickName = getNickName();  // 获取当前用户的昵称
     if (navigator.onLine){
@@ -158,17 +161,26 @@ function openEditPopup() {
     }
 }
 
+/**
+ * Closes the edit popup for updating the plant name.
+ */
 function closeEditPopup() {
     document.getElementById('editPopupForName').style.display = 'none';
 }
+
+/**
+ * Closes the edit popup for updating the plant name and status.
+ */
 function closeEditPopupForCreator() {
     document.getElementById('editPopupForNameAndStatus').style.display = 'none';
 
 }
 
-// Function to submit a request to update the plant name
+/**
+ * Submits a request to update the plant name.
+ * The request is sent to the backend via the "/updatePlants" route.
+ */
 async function submitRequestForUser() {
-
     const plantId = getPlantId();
     const nickName = getNickName();
     const plantOriginalName = getPlantOriginalName();
@@ -206,6 +218,10 @@ async function submitRequestForUser() {
     closeEditPopup()
 }
 
+/**
+ * Submits a request to update the plant name and status.
+ * The request is sent to the backend via the "/updatePlantsRequestForCreator" route.
+ */
 async function submitRequestForCreator() {
     const plantOriginalName = getPlantOriginalName();
     const preferredPlantName = document.getElementById('preferredPlantNameForCreator').value;
@@ -264,6 +280,11 @@ async function submitRequestForCreator() {
 
 }
 
+
+/**
+ * Gets the nickname of the plant.
+ * @returns {string} The nickname of the plant or an empty string if an error occurs.
+ */
 function getNickNameOfPlant() {
     // Get the element by its ID
     try {
@@ -276,6 +297,10 @@ function getNickNameOfPlant() {
     }
 }
 
+/**
+ * Gets the original name of the plant.
+ * @returns {string} The original name of the plant or an empty string if an error occurs.
+ */
 function getPlantOriginalName() {
     // Get the element by its ID
     try {
@@ -288,6 +313,10 @@ function getPlantOriginalName() {
     }
 }
 
+/**
+ * Gets the status of the detail page.
+ * @returns {string} The status of the detail page or an empty string if an error occurs.
+ */
 function getStatusOfDetailPage() {
     // Get the element by its ID
     try {
@@ -301,7 +330,10 @@ function getStatusOfDetailPage() {
 }
 
 
-// 闭包来存储 objId
+/**
+ * Object ID Manager for handling object IDs using a closure.
+ * @namespace
+ */
 const ObjIdManager = (function() {
     let objId = null;
 

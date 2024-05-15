@@ -31,11 +31,11 @@ function synPlantFromServer() {
             })
             .then(function (newPlants) {
                 openPlantIDB().then((db) => {
-                    // getAllPlants(db,"plants").then(plants => {
 
                     //double check service worker sync function
                     getAllPlants(db, "sync-plants").then(plants => {
                         if(plants.length!==0){
+                            console.log("sync plant is not empty, ready to register sw")
                             registerPlantSync();
                         }
                     }).catch(error => {

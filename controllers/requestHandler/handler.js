@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
 const mongoApi=require("../databaseController/mongodbController");
 const {mongo} = require("mongoose");
 
-
-const upload = multer();
 
 router.post("/addPlants",async function (req, res, next) {
     console.log(`service worker addPlant: ${req.body.plantId}`)

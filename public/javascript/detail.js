@@ -300,6 +300,7 @@ function getStatusOfDetailPage() {
     }
 }
 
+
 // 闭包来存储 objId
 const ObjIdManager = (function() {
     let objId = null;

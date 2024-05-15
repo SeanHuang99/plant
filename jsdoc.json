@@ -1,0 +1,12 @@
+{
+  "_comment": "command: npx jsdoc -c jsdoc.json",
+  "source": {
+    "include": ["."],
+    "exclude": ["node_modules"],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "destination": "./out"
+  }
+}

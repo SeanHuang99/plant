@@ -71,7 +71,7 @@ async function changeFormToObj(form) {
 
     let formData = new FormData(form);
 
-    formData.set('plantId', createPlantId(formData.get('plantName')))
+    formData.set('plantId', createPlantId())
     formData = await changeImageFormat(formData);
 
     const formObject = {};

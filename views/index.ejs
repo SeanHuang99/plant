@@ -168,7 +168,7 @@
 </div>
 
 
-<div id="indexPage" style="display:none" class="full-height">
+<div id="indexPage" style="display:none;" class="full-height parent">
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <!--    title of the bar-->
@@ -208,7 +208,7 @@
         </button>
     </nav>
 
-    <div class="mainContent" style="height:100%;width: 100%;margin-top: 60px;">
+    <div class="mainContent child" style="height:100%;width: 100%;" >
         <iframe id="content-iframe" src="/main" width="100%" height="100%"
                 style="border: none; "></iframe>
     </div>
@@ -216,6 +216,13 @@
 
 </body>
 <style>
+    .parent{
+        position: relative;
+    }
+    .child{
+        position: absolute; /* 绝对定位 */
+        top: 70px; /* 距离父元素顶部的间距 */
+    }
     .footer-container {
         padding: 20px;
     }

@@ -80,10 +80,14 @@ self.addEventListener('fetch', event => {
     }
     //If online, the server request is normal
     else {
-        // console.log('online: do not intercept')
+        console.log('online: do not intercept')
     }
 });
 
+/**
+ * find cache by specified event
+ * @param event
+ */
 function findCache(event){
     event.respondWith((async () => {
         const cache = await caches.open("static");
@@ -97,7 +101,9 @@ function findCache(event){
     })());
 }
 
-//Sync event to sync the plants
+/**
+ * synchronize plant/chat by the tag
+ */
 self.addEventListener('sync', event => {
     console.log('prepare to sync')
     if (event.tag === 'sync-plant') {
@@ -110,6 +116,9 @@ self.addEventListener('sync', event => {
     }
 });
 
+/**
+ * synchronize plant to server
+ */
 function syncPlantToServer(){
     console.log('Service Worker: Syncing new Plants');
     openPlantIDB().then((db) => {
@@ -149,6 +158,9 @@ function syncPlantToServer(){
     });
 }
 
+/**
+ * synchronize chat to server
+ */
 function syncChatToServer(){
     console.log('Service Worker: Syncing new chat');
     openChatIDB().then((syncPostDB) => {

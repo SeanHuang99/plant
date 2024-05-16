@@ -21,7 +21,7 @@
     // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
     v: 'weekly'
 })
-//初始化位置
+
 /**
  *  show Google Map in detail page
  * @param {Loc} loc location of current plant

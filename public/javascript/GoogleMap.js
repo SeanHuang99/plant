@@ -25,6 +25,7 @@
 // // prompted by your browser. If you see the error "The Geolocation service
 // // failed.", it means you probably did not give permission for the browser to
 // // locate you.
+//set global variable Glocation which will be set to form every time it changes
 let map, infoWindow, Glocation = {lat: 53.3921, lng: -1.4898};
 var lastMarker = null;
 
@@ -33,17 +34,14 @@ var lastMarker = null;
  * @returns {Promise<{lng: number, lat: number}>}
  */
 async function initMap() {
-    //Initialization location
+    //Initialization location(default one is Sheffield)
     setLocation()
     const {Map} = await google.maps.importLibrary("maps");
     const {AdvancedMarkerView} = await google.maps.importLibrary("marker")
     const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
     const {SearchBox} = await google.maps.importLibrary("places");
 
-
-    // var Sheffield = new google.maps.LatLng(53.3921, -1.4898);
     map = new Map(document.getElementById("map"), {
-        //default location: Sheffield
         center: Glocation,
         zoom: 11,
         mapId: "DEMO_MAP_ID",
@@ -54,24 +52,22 @@ async function initMap() {
         },
     });
 
-
-    // let lastMarker = null; // 用于存储最后一个标记
-    // 添加地图点击事件监听器
+    // Add a map click event listener
     map.addListener("click", (event) => {
         if (lastMarker != null) {
             lastMarker.setMap(null);
         }
-        // 获取点击位置的经纬度信息
+
         Glocation.lat = event.latLng.lat();
         Glocation.lng = event.latLng.lng();
         console.log("Clicked at:", Glocation.lat, Glocation.lng);
-        // 在地图上标记点击位置
+        // Mark the location on the map
         lastMarker = new AdvancedMarkerElement({
             map: map,
             position: event.latLng,
             title: "Clicked Location",
         });
-        // 将地图中心设置为标记的位置
+        // Set the center of the map to the location of the marker
         map.setCenter(lastMarker.position);
         setLocation()
     });
@@ -86,7 +82,7 @@ async function initMap() {
         if (places.length === 0) {
             return;
         }
-        // 显示搜索结果中的第一个地点，并添加标记
+        // Displays the first place in the search results and adds a tag
         const place = places[0];
         if (lastMarker != null) {
             lastMarker.setMap(null);
@@ -107,12 +103,10 @@ async function initMap() {
 
 
     infoWindow = new google.maps.InfoWindow();
-    //todo: 莫名其妙focus
     const locationButton = document.getElementById("getCurrentLoc");
 
     locationButton.textContent = "Pan to Current Location";
     locationButton.classList.add("custom-map-control-button");
-    // map.controls[google.maps.ControlPosition.LEFT_CENTER].push(locationButton);
     locationButton.addEventListener("click", () => {
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -130,7 +124,6 @@ async function initMap() {
                         position: Glocation,
                         title: "current Location",
                     });
-                    // 将地图中心设置为标记的位置
                     map.setCenter(lastMarker.position);
 
                 },
@@ -146,6 +139,12 @@ async function initMap() {
     return Glocation
 }
 
+/**
+ * handle error if the browser do not have GeoLocation
+ * @param browserHasGeolocation
+ * @param infoWindow
+ * @param pos
+ */
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(
@@ -168,18 +167,27 @@ if (path === '/upload') {
         mapForm.style.display = 'none'
     }
 }
-//否则执行showMapInDetail() （在detail.js中调用）
+//Otherwise execute showMapInDetail() (called in the detail.js)
 
+/**
+ * set latitude and longitude data to the input form
+ */
 function setLocation() {
     document.getElementById("lat").value = Glocation.lat;
     document.getElementById("lng").value = Glocation.lng;
 }
 
-//球面上的距离不能直接用勾股定理，直接调用Google封装的函数即可
+//The distance on the sphere cannot be directly used by the Pythagorean theorem,
+//the function encapsulated by Google can be called directly
+/**
+ * compute the distance between two places on the sphere
+ * @param from
+ * @param to
+ * @returns {Promise<*>}
+ */
 async function computeDistanceBetween(from, to) {
     const {spherical} = await google.maps.importLibrary("geometry")
     const distance = spherical.computeDistanceBetween(from, to)
-    // const distance=google.maps.geometry.spherical.computeDistanceBetween(from, to)
     console.log('distance' + distance)
     return distance
 }

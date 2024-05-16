@@ -72,15 +72,26 @@ To run a Node.js project in WebStorm:
 - Launch WebStorm and open your Node.js project by selecting the project directory.
 
 2. **Configure a Run/Debug Configuration:**
-- Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations..."
+- Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations...".
 - Click the "+" icon and select "Node.js" to create a new configuration.
 - Set the "Node interpreter" to the path of your Node.js installation.
 - Set the "Working directory" to your project root.
 - Set the "JavaScript file" to your main file (e.g., `index.js`).
 - Click "OK" to save the configuration.
 
-3. **Run the Project:**
-- Select the newly created configuration from the drop-down menu in the top-right corner.
+3. **Add a npm Configuration:**
+![](./public/images/img_1.png)
+![](./public/images/img.png)
+- Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations...".
+- Click the "+" icon and select "npm" to create a new configuration.
+- Name the configuration (e.g., "start").
+- Set the "package.json" field to the path of your `package.json` file.
+- Set the "Command" field to `start`.
+- Ensure the "Node interpreter" and "Package manager" fields are set correctly.
+- Click "OK" to save the configuration.
+
+4. **Run the Project:**
+- Select the newly created npm configuration from the drop-down menu in the top-right corner.
 - Click the green play button or press `Shift+F10` to start the project.
 
 #### Ⅱ. Running the Project from the Command Line

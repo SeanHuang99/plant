@@ -1,13 +1,13 @@
 # Intelligent Web Projects<link href="/import/bootstrap.min.css" rel="stylesheet">
 
 ___
-## Contributor (Team 04)
+## 👥 Contributor (Team 04)
 * Zicong Chen 
 * Yuan Gao 
 * Shengchun Huang
 ___
-## Document
-* GitHub: https://github.com/gy02/plant
+## 📚 Document
+* `Github`: https://github.com/gy02/plant
   * [(GitHub Name) Tommyczc](https://github.com/Tommyczc) : Zicong Chen
   * [(GitHub Name) SeanHuang99](https://github.com/SeanHuang99) : Shengchun Huang
   * [(GitHub Name) gy](https://github.com/gy02) : Yuan Gao

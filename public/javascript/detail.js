@@ -65,7 +65,11 @@ function generateDetailPage(){
                     console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
                     console.log(plant.plantId + ' detail-------> ' + plant.description)
                     detailRender(plant);
-                    document.getElementById("map").innerText = 'Cannot show map when offline'
+                    const map=document.getElementById("map")
+                    map.innerText='Cannot show map when offline'
+                    map.style.textAlign='center'
+                    map.style.lineHeight='400px'
+                    map.style.backgroundColor='lightgray'
                 }
                 else {
                     if (--updateTimer <= 0) {

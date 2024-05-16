@@ -96,7 +96,12 @@ async function initMap() {
             position: place.geometry.location,
             title: place.name,
         });
-        Glocation=place.geometry.location
+        console.log(place)
+        Glocation = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+        };
+        setLocation()
         map.setCenter(place.geometry.location);
     });
 
@@ -116,7 +121,7 @@ async function initMap() {
                     Glocation.lat = position.coords.latitude;
                     Glocation.lng = position.coords.longitude;
                     console.log("pan to:", Glocation.lat, Glocation.lng);
-
+                    setLocation()
                     if (lastMarker != null) {
                         lastMarker.setMap(null);
                     }

@@ -70,26 +70,17 @@ self.addEventListener('activate', event => {
 })
 
 // Fetch event to fetch from cache first
-//sw会拦截所有请求，因此做一个判断，只在offline时拦截
+//SW will intercept all requests, so make a judgment and only intercept when offline
 self.addEventListener('fetch', event => {
-    //如果offline，拦截请求并从缓存中查找资源
+    //If offline, intercept the request and find the resource from the cache
     //todo: offline时刷新主页，状态显示为online？
     if (!navigator.onLine) {
-        console.log('offline 拦截 ----- ' + event)
-        // 提取请求的 URL
-        var url = new URL(event.request.url);
-        // 如果是详情页面的请求
-        // if (url.pathname==='/detail') {
-        //     console.log('bbb')
-        //     event.request.url = 'http://localhost:3000/detail'//截去后面的id
-        //     findCache(event)
-        // }
-        // else
+        console.log('offline intercept ----- ' + event)
         findCache(event)
     }
-    //如果online则正常服务器请求
+    //If online, the server request is normal
     else {
-        // console.log('online 不拦截')
+        // console.log('online: do not intercept')
     }
 });
 

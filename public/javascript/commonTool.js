@@ -8,7 +8,7 @@
  * @property {string} datetime - time to see the plant
  * @property {Loc} locations - location of the plant
  * @property {Boolean} flowers - whether the plant has flower (yes/no)
- * @property {String} sunExposure -  full sun/partial shade/full shade
+ * @property {String} sunExposure - full sun/partial shade/full shade
  * @property {String} flowerCokor - the RGB value of the plant's color
  * @property {String} status - status of the identification (completed/in-progress)
  * @property {String} nickName - the name of current user

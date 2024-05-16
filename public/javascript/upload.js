@@ -1,13 +1,15 @@
+//this js file is to check and submit the form
+//cancel form action
+//submit button should check null value in the form
+//if the values are not empty in the form ，then insert newPlant to syncIDB(indexed db) and IDB
+//then wait for sync event in service worker,  and addPlantToServer
 window.onload = function () {
     if (getNickName() !== undefined && getNickName() !== "") {
         document.getElementById('nickName').value = getNickName()
     }
 }
 
-//取消form的action跳转
-//submit按钮先进行表单验证
-//表单全部非空之后，将newPlant插入syncIDB与IDB
-//之后在sw中的sync事件 实现addPlantToServer
+
 /**
  * show add-plant notification
  */

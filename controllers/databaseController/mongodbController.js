@@ -113,11 +113,10 @@ async function addPlant(plantId,
 }
 
 /**
- * Get a plant by its ID.
- * @param {string} id - The ID of the plant.
- * @returns {Promise<{type: string, content: Object}>} The response containing the plant information or an error message.
+ * Get all plants.
+ * @returns {Promise<{type: string, content: Plant[]}>} The response containing all plants or an error message.
  * @property {string} type - The type of the response, 'success' or 'fail'.
- * @property {Object} content - The content of the response, either the plant information or the error message.
+ * @property {Plant[]} content - The content of the response, an array of all plants or an error message.
  */
 
 async function getPlant(id) {
@@ -307,7 +306,9 @@ async function changePlantNameOfPlantForCreator(id, updateFields) {
  * @param {string} nickName - The nickname of the user.
  * @param {string} content - The chat content.
  * @param {Date} date - The date of the chat.
- * @returns {Promise<Object>} The response indicating success or failure.
+ * @returns {Promise<{type: string, content: string}>} The response indicating success or failure.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {string} content - The content of the response, either an empty string on success or an error message.
  */
 async function addChatRecord(plantId,nickName,content,date){
 
@@ -340,7 +341,9 @@ async function addChatRecord(plantId,nickName,content,date){
 /**
  * Get chat records for a plant.
  * @param {string} plantId - The ID of the plant.
- * @returns {Promise<Object>} The response containing the chat records or an error message.
+ * @returns {Promise<{type: string, content: Object}>} The response containing the chat records or an error message.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {Object} content - The content of the response, either the chat records or an error message.
  */
 async function getChatRecord(plantId) {
     var response;
@@ -357,6 +360,12 @@ async function getChatRecord(plantId) {
     return response;
 }
 
+/**
+ * Get all chat records.
+ * @returns {Promise<{type: string, content: Object[]}>} The response containing all chat records or an error message.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {Object[]} content - The content of the response, either an array of all chat records or an error message.
+ */
 async function getAllChatRecord(){
     var response;
     try {

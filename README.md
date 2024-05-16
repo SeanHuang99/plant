@@ -7,11 +7,17 @@ ___
 * Shengchun Huang
 ___
 ## Document
-* `Github`: https://github.com/gy02/plant
+* Github: https://github.com/gy02/plant
   * [(GitHub Name) Tommyczc](https://github.com/Tommyczc) : Zicong Chen
   * [(GitHub Name) SeanHuang99](https://github.com/SeanHuang99) : Shengchun Huang
   * [(GitHub Name) gy](https://github.com/gy02) : Yuan Gao
-* `Code Document`: https://docs.google.com/document/d/1TL43VqVU6vnd8pYHwG6c2bPqv_FJBUwExHSrsq_uCNA/edit?usp=sharing
+* Code Document: https://docs.google.com/document/d/1TL43VqVU6vnd8pYHwG6c2bPqv_FJBUwExHSrsq_uCNA/edit?usp=sharing
+___
+
+## Project Requirement
+* Node: 20.11.0
+* Npm: 10.2.4
+
 ___
 ## Installation and Running
 ## 📦 Install

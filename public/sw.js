@@ -73,7 +73,6 @@ self.addEventListener('activate', event => {
 //SW will intercept all requests, so make a judgment and only intercept when offline
 self.addEventListener('fetch', event => {
     //If offline, intercept the request and find the resource from the cache
-    //todo: offline时刷新主页，状态显示为online？
     if (!navigator.onLine) {
         console.log('offline intercept ----- ' + event)
         findCache(event)
@@ -168,8 +167,7 @@ function syncChatToServer(){
             // for (const chatObj of chatObjs) {
                 console.log('Service Worker: Syncing new Chats: ', chatObjs);
 
-                // Fetch with FormData instead of JSON
-                //todo:添加addChat接口
+                // Fetch with FormData instead of JSON, to upload the offline chat record
                 fetch('/requestHandler/updateOfflineChatRecordToServer', {
                     method: 'POST',
                     headers: {

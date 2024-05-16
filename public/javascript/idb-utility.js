@@ -32,7 +32,7 @@ function synPlantFromServer() {
             })
             .then(function (newPlants) {
                 openPlantIDB().then((db) => {
-                    //double check service worker sync function
+                    //double check service worker sync function, if still have new offline plants record, then sync them to server
                     getAllPlants(db, "sync-plants").then(plants => {
                         if(plants.length!==0){
                             console.log("sync plant is not empty, ready to register sw")

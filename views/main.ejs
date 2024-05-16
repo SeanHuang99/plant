@@ -30,7 +30,7 @@
             flex-direction: column;
         }
 
-        /* 自定义样式 */
+        /* Custom styles */
         .plant-card {
             border: 1px solid #ccc;
             /*border-radius: 5px;*/
@@ -57,9 +57,9 @@
 
         .custom-heading {
             font-family: 'PoetsenOne';
-            font-size: 40px; /* 设置字体大小 */
-            font-weight: 500; /* 设置字体粗细 */
-            color: black; /* 设置字体颜色 */
+            font-size: 40px; /* Set font size */
+            font-weight: 500; /* Set font weight */
+            color: black; /* Set font color */
             padding-left: 10px;
             margin: 0;
         }
@@ -110,7 +110,7 @@
 
     // Listen for the change event in the drop-down list
     dropdown.addEventListener('change', function () {
-        // 获取用户选择的选项
+        // Get the selected option by the user
         const selectedValue = dropdown.value;
         const selectedText = dropdown.options[dropdown.selectedIndex].text;
         switch (selectedText) {
@@ -189,15 +189,15 @@
     });
 
     /**
-     * get current location by using navigator
+     * Get current location by using navigator
      * @param callback
      */
     function getCurrentLocation(callback) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 const latLng = {lat: position.coords.latitude, lng: position.coords.longitude};
-                console.log('当前位置：' + latLng.lat + ', ' + latLng.lng);
-                callback(latLng); // 调用回调函数，并将位置信息作为参数传递给它
+                console.log('Current location: ' + latLng.lat + ', ' + latLng.lng);
+                callback(latLng); // Call the callback function and pass the location information to it
             })
         } else {
             alert("Geolocation is not supported")

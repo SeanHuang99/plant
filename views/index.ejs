@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Index</title>
+    <title>PlantWebTeam04</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    所有导入必须使用本地文件而不是cdn链接，以保证离线可用-->
+    <!--    All imports must use local files instead of CDN links to ensure offline availability-->
     <script src="/import/jquery-3.7.1.min.js"></script>
     <link href="/import/bootstrap.min.css" rel="stylesheet">
     <script src="/import/bootstrap.min.js"></script>
@@ -102,8 +102,6 @@
 <div>
     <style>
         /* Scope the styles to only affect the welcomePage and its children */
-        /**/
-
         .welcomePage .container {
             background-color: rgba(255, 255, 255, 0.7); /* Slight transparency */
             backdrop-filter: blur(5px); /* Blur effect */
@@ -115,14 +113,14 @@
         }
 
         .welcomePage h2 {
-            text-align: center; /* 确保标题居中 */
-            margin: 1em; /* 移除边距，减少空间 */
-            padding: 10px 0; /* 上下内边距 */
+            text-align: center; /* Ensure the title is centered */
+            margin: 1em; /* Remove margin, reduce space */
+            padding: 10px 0; /* Top and bottom padding */
         }
         .welcomePage .form-control {
-            width: 100%; /* 输入框宽度 */
-            height: 100%; /* 控制高度 */
-            margin-bottom: 1em; /* 与下一个元素的间距 */
+            width: 100%; /* Input box width */
+            height: 100%; /* Control height */
+            margin-bottom: 1em; /* Spacing from the next element */
         }
 
         .welcomePage .btn {
@@ -156,11 +154,11 @@
 <div id="indexPage" style="display:none;" class="full-height parent">
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <!--    title of the bar-->
+        <!--    Title of the bar-->
         <a class="navbar-brand d-flex align-items-center" href="/" style="margin: 5px;padding: 0">
             <img src="/images/icon.webp" width="30" height="30px" alt="">
         </a>
-        <!--    bar button for folded display on small screens-->
+        <!--    Bar button for folded display on small screens-->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -205,8 +203,8 @@
         position: relative;
     }
     .child{
-        position: absolute; /* 绝对定位 */
-        top: 70px; /* 距离父元素顶部的间距 */
+        position: absolute; /* Absolute positioning */
+        top: 70px; /* Distance from the top of the parent element */
     }
     .footer-container {
         padding: 20px;
@@ -235,10 +233,10 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 100%;  /* 宽度可以根据需要调整 */
-        max-width: 400px;  /* 最大宽度，确保不会过宽 */
+        width: 100%;  /* Width can be adjusted as needed */
+        max-width: 400px;  /* Maximum width to ensure it doesn't get too wide */
         height: 50%;
-        padding: 2em;  /* 减少内边距以减小总高度 */
+        padding: 2em;  /* Reduce padding to minimize total height */
         background: rgba(255, 255, 255, 0.8);
         border-radius: 8px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -246,16 +244,16 @@
     }
 
     header h1 {
-        color: #27ae60; /* 标题颜色 */
+        color: #27ae60; /* Title color */
     }
 
     header p {
-        color: #2c3e50; /* 段落文字颜色 */
-        margin-bottom: 20px; /* 增加底部边距 */
+        color: #2c3e50; /* Paragraph text color */
+        margin-bottom: 20px; /* Increase bottom margin */
     }
 
     input[type="text"] {
-        width: 80%; /* 输入框全宽 */
+        width: 80%; /* Full width for input box */
         padding: 10px;
         border: 2px solid #ccc;
         border-radius: 5px;
@@ -263,12 +261,12 @@
     }
 
     input[type="text"]:focus {
-        border-color: #27ae60; /* 聚焦时边框颜色 */
+        border-color: #27ae60; /* Border color on focus */
         outline: none;
     }
 
     button {
-        width: 50%; /* 按钮全宽 */
+        width: 50%; /* Full width for button */
         padding: 10px 0;
         background-color: #27ae60;
         color: white;

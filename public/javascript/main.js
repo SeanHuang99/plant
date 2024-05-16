@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
+// justify online/offline when entering the main page
 if (navigator.onLine) {
     console.log('onLine mode')
     fetch('/requestHandler/getAllPlants')
@@ -49,73 +49,71 @@ if (navigator.onLine) {
 }
 
 /**
- *
- * @param {} plantList
+ *render the DOM of plant list in main page
+ * @param {Plant} plantList
  */
 function renderPlantList(plantList) {
-    // 获取要渲染植物的容器元素
+    // Gets the container element to render the plant
     const plantContainer = document.getElementsByClassName('container')[0];
 
-    // 循环遍历 plantList，生成植物卡片的 HTML
+    // Loop through the plantList to generate the HTML of the plant card
     plantList.forEach((plant, index) => {
 
-        // 每四个植物卡片开始时创建一个新的行
+        // Create a new row at the beginning of every four plant cards
         if (index % 4 === 0) {
             const newRow = document.createElement('div');
             newRow.classList.add('row');
             plantContainer.appendChild(newRow);
         }
-        // 创建植物卡片元素
+        // Create a plant card element
         const plantCard = document.createElement('div');
         plantCard.classList.add('col-lg-3', 'col-md-6', 'mb-4', 'plant-card', 'text-center');
 
-        // 创建卡片链接
+        // Create a card link
         const cardLink = document.createElement('a');
         cardLink.style.textDecoration = "none";
         // cardLink.href = `/detail?plantId=${plant.plantId}`;
         cardLink.href = `/detail`;
         cardLink.classList.add('card-link');
-        // 添加点击事件监听器
         cardLink.addEventListener('click', function (event) {
-            // 阻止默认行为，即防止链接的默认导航行为
+            // Block default behavior, that is, prevent the default navigation behavior of links
             // event.preventDefault();
             setPlantId(plant.plantId)
-
-            // 在这里执行你想要的操作，例如跳转到详情页面或其他处理
-            // 这里可以根据 plantId 执行相应的操作，比如跳转到详情页
-            // window.location.href = `/detail?plantId=${plantId}`;
         });
         console.log("plant features:     ", plant)
-        // 创建图片元素
+        // Create a picture element
         const image = document.createElement('img');
         image.src = plant.photo;
         image.alt = plant.plantName;
         image.classList.add('img-fluid', 'mx-auto');
 
-        // 创建描述元素
+        // Create the description element
         const description = document.createElement('div');
         description.classList.add('mt-3');
         description.innerHTML = `<h3>${plant.plantName}</h3><p>${plant.description}</p>`;
         description.style.color = 'black'
 
-        // 将图片和描述添加到链接中
+        // Add the picture and description to the link
         cardLink.appendChild(image);
         cardLink.appendChild(description);
 
-        // 将链接添加到植物卡片中
+        // Add the link to the plant card
         plantCard.appendChild(cardLink);
 
-        // 将植物卡片添加到容器中的当前行
+        // Adds the plant card to the current row in the container
         const currentRow = plantContainer.lastElementChild;
         currentRow.appendChild(plantCard);
     });
 }
 
-//排序前先删除之前渲染的plantList
+/**
+ * delete all plants DOM before entering the main page(prevent duplication)
+ * @returns {Promise<void>}
+ */
 async function deleteAllPlantsDOM() {
     const plantContainer = document.getElementsByClassName('container')[0];
     console.log(plantContainer)
-    while (plantContainer.firstChild) {//可能有多个同级子节点
+    while (plantContainer.firstChild) {//There may be multiple sibling child nodes
         plantContainer.removeChild(plantContainer.firstChild);
     }
     console.log('deleteAllPlantsDOM')

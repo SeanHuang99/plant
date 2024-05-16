@@ -8,6 +8,9 @@ window.onload = function () {
 //submit按钮先进行表单验证
 //表单全部非空之后，将newPlant插入syncIDB与IDB
 //之后在sw中的sync事件 实现addPlantToServer
+/**
+ * show add-plant notification
+ */
 function showAddPlantNotification() {
     navigator.serviceWorker.ready
         .then(function (serviceWorkerRegistration) {
@@ -21,6 +24,14 @@ function showAddPlantNotification() {
 
 var photo, base64Image
 
+/**
+ * check the form before submitting
+ * --all inputs should be filled
+ * --all checkboxes should be chosen
+ * --chosen image should not exceed 3MB
+ * @param form
+ * @returns {boolean}
+ */
 function checkForm(form) {
     // 检查是否至少有一个单选按钮被选中
     const flowersYes = document.getElementById('flowersYes');
@@ -66,6 +77,11 @@ function checkForm(form) {
     return true
 }
 
+/**
+ * change form to object(Easy to submit to the backend)
+ * @param form
+ * @returns {Promise<{}>}
+ */
 async function changeFormToObj(form) {
     console.log('run changeFormToObj()')
 
@@ -83,6 +99,11 @@ async function changeFormToObj(form) {
     return formObject;
 }
 
+/**
+ * change image format to base64
+ * @param formData
+ * @returns {Promise<unknown>}
+ */
 async function changeImageFormat(formData) {
     console.log('run changeImageFormat()')
     return new Promise((resolve, reject) => {
@@ -99,22 +120,26 @@ async function changeImageFormat(formData) {
             };
             reader.readAsDataURL(photo);
         } else {
-            // 如果没有图片，直接返回 formData
+            // If there is no image, return formData
             resolve(formData);
         }
     });
 }
 
+/**
+ * submit the form
+ * @param form
+ * @returns {Promise<boolean>}
+ */
 async function mySubmit(form) {
     console.log("ready to submit: " + form)
-    //做表单验证（非空+限制图片大小）
+    //Do form validation (non-empty + limit image size)
     if (checkForm(form)) {
-        console.log('处理表单')
+        console.log('handle form')
         changeFormToObj(form).then(async plantObj => {
             console.log(plantObj)
             if (plantObj != null) {
                 console.log('plantObj!=null')
-                // const plants=[plantObj]
                 console.log(plantObj)
                 openPlantIDB().then(async IDB => {
                     // await addNewPlantToSync(IDB, plantObj)
@@ -148,22 +173,27 @@ async function mySubmit(form) {
             }
         })
     } else {
-        console.log('有空值')
+        console.log('have null value')
         // return false
     }
     return false
 }
 
+/**
+ * set drop down form
+ * @returns {boolean}
+ */
 function selectSunExposure() {
     const select = document.querySelector('.sun');
     const reset = document.querySelector('.sun option:nth-child(2)');
     const select_index = select.selectedIndex;
     console.log("select_index: " + select_index)
     return select_index !== 0;
-
 }
 
-// Synchronize the text field with the color picker
+/**
+ * Synchronize the text field with the color picker
+ */
 function updateFlowerColor() {
     const colorPicker = document.getElementById('flowerColorPicker');
     const colorText = document.getElementById('flowerColor');

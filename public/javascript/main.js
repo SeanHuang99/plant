@@ -31,8 +31,9 @@ if (navigator.onLine) {
             } else {
                 //only need to sync from server when plant was changed
                 //刷新页面，当前的DOM会销毁，因此不用deleteAllPlantsDOM
-                // deleteAllPlantsDOM().then(() => renderPlantList(newPlants))
-                renderPlantList(newPlants)
+                //sometime still encounter an error
+                deleteAllPlantsDOM().then(() => renderPlantList(newPlants))
+                // renderPlantList(newPlants)
             }
 
         })
@@ -47,6 +48,10 @@ if (navigator.onLine) {
     })
 }
 
+/**
+ *
+ * @param {} plantList
+ */
 function renderPlantList(plantList) {
     // 获取要渲染植物的容器元素
     const plantContainer = document.getElementsByClassName('container')[0];

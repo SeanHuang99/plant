@@ -16,8 +16,7 @@
     <style>
         @font-face {
             font-family: 'PoetsenOne';
-            src:
-            url('/fonts/poetsenone-regular-sub.ttf') format('truetype');
+            src: url('/fonts/poetsenone-regular-sub.ttf') format('truetype');
             font-weight: 500;
             font-style: normal;
         }
@@ -28,6 +27,8 @@
             padding: 0;
             height: 100%;
             width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         /* 自定义样式 */
@@ -43,6 +44,7 @@
             height: 250px;
             width: 250px;
         }
+
         .footer {
             height: 60px; /* consistent footer height */
             background-color: #343a40;
@@ -50,9 +52,10 @@
             text-align: center;
             padding: 20px 0;
             width: 100%;
-            /*position: absolute;*/
-            /*bottom: 0;*/
+            position: absolute;
+            bottom: 0;
         }
+
         .custom-heading {
             font-family: 'PoetsenOne';
             font-size: 40px; /* 设置字体大小 */
@@ -93,13 +96,12 @@
 </div>
 
 <div>
-    <div id="container" class="container" style=""></div>
+    <div id="container" class="container" style="min-height: 600px"></div>
 </div>
-<div>
-    <footer class="footer">
-        <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
-    </footer>
-</div>
+<footer class="footer">
+    <p>&copy; 2024 Intelligent Web Team04. All Rights Reserved.</p>
+</footer>
+
 
 </body>
 <script>
@@ -108,14 +110,14 @@
     const selectedOption = document.getElementById('selectedOption');
 
     // 监听下拉列表的 change 事件
-    dropdown.addEventListener('change', function() {
+    dropdown.addEventListener('change', function () {
         // 获取用户选择的选项
         const selectedValue = dropdown.value;
         const selectedText = dropdown.options[dropdown.selectedIndex].text;
         switch (selectedText) {
             case 'None':
                 openPlantIDB().then(IDB => {
-                    getAllPlants(IDB,"plants").then(plantList => {
+                    getAllPlants(IDB, "plants").then(plantList => {
                         deleteAllPlantsDOM();
                         renderPlantList(plantList);
                     });
@@ -134,22 +136,22 @@
                 });
                 break;
             case 'Completed':
-                filterPlants('status','Completed').then(plants => {
+                filterPlants('status', 'Completed').then(plants => {
                     deleteAllPlantsDOM();
                     renderPlantList(plants);
                 });
                 break;
             case 'In Progress':
-                filterPlants('status','In Progress').then(plants => {
+                filterPlants('status', 'In Progress').then(plants => {
                     deleteAllPlantsDOM();
                     renderPlantList(plants);
                 });
                 break;
             case 'Nearest Plant':
                 console.log('sort by near-----------------')
-                getCurrentLocation(loc=>{
-                    if (loc!=null){
-                        sortByDistance(loc,'asc').then(async plantList => {
+                getCurrentLocation(loc => {
+                    if (loc != null) {
+                        sortByDistance(loc, 'asc').then(async plantList => {
                             await deleteAllPlantsDOM()
                             renderPlantList(plantList);
                         })
@@ -158,9 +160,9 @@
                 break;
             case 'Furthest Plant':
                 console.log('sort by far---------------')
-                getCurrentLocation(loc=>{
-                    if (loc!=null){
-                        sortByDistance(loc,'desc').then(async plantList => {
+                getCurrentLocation(loc => {
+                    if (loc != null) {
+                        sortByDistance(loc, 'desc').then(async plantList => {
                             await deleteAllPlantsDOM();
                             renderPlantList(plantList);
                         })
@@ -169,14 +171,14 @@
                 break;
             case 'With Flowers':
                 console.log('sort by with flowers---------------')
-                filterPlants("flowers","yes").then(async plantList => {
+                filterPlants("flowers", "yes").then(async plantList => {
                     await deleteAllPlantsDOM();
                     renderPlantList(plantList);
                 })
                 break;
             case 'Without Flowers':
                 console.log('sort by without flowers---------------')
-                filterPlants("flowers","no").then(async plantList => {
+                filterPlants("flowers", "no").then(async plantList => {
                     await deleteAllPlantsDOM();
                     renderPlantList(plantList);
                 })
@@ -188,14 +190,14 @@
 
     });
 
-    function getCurrentLocation(callback){
-        if (navigator.geolocation){
+    function getCurrentLocation(callback) {
+        if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
-                const latLng = { lat: position.coords.latitude, lng: position.coords.longitude };
+                const latLng = {lat: position.coords.latitude, lng: position.coords.longitude};
                 console.log('当前位置：' + latLng.lat + ', ' + latLng.lng);
                 callback(latLng); // 调用回调函数，并将位置信息作为参数传递给它
             })
-        }else {
+        } else {
             alert("Geolocation is not supported")
             location.reload()
         }

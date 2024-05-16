@@ -3,7 +3,14 @@ const router = express.Router();
 const mongoApi=require("../databaseController/mongodbController");
 const {mongo} = require("mongoose");
 
-
+/**
+ * Adds a new plant to the database.
+ * @route POST /addPlants
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.post("/addPlants",async function (req, res, next) {
     console.log(`service worker addPlant: ${req.body.plantId}`)
     let plantId=req.body.plantId;
@@ -97,8 +104,14 @@ router.post("/addPlants",async function (req, res, next) {
 
 
 
-
-
+/**
+ * Fetches the details of a specific plant by plant ID.
+ * @route GET /getPlants/:id
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getPlants/:id",function (req,res,next){
     console.log('getPlants')
     const { id } = req.params;
@@ -106,7 +119,7 @@ router.get("/getPlants/:id",function (req,res,next){
         .then(function(response){
             if(response.type==='success'){
                 plant=response.content;
-                res.json(plant);
+                res.status(200).json(plant);
             }
         })
         .catch(function(error){
@@ -116,6 +129,14 @@ router.get("/getPlants/:id",function (req,res,next){
 
 })
 
+/**
+ * Fetches all plants from the database.
+ * @route GET /getAllPlants
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getAllPlants",function (req,res,next){
     mongoApi.getAllPlants()
         .then(function(response){
@@ -130,6 +151,14 @@ router.get("/getAllPlants",function (req,res,next){
         })
 })
 
+/**
+ * Fetches chat records for a specific plant by plant ID.
+ * @route GET /getChatRecordById/:id
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getChatRecordById/:id",function (req,res,next){
     const { id } = req.params;
     // console.log('receive chat record request: '+id);
@@ -146,7 +175,14 @@ router.get("/getChatRecordById/:id",function (req,res,next){
         })
 })
 
-
+/**
+ * Updates offline chat records to the mongoDB.
+ * @route POST /updateOfflineChatRecordToServer
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.post('/updateOfflineChatRecordToServer', async function (req, res, next) {
     // req.body;
     console.log("updateOfflineChatRecordToServer: "+JSON.stringify(req.body));
@@ -162,6 +198,14 @@ router.post('/updateOfflineChatRecordToServer', async function (req, res, next) 
     res.status(200).send();
 })
 
+/**
+ * Fetches all chat records from the database.
+ * @route GET /getAllChatRecord
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getAllChatRecord",function (req,res,next){
     mongoApi.getAllChatRecord()
         .then(function(response){
@@ -431,7 +475,11 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
     }
 });
 
-
+/**
+ * because in DBpedia, the name of plant always with uppercase on first letter
+ * @param input
+ * @returns {string}
+ */
 function capitalizeFirstLetterIfAlphabet(input) {
     // check input whether is string and not blank
     if (typeof input === 'string' && input.length > 0) {

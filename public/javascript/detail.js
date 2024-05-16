@@ -57,7 +57,7 @@ function generateDetailPage(){
             })
     }
     else {
-        console.log()
+        // console.log()
         openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
                 if(plant) {

@@ -11,7 +11,34 @@ ___
   * [(GitHub Name) Tommyczc](https://github.com/Tommyczc) : Zicong Chen
   * [(GitHub Name) SeanHuang99](https://github.com/SeanHuang99) : Shengchun Huang
   * [(GitHub Name) gy](https://github.com/gy02) : Yuan Gao
-* `Code Document`: https://docs.google.com/document/d/1TL43VqVU6vnd8pYHwG6c2bPqv_FJBUwExHSrsq_uCNA/edit?usp=sharing
+* Code Document: https://docs.google.com/document/d/1TL43VqVU6vnd8pYHwG6c2bPqv_FJBUwExHSrsq_uCNA/edit?usp=sharing
+___
+
+## Project Requirement
+* Node: 20.11.0
+* Npm: 10.2.4
+
+---
+## Database Connection (global)
+
+###### Attention: The project use default global database, you can skip this part, but if you want to use local mongoDB server, please just change the mongoose connection string.
+
+### MongoDB (Hosted in Microsoft Azure Cloud Server)
+* `Compass Connection`:
+
+        Login Url: mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000
+        Username: web04Admin
+        Password: project-22558800
+
+* `Mongoose Connection`(Path: `/controllers/databaseController/mongodbController.js`):
+
+        const mongoose = require('mongoose');
+        
+        // MongoDB Atlas connection string
+        const uri = 'mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000';
+        
+        mongoose.connect(uri);
+
 ___
 ## Installation and Running
 ## 📦 Install
@@ -89,22 +116,4 @@ To access and run a Node.js project deployed on a cloud server, you can simply v
 - The application should be running and accessible through the web interface. The main page should as the picture below:
 ![](./Screenshots/main.png)
 
----
-## Database Connection (global)
-### MongoDB (Hosted in Microsoft Azure Cloud Server)
-* `Compass Connection`:
 
-        Login Url: mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000
-        Username: web04Admin
-        Password: project-22558800
-
-* `Mongoose Connection`(Path: /controllers/databaseController/mongodbController.js): 
-
-  if you try to use local mongoDB server, please change the connection string.
-
-        const mongoose = require('mongoose');
-        
-        // MongoDB Atlas connection string
-        const uri = 'mongodb+srv://web04Admin:project-22558800@web04.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000';
-        
-        mongoose.connect(uri);

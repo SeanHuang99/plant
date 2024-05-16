@@ -126,5 +126,27 @@ To access and run a Node.js project deployed on a cloud server, you can simply v
 
 - The application should be running and accessible through the web interface. The main page should as the picture below:
 ![](./Screenshots/main.png)
+## usage
 
+### main page. 
+- You could see all the sightings.
+![](./Screenshots/main.png)
+
+### Detail page. 
+- You could see the detail of the plant you choose.
+![](./Screenshots/upload10.png)
+
+### Login page.
+- You could log in by simply inputting your nick name.
+![](./Screenshots/login.png)
+
+### UpdateRequest page. 
+- You could check requests of updating plant name sent from other users.
+- User Update Interface for Non-Plant Creators
+![](./Screenshots/update01.png)
+- Update Interface for Plant Creators
+![](./Screenshots/update09.png)
+### About Page
+- Project Introduction
+![](./Screenshots/about.png)
 

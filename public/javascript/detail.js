@@ -22,6 +22,9 @@ let isCreator = null;
 // var uniqueId="<%=uniqueId%>"
 
 // let objId = null;
+/**
+ * generate detail page
+ */
 function generateDetailPage(){
     const plantId=localStorage.getItem('plantId')
     // console.log('plantId: '+plantId)
@@ -56,20 +59,21 @@ function generateDetailPage(){
                 clearInterval(getData)
             })
     }
-    else {
-        // console.log()
+    else {//offline
         openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
                 if(plant) {
                     clearInterval(getData)
                     console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
                     console.log(plant.plantId + ' detail-------> ' + plant.description)
-                    detailRender(plant);
                     const map=document.getElementById("map")
+                    console.log('离线时获取map DOM')
                     map.innerText='Cannot show map when offline'
                     map.style.textAlign='center'
                     map.style.lineHeight='400px'
                     map.style.backgroundColor='lightgray'
+                    //todo: 地图区域为空？
+                    detailRender(plant);
                 }
                 else {
                     if (--updateTimer <= 0) {

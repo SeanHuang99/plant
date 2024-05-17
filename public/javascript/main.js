@@ -113,7 +113,7 @@ function renderPlantList(plantList) {
 async function deleteAllPlantsDOM() {
     const plantContainer = document.getElementsByClassName('container')[0];
     console.log(plantContainer)
-    while (plantContainer.firstChild) {//There may be multiple sibling child nodes
+    while (plantContainer?.firstChild) {//There may be multiple sibling child nodes
         plantContainer.removeChild(plantContainer.firstChild);
     }
     console.log('deleteAllPlantsDOM')

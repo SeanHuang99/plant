@@ -7,6 +7,7 @@
     "excludePattern": "(^|\\/|\\\\)_"
   },
   "opts": {
-    "destination": "./out"
+    "destination": "./out",
+    "template": "node_modules/docdash"
   }
 }

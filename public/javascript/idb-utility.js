@@ -60,7 +60,7 @@ function synPlantFromServer() {
 /**
  * add a new plant to the Synchronized indexDB(sync-plants)
  * @param IDB indexDB to be opened
- * @param plant the new plant
+ * @param {Plant} plant the new plant
  * @returns {Promise<unknown>}
  */
 const addNewPlantToSync = (IDB, plant) => {
@@ -98,7 +98,7 @@ const addNewPlantToSync = (IDB, plant) => {
 /**
  * add new plants to indexDB
  * @param plantIDB indexDB to be opened
- * @param plants plant list to be added
+ * @param {Plant} plants plant list to be added
  * @returns {Promise<unknown>}
  */
 const addNewPlantsToIDB = (plantIDB, plants) => {
@@ -141,7 +141,7 @@ const addNewPlantsToIDB = (plantIDB, plants) => {
 /**
  * add the new plant to both indexDB('plants') and synchronized indexDB('sync-plants')
  * @param db
- * @param plant
+ * @param {Plant} plant
  * @returns {Promise<unknown>}
  */
 const addPlantToBothStores =  async (db, plant) => {
@@ -355,7 +355,7 @@ const getSyncChatObjs = (plantIDB) => {
 /**
  * clear chat list in one chat object(deprecated)
  * @param store
- * @param chatObj
+ * @param {Chat} chatObj
  * @returns {Promise<unknown>}
  */
 const updateWithClearedChatList = (store, chatObj) => {
@@ -376,7 +376,7 @@ const updateWithClearedChatList = (store, chatObj) => {
 // Therefore, after synchronization, only the chat list is emptied and the current record is kept
 
 //Changed to backend judgment, index DB only needs to clear all records
-//改为调用deleteAllChatObjsFromIDB
+//change to call deleteAllChatObjsFromIDB()
 const clearSyncChatFromIDB = (db, chatObjs) => {
     const transaction = db.transaction(["sync-chats"], "readwrite");
     const plantStore = transaction.objectStore("sync-chats");
@@ -457,8 +457,8 @@ function synAllChatObjsFromServer() {
 /**
  * add new chat to 'sync-chats'
  * @param db
- * @param plantId
- * @param chat
+ * @param {String} plantId
+ * @param {String} chat
  * @returns {Promise<unknown>}
  */
 const addNewChatToIDB = (db, plantId, chat) => {
@@ -530,7 +530,7 @@ function registerPlantSync() {
 /**
  * get chat record by id
  * @param store
- * @param plantId
+ * @param {String} plantId
  * @returns {Promise<unknown>}
  */
 const getChatRecordById = async (store, plantId) => {

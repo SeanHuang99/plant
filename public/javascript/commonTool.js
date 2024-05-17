@@ -47,6 +47,19 @@
  * @property {string} decision - The decision for the request (e.g., agree, reject)
  */
 
+/**
+ * chat object
+ * @typedef {object} Chat
+ * @property {String} plantId
+ * @property {ChatEntry} chatList
+ */
+
+/**
+* @typedef {Object} ChatEntry
+* @property {string} nickName - The name of the user.
+* @property {string} content - The content of the chat message.
+* @property {Date} [date=Date.now] - The date when the message was created. Defaults to the current date and time.
+*/
 function getNickName(){
     let nickName=window.localStorage.getItem("userNickName")
     return nickName;

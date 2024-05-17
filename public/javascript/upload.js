@@ -97,7 +97,14 @@ async function changeFormToObj(form) {
         formObject[key] = value;
         // console.log(`${key}: ${value}`)
     });
-    // console.log(formData)
+    //create location object
+    formObject['location']={
+        lat:formObject['lat'],
+        lng:formObject['lng']
+    }
+    delete formObject['lat']
+    delete formObject['lng']
+    console.log(formData)
     return formObject;
 }
 

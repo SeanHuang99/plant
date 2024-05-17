@@ -17,6 +17,7 @@ self.addEventListener('install', event => {
                 '/import/bootstrap.min.css',
                 '/import/bootstrap.min.js',
                 '/import/jquery-3.7.1.min.js',
+                '/import/socket.io.min.js',
                 '/javascript/idb-utility.js',
                 '/javascript/index.js',
                 '/javascript/main.js',

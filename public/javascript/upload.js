@@ -226,50 +226,77 @@ document.getElementById('photo').addEventListener('change', function (event) {
     }
 });
 
+/**
+ * Opens the camera and displays the video stream.
+ * Sets up the necessary event listeners and UI elements.
+ */
 function openCamera() {
     const video = document.getElementById('camera');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
     const constraints = { video: true };
 
+    // Request access to the user's camera
     navigator.mediaDevices.getUserMedia(constraints)
         .then((stream) => {
-            video.srcObject = stream;
-            video.style.display = 'block';
+            video.srcObject = stream; // Display the video stream
+            video.style.display = 'block'; // Show the video element
+            document.getElementById('captureBtn').style.display = 'inline-block'; // Show capture button
+            document.getElementById('cancelBtn').style.display = 'inline-block'; // Show cancel button
         })
         .catch((err) => {
-            console.error(`An error occurred: ${err}`);
+            console.error(`An error occurred: ${err}`); // Log any errors
         });
 
+    // Hide the uploaded image when a new photo is being taken
     document.getElementById('photo').addEventListener('change', function () {
         const img = document.getElementById('uploadedImage');
-        img.style.display = 'none';
-    });
-
-    video.addEventListener('click', function () {
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(function (blob) {
-            const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            document.getElementById('photo').files = dataTransfer.files;
-
-            const img = document.getElementById('uploadedImage');
-            img.src = URL.createObjectURL(blob);
-            img.style.display = 'block';
-            video.style.display = 'none';
-            video.srcObject.getTracks().forEach(track => track.stop());
-        }, "image/jpeg");
+        img.style.display = 'none'; // Hide the uploaded image
     });
 }
 
+/**
+ * Captures a photo from the video stream and displays it.
+ * Stops the video stream and hides the video element.
+ */
+function capturePhoto() {
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    // Draw the current video frame onto the canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert the canvas content to a Blob and handle the image file
+    canvas.toBlob(function (blob) {
+        const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        document.getElementById('photo').files = dataTransfer.files; // Update the file input with the captured photo
+
+        const img = document.getElementById('uploadedImage');
+        img.src = URL.createObjectURL(blob); // Display the captured photo
+        img.style.display = 'block'; // Show the captured image
+        video.style.display = 'none'; // Hide the video element
+        document.getElementById('captureBtn').style.display = 'none'; // Hide capture button
+        document.getElementById('cancelBtn').style.display = 'none'; // Hide cancel button
+        video.srcObject.getTracks().forEach(track => track.stop()); // Stop the video stream
+    }, "image/jpeg");
+}
+
+/**
+ * Cancels the image capture process.
+ * Hides the video stream and the captured image, and stops the video stream.
+ */
 function cancelImage() {
     const img = document.getElementById('uploadedImage');
-    img.style.display = 'none';
-    document.getElementById('photo').value = '';
+    img.style.display = 'none'; // Hide the uploaded image
+    document.getElementById('photo').value = ''; // Clear the file input
     const video = document.getElementById('camera');
-    video.style.display = 'none';
+    video.style.display = 'none'; // Hide the video element
     if (video.srcObject) {
-        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject.getTracks().forEach(track => track.stop()); // Stop the video stream
     }
+    document.getElementById('captureBtn').style.display = 'none'; // Hide capture button
+    document.getElementById('cancelBtn').style.display = 'none'; // Hide cancel button
 }

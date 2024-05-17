@@ -55,6 +55,16 @@
             border: 1px solid #ccc;  /* Optional: Add a border around the image */
         }
 
+        .btn-svg {
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        .btn-svg img {
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <body style="height: 100%">
@@ -144,8 +154,11 @@
             <label for="photo">Photo:</label><br>
             <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*" required>
             <br>
-            <button type="button" class="btn btn-primary" onclick="openCamera()">Open Camera</button>
-            <button type="button" class="btn btn-primary" onclick="cancelImage()">Cancel Image</button>
+            <button type="button" class="btn-svg" id="openCameraBtn" onclick="openCamera()">
+                <img src="/icons/opencamera.svg" alt="Open Camera">
+            </button>
+            <button type="button" class="btn btn-primary" id="captureBtn" style="display:none;" onclick="capturePhoto()">Capture Photo</button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn" style="display:none;" onclick="cancelImage()">Cancel Image</button>
             <br><br>
             <video id="camera" width="300" height="300" autoplay style="display:none;border: 1px solid #ccc;"></video>
             <canvas id="canvas" style="display:none;"></canvas>

@@ -317,12 +317,12 @@ async function addChatRecord(plantId,nickName,content,date){
     const newChat = {
         nickName: nickName,
         content: content,
-        date: date // 如果不指定日期，默认使用当前时间
+        date: date // default now
     };
     try {
         const result = await ChatRecord.findOneAndUpdate(
             { plantId: plantId }, // 查询条件
-            { $push: { chatList: newChat } }, // 要添加的聊天数据
+            { $push: { chatList: newChat } }, // the chat content
             { new: true, upsert: true } // return the updated data, and if the plantId is not exist, then create a new one
         );
         // console.log('Updated Chat Record:', result);

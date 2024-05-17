@@ -1,3 +1,8 @@
+/**
+ * @module backendHandler
+ * @type {e | (() => Express)}
+ * @description a back-end request controller, it solves all requests from frontend
+ */
 const express = require('express');
 const router = express.Router();
 const mongoApi=require("../databaseController/mongodbController");

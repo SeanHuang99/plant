@@ -1,3 +1,7 @@
+/**
+ * @module UpdateRequestSchema
+ * @description the mongodb model for update request
+ */
 const mongoose = require('mongoose');
 const UpdateRequestSchema = new mongoose.Schema({
     plantId: {

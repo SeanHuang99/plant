@@ -1,3 +1,7 @@
+/**
+ * @module socketController
+ * @description the websocket which used in chat room
+ */
 const mongoApi=require("./databaseController/mongodbController");
 
 exports.init = function(io) {

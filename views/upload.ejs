@@ -143,6 +143,12 @@
         <div class="form-group">
             <label for="photo">Photo:</label><br>
             <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*" required>
+            <br>
+            <button type="button" class="btn btn-primary" onclick="openCamera()">Open Camera</button>
+            <button type="button" class="btn btn-primary" onclick="cancelImage()">Cancel Image</button>
+            <br><br>
+            <video id="camera" width="300" height="300" autoplay style="display:none;border: 1px solid #ccc;"></video>
+            <canvas id="canvas" style="display:none;"></canvas>
         </div>
         <br>
         <img id="uploadedImage" alt="Uploaded Image" style="display:none;"/>

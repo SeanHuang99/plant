@@ -7,7 +7,7 @@ const UpdateRequestSchema = new mongoose.Schema({
     plantName: {
         type: String,
         required: true,
-        index: true  // 单字段索引
+        index: true  // Single field index
     },
     nickName: {
         type: String,
@@ -21,12 +21,12 @@ const UpdateRequestSchema = new mongoose.Schema({
         type: String,
         enum: ['completed', 'in-progress'],
         default: 'in-progress',
-        index: true  // 单字段索引
+        index: true  // Single field index
     },
     date: {
         type: Date,
         default: Date.now,
-        index: -1  // 单字段索引，降序
+        index: -1  // Single field index, descending
     },
     decision: {
         type: String,

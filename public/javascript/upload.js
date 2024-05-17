@@ -225,3 +225,51 @@ document.getElementById('photo').addEventListener('change', function (event) {
         reader.readAsDataURL(file);
     }
 });
+
+function openCamera() {
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const constraints = { video: true };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            video.srcObject = stream;
+            video.style.display = 'block';
+        })
+        .catch((err) => {
+            console.error(`An error occurred: ${err}`);
+        });
+
+    document.getElementById('photo').addEventListener('change', function () {
+        const img = document.getElementById('uploadedImage');
+        img.style.display = 'none';
+    });
+
+    video.addEventListener('click', function () {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(function (blob) {
+            const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            document.getElementById('photo').files = dataTransfer.files;
+
+            const img = document.getElementById('uploadedImage');
+            img.src = URL.createObjectURL(blob);
+            img.style.display = 'block';
+            video.style.display = 'none';
+            video.srcObject.getTracks().forEach(track => track.stop());
+        }, "image/jpeg");
+    });
+}
+
+function cancelImage() {
+    const img = document.getElementById('uploadedImage');
+    img.style.display = 'none';
+    document.getElementById('photo').value = '';
+    const video = document.getElementById('camera');
+    video.style.display = 'none';
+    if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+    }
+}

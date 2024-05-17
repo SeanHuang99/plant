@@ -19,8 +19,8 @@ router.post("/addPlants",async function (req, res, next) {
     let details = req.body.details;
     let datetime = req.body.datetime;
     // let location = req.body.location;
-    let lat = req.body.lat;
-    let lng = req.body.lng;
+    let lat = req.body.location.lat;
+    let lng = req.body.location.lng;
     let flowers = req.body.flowers;
     let sunExpose = req.body.sunExposure;
     let flowerColor = req.body.flowerColorPicker;

@@ -1,12 +1,12 @@
 # Intelligent Web Projects<link href="/import/bootstrap.min.css" rel="stylesheet">
 
 ___
-## Contributor (Team 04)
+## 👥 Contributor (Team 04)
 * Zicong Chen 
 * Yuan Gao 
 * Shengchun Huang
 ___
-## Document
+## 📚 Document
 * Github: https://github.com/gy02/plant
   * [(GitHub Name) Tommyczc](https://github.com/Tommyczc) : Zicong Chen
   * [(GitHub Name) SeanHuang99](https://github.com/SeanHuang99) : Shengchun Huang
@@ -72,15 +72,26 @@ To run a Node.js project in WebStorm:
 - Launch WebStorm and open your Node.js project by selecting the project directory.
 
 2. **Configure a Run/Debug Configuration:**
-- Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations..."
+- Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations...".
 - Click the "+" icon and select "Node.js" to create a new configuration.
 - Set the "Node interpreter" to the path of your Node.js installation.
 - Set the "Working directory" to your project root.
 - Set the "JavaScript file" to your main file (e.g., `index.js`).
 - Click "OK" to save the configuration.
 
-3. **Run the Project:**
-- Select the newly created configuration from the drop-down menu in the top-right corner.
+3. **Add a npm Configuration:**
+![](./public/images/img_1.png)
+![](./public/images/img.png)
+- Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations...".
+- Click the "+" icon and select "npm" to create a new configuration.
+- Name the configuration (e.g., "start").
+- Set the "package.json" field to the path of your `package.json` file.
+- Set the "Command" field to `start`.
+- Ensure the "Node interpreter" and "Package manager" fields are set correctly.
+- Click "OK" to save the configuration.
+
+4. **Run the Project:**
+- Select the newly created npm configuration from the drop-down menu in the top-right corner.
 - Click the green play button or press `Shift+F10` to start the project.
 
 #### Ⅱ. Running the Project from the Command Line
@@ -108,12 +119,34 @@ To access and run a Node.js project deployed on a cloud server, you can simply v
 **Enter the URL:**
 
 - Navigate to the URL of the deployed project. There are global test web addresses:
-  - [https://intelligentwebteam04.net/](https://intelligentwebteam04.net/)
-  - [https://sheffileldweb.vercel.app/](https://sheffileldweb.vercel.app/)
+  - [https://intelligentwebteam04.net/](https://intelligentwebteam04.net/)(Main option)
+  - [https://sheffileldweb.vercel.app/](https://sheffileldweb.vercel.app/)(Backup option)
 
 **Interact with the Application:**
 
 - The application should be running and accessible through the web interface. The main page should as the picture below:
 ![](./Screenshots/main.png)
+## usage
 
+### main page. 
+- You could see all the sightings.
+![](./Screenshots/main.png)
+
+### Detail page. 
+- You could see the detail of the plant you choose.
+![](./Screenshots/upload10.png)
+
+### Login page.
+- You could log in by simply inputting your nick name.
+![](./Screenshots/login.png)
+
+### UpdateRequest page. 
+- You could check requests of updating plant name sent from other users.
+- User Update Interface for Non-Plant Creators
+![](./Screenshots/update01.png)
+- Update Interface for Plant Creators
+![](./Screenshots/update09.png)
+### About Page
+- Project Introduction
+![](./Screenshots/about.png)
 

@@ -48,7 +48,7 @@ async function fetchUpdateRequests(nickName) {
     if (data.type === 'success' && data.content.length > 0) {
         renderTableRows(data.content);
     } else {
-        tbody.innerHTML = '<tr><td colspan="6">No data found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7">No data found.</td></tr>';
     }
 }
 

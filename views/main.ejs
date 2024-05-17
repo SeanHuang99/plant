@@ -115,7 +115,7 @@
     const selectedOption = document.getElementById('selectedOption');
 
     // Listen for the change event in the drop-down list
-    dropdown.addEventListener('change', function () {
+    dropdown.addEventListener('change', async function () {
         // Get the selected option by the user
         const selectedValue = dropdown.value;
         const selectedText = dropdown.options[dropdown.selectedIndex].text;
@@ -153,26 +153,37 @@
                 });
                 break;
             case 'Nearest Plant':
-                console.log('sort by near-----------------')
-                getCurrentLocation(loc => {
-                    if (loc != null) {
-                        sortByDistance(loc, 'asc').then(async plantList => {
-                            await deleteAllPlantsDOM()
-                            renderPlantList(plantList);
-                        })
-                    }
-                })
+                if (navigator.onLine) {
+                    console.log('sort by near-----------------')
+                    getCurrentLocation(loc => {
+                        if (loc != null) {
+                            sortByDistance(loc, 'asc').then(async plantList => {
+                                await deleteAllPlantsDOM()
+                                renderPlantList(plantList);
+                            })
+                        }
+                    })
+                } else {
+                    alert('unavailable when offline')
+                    await deleteAllPlantsDOM()
+                }
                 break;
             case 'Furthest Plant':
-                console.log('sort by far---------------')
-                getCurrentLocation(loc => {
-                    if (loc != null) {
-                        sortByDistance(loc, 'desc').then(async plantList => {
-                            await deleteAllPlantsDOM();
-                            renderPlantList(plantList);
-                        })
-                    }
-                })
+                if (navigator.onLine) {
+                    console.log('sort by far---------------')
+                    getCurrentLocation(loc => {
+                        if (loc != null) {
+                            sortByDistance(loc, 'desc').then(async plantList => {
+                                await deleteAllPlantsDOM();
+                                renderPlantList(plantList);
+                            })
+                        }
+                    })
+                } else {
+                    alert('unavailable when offline')
+                    await deleteAllPlantsDOM()
+                }
+
                 break;
             case 'With Flowers':
                 console.log('sort by with flowers---------------')

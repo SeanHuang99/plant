@@ -80,8 +80,8 @@ To run a Node.js project in WebStorm:
 - Click "OK" to save the configuration.
 
 3. **Add a npm Configuration:**
-![](./public/images/img_1.png)
-![](./public/images/img.png)
+![](Screenshots/img_1.png)
+![](Screenshots/img.png)
 - Click on the drop-down menu in the top-right corner of the WebStorm window and select "Edit Configurations...".
 - Click the "+" icon and select "npm" to create a new configuration.
 - Name the configuration (e.g., "start").

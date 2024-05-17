@@ -30,6 +30,7 @@ self.addEventListener('install', event => {
                 '/stylesheets/style.css',
                 '/stylesheets/map.css',
                 '/images/icon.webp',
+                '/images/opencamera.svg',
                 '/manifest.json',
                 '/fonts/poetsenone-regular-sub.ttf',
                 '/fonts/roboto-medium-Nav.ttf',

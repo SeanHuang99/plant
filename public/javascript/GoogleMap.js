@@ -184,8 +184,8 @@ function setLocation() {
 //the function encapsulated by Google can be called directly
 /**
  * compute the distance between two places on the sphere
- * @param from
- * @param to
+ * @param {Loc} from
+ * @param {Loc} to
  * @returns {Promise<*>}
  */
 async function computeDistanceBetween(from, to) {

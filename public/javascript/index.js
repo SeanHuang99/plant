@@ -118,7 +118,9 @@ window.onload = function () {
 //     console.log("Nickname from storage:", getNickName());
 //     location.href="/";
 // }
-//this function is to check the input nickname
+/**
+ * listen the nickname input field and check the nickname input whether empty, user cannot input empty nickname
+ */
 function handleNickname() {
     var nicknameInput = document.getElementById('nickname');
     var errorMessage = document.getElementById('error-message');
@@ -140,7 +142,9 @@ function handleNickname() {
     }
 }
 
-//show the index page, user can see all uploaded plant
+/**
+ * show the index page, user can see all uploaded plant
+ */
 function showWelcome(){
     var welcomePage = document.getElementById('welcomePage');
     var indexPage = document.getElementById('indexPage');
@@ -158,7 +162,9 @@ function showWelcome(){
 //     indexPage.style.display='block';
 // }
 
-//when user change username on welcome page, this function can update the frontend to sync the username
+/**
+ * when user change username on welcome page, this function can update the frontend to sync the username
+ */
 function updateNickname(){
     const username = getNickName();  // This function is assumed to be defined in your commonTool.js
     const userGreeting = document.getElementById('userGreeting');
@@ -169,7 +175,9 @@ function updateNickname(){
     }
 }
 
-//show the welcome page, user can change their username on this page
+/**
+ * show the welcome page, user can change their username on this page
+ */
 function changeUserName(){
     var welcomePage = document.getElementById('welcomePage');
     var indexPage = document.getElementById('indexPage');

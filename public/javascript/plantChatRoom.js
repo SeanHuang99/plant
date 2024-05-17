@@ -8,7 +8,10 @@ let name = getNickName();
 let roomNo = getPlantId();
 let socket = io();
 
-//if online, use websocket in chat room, otherwise store the chat in indexed db
+
+/**
+ * if online, use websocket in chat room, otherwise store the chat in indexed db
+ */
 window.onload = function () {
     cleanChatPanel()
     if (navigator.onLine) {
@@ -25,7 +28,9 @@ window.addEventListener('offline', function() {
     }
 });
 
-//websocket initialization function
+/**
+ * websocket initialization function
+ */
 function init() {
     // Event listener for joining a room
     socket.on('joined', function (room, userId) {
@@ -59,7 +64,9 @@ function init() {
     enableResizer(); // Enable resizable panel feature
 }
 
-// Send the chat message to the server
+/**
+ * Send the chat message to the server by socket if online, otherwise store the chat in indexedb
+ */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     if (!chatText.trim()) return;
@@ -96,7 +103,10 @@ function showAddChatNotification(){
         });
 }
 
-// Append new chat history entries to the container
+/**
+ * Append new chat history entries to the container
+ * @param text
+ */
 function writeOnHistory(text) {
     let history = document.getElementById('chat_history');
     let paragraph = document.createElement('p');
@@ -106,7 +116,9 @@ function writeOnHistory(text) {
     history.scrollTop = history.scrollHeight;
 }
 
-//clean the chat panel, because the cache would store previous chat record
+/**
+ * clean the chat panel, because the cache would store previous chat record
+ */
 function cleanChatPanel() {
 
     let history = document.getElementById('chat_history');
@@ -120,7 +132,11 @@ function cleanChatPanel() {
     });
 }
 
-// Fetch the entire chat history for a particular room
+/**
+ * Fetch the entire chat history for a particular room
+ * @param roomNo
+ * @return Promise<void>
+ */
 function getChatRecord(roomNo) {
     if (navigator.onLine) {
         fetch(`/requestHandler/getChatRecordById/${roomNo}`)
@@ -180,12 +196,16 @@ function getChatRecord(roomNo) {
     }
 }
 
-// Request to join or create a new chat room
+/**
+ *  Request to join or create a new chat room
+ */
 function connectToRoom() {
     socket.emit('create or join', roomNo, name);
 }
 
-// Enable resizing of plant and chat panels
+/**
+ * Enable resizing of plant and chat panels
+ */
 function enableResizer() {
     const resizer = document.querySelector('.resizer');
     const plantDetails = document.getElementById('plant-details');
@@ -214,7 +234,10 @@ function enableResizer() {
     }
 }
 
-// Handle key down event for chat input
+/**
+ * Handle key down event for chat input
+ * @param event
+ */
 function handleKeyDown(event) {
     if (event.key === "Enter") {
         event.preventDefault();

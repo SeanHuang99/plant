@@ -113,11 +113,10 @@ async function addPlant(plantId,
 }
 
 /**
- * Get a plant by its ID.
- * @param {string} id - The ID of the plant.
- * @returns {Promise<{type: string, content: Object}>} The response containing the plant information or an error message.
+ * Get all plants.
+ * @returns {Promise<{type: string, content: Plant[]}>} The response containing all plants or an error message.
  * @property {string} type - The type of the response, 'success' or 'fail'.
- * @property {Object} content - The content of the response, either the plant information or the error message.
+ * @property {Plant[]} content - The content of the response, an array of all plants or an error message.
  */
 
 async function getPlant(id) {
@@ -152,127 +151,146 @@ async function getAllPlants(){
     return response;
 }
 
-
+/**
+ * Gets the nickname of a plant by its ID.
+ * @param {string} id - The ID of the plant.
+ * @returns {Promise<Object>} The response object containing the nickname of the plant or an error message.
+ */
 async function getNickNameOfPlant(id) {
-    // Declare response at the start of the function
     let response = {
         type: 'fail',
         content: 'Unexpected error occurred'
     };
 
     try {
-        // Query the plant record with the specified plantId
         const plantInfo = await Plant.findOne({ plantId: id });
-
-        // If the plant information is found, return its nickname
         if (plantInfo) {
             response = {
                 type: 'success',
                 content: plantInfo.nickName
             };
         } else {
-            // No matching plant record found
             response = {
                 type: 'fail',
                 content: 'Plant not found'
             };
         }
     } catch (error) {
-        // Catch errors and return the error message
         response = {
             type: 'fail',
             content: error.message
         };
     }
 
-    // Return the response
     return response;
 }
 
-
-async function changePlantNameOfPlant(id, newPlantName,link,name,description,genus) {
+/**
+ * Changes the name of a plant and updates its DBpedia information.
+ * @param {string} id - The ID of the plant.
+ * @param {string} newPlantName - The new name of the plant.
+ * @param {string} link - The DBpedia link for the plant.
+ * @param {string} name - The DBpedia name for the plant.
+ * @param {string} description - The DBpedia description for the plant.
+ * @param {string} genus - The DBpedia genus for the plant.
+ * @returns {Promise<Object>} The response object indicating success or failure.
+ */
+async function changePlantNameOfPlant(id, newPlantName, link, name, description, genus) {
     let response;
     try {
-        const dbpedia={}
-        dbpedia.link = link;
-        dbpedia.name = name;
-        dbpedia.description = description;
-        dbpedia.genus = genus;
-        // Update the plant name for the plant with the specified plantId
+        const dbpedia = {
+            link: link,
+            name: name,
+            description: description,
+            genus: genus
+        };
         const plantInfo = await Plant.findOneAndUpdate(
-            { plantId: id }, // Find the plant by plantId
-            { plantName: newPlantName ,dbpedia: dbpedia}, // Set the new plant name
-            { new: true } // Return the updated document
+            { plantId: id },
+            { plantName: newPlantName, dbpedia: dbpedia },
+            { new: true }
         );
 
-        // If the update was successful, return a success message
         if (plantInfo) {
             response = {
                 type: 'success',
                 content: `Plant name updated to '${newPlantName}'`
             };
         } else {
-            // If no matching plant record was found
             response = {
                 type: 'fail',
                 content: 'Plant not found'
             };
         }
     } catch (error) {
-        // Catch any errors and return an appropriate message
         response = {
             type: 'fail',
             content: error.message
         };
     }
-    // Return the response
     return response;
 }
 
 
 /**
- * Find a plant by its ObjectId.
- * @param {string} id - The ObjectId of the plant.
- * @returns {Promise<Object>} The response containing the plant information or an error message.
+ * Finds a plant by its object ID.
+ * @param {string} id - The object ID of the plant.
+ * @returns {Promise<Object>} The response object containing the plant information or an error message.
  */
 async function findPlantByObjId(id) {
     try {
-        // 确保 id 是一个有效的 ObjectId
+        // Convert the string ID to a Mongoose ObjectId
         const objectId = new mongoose.Types.ObjectId(id);
+
+        // Find the plant by its ObjectId
         const plant = await Plant.findById(objectId);
+
+        // If the plant is not found, return a failure response
         if (!plant) {
             return { type: 'fail', content: 'Plant not found' };
         }
+
+        // If the plant is found, return a success response with the plant data
         return { type: 'success', content: plant };
     } catch (error) {
+        // If an error occurs, return a failure response with the error message
         return { type: 'fail', content: error.message };
     }
 }
 
-
+/**
+ * Changes the name and status of a plant for the creator.
+ * @param {string} id - The object ID of the plant.
+ * @param {Object} updateFields - The fields to update.
+ * @returns {Promise<Object>} The response object indicating success or failure.
+ */
 async function changePlantNameOfPlantForCreator(id, updateFields) {
     let response;
     try {
+        // Convert the string ID to a Mongoose ObjectId
         const objectId = new mongoose.Types.ObjectId(id);
-        // 更新植物记录
+
+        // Find the plant by its ObjectId and update with the new fields
         const result = await Plant.findByIdAndUpdate(
             objectId,
             updateFields,
-            { new: true }
+            { new: true } // Return the updated document
         );
 
+        // If the update is successful, return a success response
         if (result) {
             response = {
                 type: 'success',
                 content: 'Plant name and status updated successfully'
             };
         } else {
+            // If the plant is not found, return a failure response
             response = {
                 type: 'fail',
                 content: 'Failed to update plant'
             };
         }
     } catch (error) {
+        // If an error occurs, return a failure response with the error message
         response = {
             type: 'fail',
             content: error.message
@@ -288,7 +306,9 @@ async function changePlantNameOfPlantForCreator(id, updateFields) {
  * @param {string} nickName - The nickname of the user.
  * @param {string} content - The chat content.
  * @param {Date} date - The date of the chat.
- * @returns {Promise<Object>} The response indicating success or failure.
+ * @returns {Promise<{type: string, content: string}>} The response indicating success or failure.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {string} content - The content of the response, either an empty string on success or an error message.
  */
 async function addChatRecord(plantId,nickName,content,date){
 
@@ -321,7 +341,9 @@ async function addChatRecord(plantId,nickName,content,date){
 /**
  * Get chat records for a plant.
  * @param {string} plantId - The ID of the plant.
- * @returns {Promise<Object>} The response containing the chat records or an error message.
+ * @returns {Promise<{type: string, content: Object}>} The response containing the chat records or an error message.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {Object} content - The content of the response, either the chat records or an error message.
  */
 async function getChatRecord(plantId) {
     var response;
@@ -338,6 +360,12 @@ async function getChatRecord(plantId) {
     return response;
 }
 
+/**
+ * Get all chat records.
+ * @returns {Promise<{type: string, content: Object[]}>} The response containing all chat records or an error message.
+ * @property {string} type - The type of the response, 'success' or 'fail'.
+ * @property {Object[]} content - The content of the response, either an array of all chat records or an error message.
+ */
 async function getAllChatRecord(){
     var response;
     try {
@@ -349,29 +377,32 @@ async function getAllChatRecord(){
     return response;
 }
 
-// Add or update plant edit request (plantId, plantName, nickName)
-async function addUpdateRequest(plantId,
-                                plantName,
-                                nickName,
-                                creator,
-                                plantOriginalName) {
+/**
+ * Adds an update request for a plant.
+ * @param {string} plantId - The ID of the plant.
+ * @param {string} plantName - The new name of the plant.
+ * @param {string} nickName - The nickname of the user making the request.
+ * @param {string} creator - The nickname of the plant creator.
+ * @param {string} plantOriginalName - The original name of the plant.
+ * @returns {Promise<Object>} The response object indicating success or failure.
+ */
+async function addUpdateRequest(plantId, plantName, nickName, creator, plantOriginalName) {
     var response;
     try {
-        const updateRequest = new UpdateRequest({  plantId,
-                                                                                        plantName,
-                                                                                        nickName,
-                                                                                        creator,
-                                                                                        plantOriginalName});
+        // Create a new update request with the provided details
+        const updateRequest = new UpdateRequest({ plantId, plantName, nickName, creator, plantOriginalName });
+
+        // Save the update request to the database
         await updateRequest.save();
+
+        // Return a success response
         response = { type: 'success', content: '' };
     } catch (error) {
-        // Check if the error is a duplicate key error
-        // console.log(error.name);
+        // If the error is a duplicate key error, return a specific failure response
         if (error.code === 11000) {
-            // Provide a custom message for duplicate key error
             response = { type: 'fail', content: 'This suggestion has already been submitted by someone.' };
         } else {
-            // Handle other kinds of errors normally
+            // For other errors, return a general failure response
             response = { type: 'fail', content: 'Error processing request: ' + error.message };
         }
     }
@@ -380,40 +411,68 @@ async function addUpdateRequest(plantId,
 
 
 
-// Get plant edit request by plantId
+/**
+ * Gets the update request by plant ID.
+ * @param {string} plantId - The ID of the plant.
+ * @returns {Promise<Object>} The response object containing the update request or an error message.
+ */
 async function getUpdateRequestById(plantId) {
     var response;
     try {
+        // Find an update request by the plant ID
         const updateRequest = await UpdateRequest.findOne({ plantId });
+
+        // If the update request is found, return a success response
         if (updateRequest) {
             response = { type: 'success', content: updateRequest };
         } else {
+            // If the update request is not found, return a failure response
             response = { type: 'fail', content: 'No update request found for this plant' };
         }
     } catch (error) {
+        // If an error occurs, return a failure response with the error message
         response = { type: 'fail', content: error.message };
     }
     return response;
 }
 
+/**
+ * Gets all update requests by nickname.
+ * @param {string} creator - The nickname of the creator.
+ * @returns {Promise<Object>} The response object containing the update requests or an error message.
+ */
 async function getAllUpdateRequestsByNickName(creator) {
     let response;
     try {
+        // Aggregate update requests matching the creator's nickname and sort them
         const updateRequests = await UpdateRequest.aggregate([
-            { $match: { creator: creator } },  // 过滤匹配的文档
-            { $sort: { statusOfRequest: -1, date: -1, plantName: 1 } },// 根据新字段和其他字段排序
-            { $project: { sortPriority: 0 } }  // 选择性地移除用于排序的临时字段
+            { $match: { creator: creator } },
+            { $sort: { statusOfRequest: -1, date: -1, plantName: 1 } },
+            { $project: { sortPriority: 0 } }
         ]);
+
+        // Return a success response with the update requests
         response = { 'type': 'success', 'content': updateRequests };
     } catch (error) {
+        // If an error occurs, return a failure response with the error message
         response = { 'type': 'fail', 'content': error.message };
     }
     return response;
 }
 
-
+/**
+ * Updates the request from the update requests page.
+ * @param {string} plantId - The ID of the plant.
+ * @param {string} plantName - The new name of the plant.
+ * @param {string} date - The date of the request.
+ * @param {string} decision - The decision for the request (agree/reject).
+ * @param {string} nickName - The nickname of the user making the request.
+ * @returns {Promise<Object>} The updated request object.
+ * @throws {Error} Throws an error if no matching document is found.
+ */
 async function updateRequestFromUrPage(plantId, plantName, date, decision, nickName) {
     try {
+        // Find and update the update request by plant ID, date, and nickname
         const result = await UpdateRequest.findOneAndUpdate(
             {
                 plantId: plantId,
@@ -429,14 +488,16 @@ async function updateRequestFromUrPage(plantId, plantName, date, decision, nickN
             }
         );
 
+        // If no matching document is found, throw an error
         if (!result) {
             throw new Error('No matching document found to update.');
         }
 
+        // Return the updated request
         return result;
     } catch (error) {
         console.error('Failed to update request:', error);
-        throw error; // Rethrow or handle as needed
+        throw error;
     }
 }
 

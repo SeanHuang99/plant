@@ -70,29 +70,23 @@ self.addEventListener('activate', event => {
 })
 
 // Fetch event to fetch from cache first
-//sw会拦截所有请求，因此做一个判断，只在offline时拦截
+//SW will intercept all requests, so make a judgment and only intercept when offline
 self.addEventListener('fetch', event => {
-    //如果offline，拦截请求并从缓存中查找资源
-    //todo: offline时刷新主页，状态显示为online？
+    //If offline, intercept the request and find the resource from the cache
     if (!navigator.onLine) {
-        console.log('offline 拦截 ----- ' + event)
-        // 提取请求的 URL
-        var url = new URL(event.request.url);
-        // 如果是详情页面的请求
-        // if (url.pathname==='/detail') {
-        //     console.log('bbb')
-        //     event.request.url = 'http://localhost:3000/detail'//截去后面的id
-        //     findCache(event)
-        // }
-        // else
+        console.log('offline intercept ----- ' + event)
         findCache(event)
     }
-    //如果online则正常服务器请求
+    //If online, the server request is normal
     else {
-        // console.log('online 不拦截')
+        console.log('online: do not intercept')
     }
 });
 
+/**
+ * find cache by specified event
+ * @param event
+ */
 function findCache(event){
     event.respondWith((async () => {
         const cache = await caches.open("static");
@@ -106,7 +100,9 @@ function findCache(event){
     })());
 }
 
-//Sync event to sync the plants
+/**
+ * synchronize plant/chat by the tag
+ */
 self.addEventListener('sync', event => {
     console.log('prepare to sync')
     if (event.tag === 'sync-plant') {
@@ -119,6 +115,9 @@ self.addEventListener('sync', event => {
     }
 });
 
+/**
+ * synchronize plant to server
+ */
 function syncPlantToServer(){
     console.log('Service Worker: Syncing new Plants');
     openPlantIDB().then((db) => {
@@ -158,6 +157,9 @@ function syncPlantToServer(){
     });
 }
 
+/**
+ * synchronize chat to server
+ */
 function syncChatToServer(){
     console.log('Service Worker: Syncing new chat');
     openChatIDB().then((syncPostDB) => {
@@ -165,8 +167,7 @@ function syncChatToServer(){
             // for (const chatObj of chatObjs) {
                 console.log('Service Worker: Syncing new Chats: ', chatObjs);
 
-                // Fetch with FormData instead of JSON
-                //todo:添加addChat接口
+                // Fetch with FormData instead of JSON, to upload the offline chat record
                 fetch('/requestHandler/updateOfflineChatRecordToServer', {
                     method: 'POST',
                     headers: {

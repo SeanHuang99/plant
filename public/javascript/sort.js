@@ -1,4 +1,8 @@
-// sorted (at least) by date/time seen
+/**
+ * sort the plant by date
+ * @param order asc/desc
+ * @returns {Promise<unknown>}
+ */
 function sortByDate(order) {
     return new Promise((resolve, reject) => {
         openPlantIDB().then(IDB => {
@@ -25,6 +29,13 @@ function sortByDate(order) {
     });
 }
 
+/**
+ * sort plants by specified attribute and order
+ * @param plants
+ * @param key specified attribute
+ * @param order asc/desc
+ * @returns {*}
+ */
 function sortPlants(plants, key, order) {
     plants.sort((a, b) => {
         if (order === 'asc') {
@@ -36,7 +47,13 @@ function sortPlants(plants, key, order) {
     return plants
 }
 
-// whether identification is finished.
+/**
+ * filter plants by specified key and value
+ * e.g. whether identification is finished.
+ * @param key attribute
+ * @param value value
+ * @returns {Promise<unknown>}
+ */
 function filterPlants(key, value) {
     return new Promise((resolve, reject) => {
         openPlantIDB().then(IDB => {
@@ -53,11 +70,22 @@ function filterPlants(key, value) {
     });
 }
 
+/**
+ * whether the plant has location
+ * @param plant
+ * @returns {boolean}
+ */
 function haveLoc(plant) {
     return plant.location.lat != null && plant.location.lng != null
 }
 
 // Sorting by distance away is a ‘stretch’ goal (i.e. nice to have).
+/**
+ * calculate distances of the plant using current location
+ * @param plants
+ * @param currentLoc current location
+ * @returns {Promise<*>}
+ */
 async function calculateDistances(plants, currentLoc) {
     for (const plant of plants) {
         try {
@@ -71,6 +99,13 @@ async function calculateDistances(plants, currentLoc) {
     return plants
 }
 
+/**
+ * sort plants by distance()
+ * (Plants that do not have location information will not be displayed)
+ * @param currentLoc
+ * @param order asc/desc
+ * @returns {Promise<unknown>}
+ */
 function sortByDistance(currentLoc, order) {
     return new Promise((resolve, reject) => {
         openPlantIDB().then(IDB => {

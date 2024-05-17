@@ -1,7 +1,7 @@
 {
   "_comment": "command: npx jsdoc -c jsdoc.json",
   "source": {
-    "include": ["."],
+    "include": ["./public/javascript", "./routes", "./controllers"],
     "exclude": ["node_modules"],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"

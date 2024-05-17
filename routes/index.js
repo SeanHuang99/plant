@@ -36,12 +36,15 @@ router.get('/detail', async function (req, res) {
 //     res.render('mapTest')
 // })
 
-// router.get('/huangtest', function (req, res) {
-//     res.render('temptest')
-// })
-
+/**
+ * Route to render the update requests page.
+ * @name get/updateRequests
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 router.get('/getAllUpdateRequests', function (req, res) {
-    // console.log('/getAllUpdateRequests')
     res.render('updateRequests')
 })
 

@@ -21,14 +21,14 @@
     // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
     v: 'weekly'
 })
-//初始化位置
+
 /**
  *  show Google Map in detail page
  * @param {Loc} loc location of current plant
  * @returns {Promise<void>} need to wait for Google API
  */
 async function showMapInDetail(loc){
-    if (loc.lat!=null && loc.lng !=null){
+    if (loc?.lat!=null && loc?.lng !=null){
         console.log('render map')
         const { Map } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -53,6 +53,10 @@ async function showMapInDetail(loc){
         map.setCenter(marker.position);
     }
     else {
-        document.getElementById("map").innerText='Location not set'
+        const map=document.getElementById("map")
+        map.innerText='Location not set'
+        map.style.textAlign='center'
+        map.style.lineHeight='400px'
+        map.style.backgroundColor='lightgray'
     }
 }

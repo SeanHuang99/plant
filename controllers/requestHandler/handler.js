@@ -3,7 +3,14 @@ const router = express.Router();
 const mongoApi=require("../databaseController/mongodbController");
 const {mongo} = require("mongoose");
 
-
+/**
+ * Adds a new plant to the database.
+ * @route POST /addPlants
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.post("/addPlants",async function (req, res, next) {
     console.log(`service worker addPlant: ${req.body.plantId}`)
     let plantId=req.body.plantId;
@@ -97,8 +104,14 @@ router.post("/addPlants",async function (req, res, next) {
 
 
 
-
-
+/**
+ * Fetches the details of a specific plant by plant ID.
+ * @route GET /getPlants/:id
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getPlants/:id",function (req,res,next){
     console.log('getPlants')
     const { id } = req.params;
@@ -106,7 +119,7 @@ router.get("/getPlants/:id",function (req,res,next){
         .then(function(response){
             if(response.type==='success'){
                 plant=response.content;
-                res.json(plant);
+                res.status(200).json(plant);
             }
         })
         .catch(function(error){
@@ -116,6 +129,14 @@ router.get("/getPlants/:id",function (req,res,next){
 
 })
 
+/**
+ * Fetches all plants from the database.
+ * @route GET /getAllPlants
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getAllPlants",function (req,res,next){
     mongoApi.getAllPlants()
         .then(function(response){
@@ -130,6 +151,14 @@ router.get("/getAllPlants",function (req,res,next){
         })
 })
 
+/**
+ * Fetches chat records for a specific plant by plant ID.
+ * @route GET /getChatRecordById/:id
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getChatRecordById/:id",function (req,res,next){
     const { id } = req.params;
     // console.log('receive chat record request: '+id);
@@ -146,7 +175,14 @@ router.get("/getChatRecordById/:id",function (req,res,next){
         })
 })
 
-
+/**
+ * Updates offline chat records to the mongoDB.
+ * @route POST /updateOfflineChatRecordToServer
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.post('/updateOfflineChatRecordToServer', async function (req, res, next) {
     // req.body;
     console.log("updateOfflineChatRecordToServer: "+JSON.stringify(req.body));
@@ -162,6 +198,14 @@ router.post('/updateOfflineChatRecordToServer', async function (req, res, next) 
     res.status(200).send();
 })
 
+/**
+ * Fetches all chat records from the database.
+ * @route GET /getAllChatRecord
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {void}
+ */
 router.get("/getAllChatRecord",function (req,res,next){
     mongoApi.getAllChatRecord()
         .then(function(response){
@@ -191,47 +235,52 @@ router.get("/getAllChatRecord",function (req,res,next){
 //         });
 // });
 
-router.get('/getAllUpdateRequests', function (req, res) {
-
-    res.render('updateRequests')
-})
-
-// API Route for fetching update requests by nickname
-router.get("/api/getAllUpdateRequests", function (req, res, next){
-    const nickName = req.query.nickName; // Assume nickname is passed as a query parameter
+/**
+ * API Route for fetching update requests by nickname.
+ * @name get/api/getAllUpdateRequests
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
+router.get("/api/getAllUpdateRequests", function (req, res, next) {
+    const nickName = req.query.nickName;  // Get nickname from query parameter
     mongoApi.getAllUpdateRequestsByNickName(nickName)
-        .then(function(response){
+        .then(function(response) {
             if (response.type === 'success') {
-                res.json(response); // Send success response back to client
+                res.json(response);  // Send success response
             } else {
-                res.status(404).json(response); // Send failure response back to client
+                res.status(404).json(response);  // Send failure response
             }
         })
-        .catch(function(error){
+        .catch(function(error) {
             res.status(500).json({ type: 'fail', content: error.message });
         });
 });
 
 
-
+/**
+ * API Route for updating plant requests.
+ * @name post/updatePlantsRequest
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
 router.post('/updatePlantsRequest', async function (req, res, next) {
     var response;
-    const { plantId, preferredPlantName, nickName,creator, plantOriginalName} = req.body;
+    const { plantId, preferredPlantName, nickName, creator, plantOriginalName } = req.body;
     const originalNickName = await mongoApi.getNickNameOfPlant(plantId);
     if (originalNickName.type === 'fail') {
         return res.status(404).json({ message: 'Plant not found' });
     }
 
-    // If the uploader and the modifier are the same, update directly
+    // Check if the requester is the creator of the plant
     if (originalNickName.content === nickName) {
-
         const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(preferredPlantName)}`;
-        // console.log("DBPedia URL: "+resource)
-        // The DBpedia SPARQL endpoint URL
         const endpointUrl = 'https://dbpedia.org/sparql';
-
-
-        // The SPARQL query to retrieve data for the given resource
         const sparqlQuery = `
             PREFIX dbo: <http://dbpedia.org/ontology/>
             PREFIX dbr: <http://dbpedia.org/resource/>
@@ -246,23 +295,17 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
             }
             LIMIT 1
             `;
-
-        // Encode the query as a URL parameter
         const encodedQuery = encodeURIComponent(sparqlQuery);
-        // Build the URL for the SPARQL query
         const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
 
-        let DBpediaName="";
-        let DBpediaDescription="";
-        let DBpediagenus="";
+        let DBpediaName = "";
+        let DBpediaDescription = "";
+        let DBpediagenus = "";
 
         await fetch(url)
             .then(response => response.json())
             .then(data => {
-                // The results are in the 'data' object
                 let bindings = data.results.bindings[0];
-                let result = JSON.stringify(bindings);
-                // console.log(result)
                 DBpediaName = bindings?.name?.value;
                 DBpediaDescription = bindings?.comment?.value;
                 DBpediagenus = bindings?.genus?.value;
@@ -272,45 +315,48 @@ router.post('/updatePlantsRequest', async function (req, res, next) {
                 res.status(504).send(error.message);
             });
 
-
-        const result = await mongoApi.changePlantNameOfPlant(plantId, preferredPlantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
+        // Update plant name and DBpedia information
+        const result = await mongoApi.changePlantNameOfPlant(plantId, preferredPlantName, resource, DBpediaName, DBpediaDescription, DBpediagenus);
         if (result.type === 'success') {
             res.status(200).send('Plant name updated successfully');
         } else {
-            console.error(`${result.content}`)
+            console.error(`${result.content}`);
             res.status(500).json({ message: result.content });
         }
     } else {
-        // If not the same, add an update request
+        // If the requester is not the creator, add an update request
         const result = await mongoApi.addUpdateRequest(plantId, preferredPlantName, nickName, creator, plantOriginalName);
         if (result.type === 'success') {
             res.status(200).send('Update request submitted successfully');
         } else {
-            // This else clause handles both duplicate requests and other errors
             res.status(400).json({ message: result.content });
         }
     }
 });
 
+/**
+ * API Route for updating plant requests by creator.
+ * @name post/updatePlantsRequestForCreator
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
 router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
     const { objId, preferredPlantName, plantOriginalName, status } = req.body;
-    console.log("Received objId:", objId);
-
     try {
-        // 通过 objId 查找植物记录
         const plantResult = await mongoApi.findPlantByObjId(objId);
         if (plantResult.type === 'fail') {
             return res.status(404).json({ message: plantResult.content });
         }
         const plant = plantResult.content;
-
         const updateFields = {
             status: status,
-            dbpedia: plant.dbpedia // 保留现有的 dbpedia 字段
+            dbpedia: plant.dbpedia  // Retain existing DBpedia field
         };
 
         if (preferredPlantName && preferredPlantName !== plantOriginalName) {
-            // 构建 DBpedia 资源链接
             const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(preferredPlantName)}`;
             const endpointUrl = 'https://dbpedia.org/sparql';
             const sparqlQuery = `
@@ -344,7 +390,7 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
                 })
                 .catch(function (error) {
                     console.log("error: " + error.message);
-                    //return res.status(504).send(error.message);
+                    return res.status(504).send(error.message);
                 });
 
             updateFields.plantName = preferredPlantName;
@@ -356,7 +402,7 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
             };
         }
 
-        // use mongo api to update the DBpedia field
+        // Update plant name and status
         const result = await mongoApi.changePlantNameOfPlantForCreator(objId, updateFields);
 
         if (result.type === 'success') {
@@ -370,25 +416,21 @@ router.post('/updatePlantsRequestForCreator', async function (req, res, next) {
     }
 });
 
+/**
+ * API Route for processing update requests from the update requests page.
+ * @name post/updatePlantsRequestFromURPage
+ * @function
+ * @memberof module:router
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 router.post('/updatePlantsRequestFromURPage', async function (req, res) {
     try {
-        // console.log(req.body);
         const requests = req.body.requests;
-        console.log(requests)
-        // if (!Array.isArray(requests)) {
-        //     return res.status(400).send('Bad request: Expected an array of requests');
-        // }
         await Promise.all(requests.map(async request => {
             const { plantId, plantName, date, decision, nickName } = request;
-
-
             const resource = `http://dbpedia.org/resource/${capitalizeFirstLetterIfAlphabet(plantName)}`;
-            // console.log("DBPedia URL: "+resource)
-            // The DBpedia SPARQL endpoint URL
             const endpointUrl = 'https://dbpedia.org/sparql';
-
-
-            // The SPARQL query to retrieve data for the given resource
             const sparqlQuery = `
             PREFIX dbo: <http://dbpedia.org/ontology/>
             PREFIX dbr: <http://dbpedia.org/resource/>
@@ -403,35 +445,27 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
             }
             LIMIT 1
             `;
-
-            // Encode the query as a URL parameter
             const encodedQuery = encodeURIComponent(sparqlQuery);
-            // Build the URL for the SPARQL query
             const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
 
-            let DBpediaName="";
-            let DBpediaDescription="";
-            let DBpediagenus="";
+            let DBpediaName = "";
+            let DBpediaDescription = "";
+            let DBpediagenus = "";
 
             await fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // The results are in the 'data' object
                     let bindings = data.results.bindings[0];
-                    let result = JSON.stringify(bindings);
-                    // console.log(result)
                     DBpediaName = bindings?.name?.value;
                     DBpediaDescription = bindings?.comment?.value;
                     DBpediagenus = bindings?.genus?.value;
                 })
                 .catch(function (error) {
                     console.log("error: " + error.message);
-                    //res.status(504).send(error.message);
+                    res.status(504).send(error.message);
                 });
 
-
-            await mongoApi.changePlantNameOfPlant(plantId, plantName,resource,DBpediaName,DBpediaDescription,DBpediagenus);
-
+            await mongoApi.changePlantNameOfPlant(plantId, plantName, resource, DBpediaName, DBpediaDescription, DBpediagenus);
             await mongoApi.updateRequestFromUrPage(plantId, plantName, date, decision, nickName);
         }));
         res.status(200).send('All requests processed successfully.');
@@ -441,6 +475,11 @@ router.post('/updatePlantsRequestFromURPage', async function (req, res) {
     }
 });
 
+/**
+ * because in DBpedia, the name of plant always with uppercase on first letter
+ * @param input
+ * @returns {string}
+ */
 function capitalizeFirstLetterIfAlphabet(input) {
     // check input whether is string and not blank
     if (typeof input === 'string' && input.length > 0) {

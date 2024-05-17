@@ -1,7 +1,12 @@
+// updateRequest.js
 document.addEventListener('DOMContentLoaded', function() {
     initializePage();
 });
 
+/**
+ * Initializes the update requests page.
+ * Fetches the update requests and sets up event listeners.
+ */
 function initializePage() {
     const loadingIndicator = document.getElementById('loadingIndicator');
     loadingIndicator.style.display = 'block'; // Show loading indicator when the AJAX call starts
@@ -25,6 +30,12 @@ function initializePage() {
     document.getElementById('submitBtn').addEventListener('click', submitRequests);
 }
 
+/**
+ * Fetches the update requests for the given nickname.
+ * @param {string} nickName - The nickname of the user.
+ * @returns {Promise<void>}
+ * @throws {Error} Throws an error if the fetch request fails.
+ */
 async function fetchUpdateRequests(nickName) {
     const url = `requestHandler/api/getAllUpdateRequests?nickName=${encodeURIComponent(nickName)}`;
     const response = await fetch(url);
@@ -37,10 +48,15 @@ async function fetchUpdateRequests(nickName) {
     if (data.type === 'success' && data.content.length > 0) {
         renderTableRows(data.content);
     } else {
-        tbody.innerHTML = '<tr><td colspan="6">No data found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7">No data found.</td></tr>';
     }
 }
 
+
+/**
+ * Renders the table rows for the update requests.
+ * @param {Array<Object>} requests - The update requests.
+ */
 function renderTableRows(requests) {
     const tbody = document.querySelector('table tbody');
     tbody.innerHTML = ''; // Clear existing rows
@@ -59,7 +75,7 @@ function renderTableRows(requests) {
                 </label>
                 `;
         tbody.innerHTML += `
-            <tr id="${request.plantId}" data-full-date="${request.date}" nickName = "${request.nickName}">
+            <tr id="${request.plantId}" data-full-date="${request.date}" nickName="${request.nickName}">
                 <td>${request.plantOriginalName || 'N/A'}</td>
                 <td>${request.plantName || 'N/A'}</td>
                 <td>${request.statusOfRequest || 'in-progress'}</td>
@@ -67,18 +83,22 @@ function renderTableRows(requests) {
                 <td>${request.decision || 'Pending decision'}</td>
                 <td>${agreeInput}</td>
                 <td>${rejectInput}</td>
-                
             </tr>
         `;
     });
+
     setupCheckboxBehavior();
 }
 
-
+/**
+ * Sets up the behavior for the agree and reject checkboxes.
+ * Ensures that only one checkbox is selected at a time.
+ */
 function setupCheckboxBehavior() {
     document.querySelectorAll('input.agree, input.reject').forEach(input => {
         input.addEventListener('change', function() {
             const name = this.name;
+            // Ensure only one checkbox is selected at a time
             document.querySelectorAll(`input[name="${name}"]`).forEach(box => {
                 if (box !== this) box.checked = false;
             });
@@ -86,15 +106,17 @@ function setupCheckboxBehavior() {
     });
 }
 
-
-
+/**
+ * Submits the selected update requests.
+ * Sends the requests to the backend for processing.
+ */
 async function submitRequests() {
     const requests = [];
     document.querySelectorAll('table tbody tr').forEach(row => {
         const agreeInput = row.querySelector('.agree');
         const rejectInput = row.querySelector('.reject');
 
-        // 只有当复选框实际存在时，才尝试读取它们的状态并处理
+        // Only process if the checkboxes exist
         if (agreeInput && rejectInput) {
             const agreeChecked = agreeInput.checked;
             const rejectChecked = rejectInput.checked;
@@ -102,13 +124,13 @@ async function submitRequests() {
                 requests.push({
                     plantId: row.id,
                     plantName: row.cells[1].textContent,
-                    date: row.getAttribute('data-full-date'), // 获取完整的日期信息
+                    date: row.getAttribute('data-full-date'), // Get full date attribute
                     decision: agreeChecked ? 'agree' : 'reject',
                     nickName: row.getAttribute('nickName')
                 });
             }
         } else {
-            // 如果没有找到复选框，可以在这里添加一些调试信息
+            // Log debug information if checkboxes are not found
             console.log(`No checkboxes found for row: ${row.id}`);
         }
     });
@@ -119,12 +141,13 @@ async function submitRequests() {
     }
 
     try {
+        // Send the selected requests to the backend for processing
         const response = await fetch('/requestHandler/updatePlantsRequestFromURPage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({requests})
+            body: JSON.stringify({ requests })
         });
 
         if (response.ok) {

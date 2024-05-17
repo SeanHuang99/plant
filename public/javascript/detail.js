@@ -57,7 +57,7 @@ function generateDetailPage(){
             })
     }
     else {
-        console.log()
+        // console.log()
         openPlantIDB().then(IDB => {
             getDetailById(IDB, plantId).then(plant => {
                 if(plant) {
@@ -65,7 +65,11 @@ function generateDetailPage(){
                     console.log('detail plant found in IDB ----- ' + JSON.stringify(plant))
                     console.log(plant.plantId + ' detail-------> ' + plant.description)
                     detailRender(plant);
-                    document.getElementById("map").innerText = 'Cannot show map when offline'
+                    const map=document.getElementById("map")
+                    map.innerText='Cannot show map when offline'
+                    map.style.textAlign='center'
+                    map.style.lineHeight='400px'
+                    map.style.backgroundColor='lightgray'
                 }
                 else {
                     if (--updateTimer <= 0) {
@@ -140,99 +144,114 @@ function detailRender(plant){
     }
 }
 
-
+/**
+ * Opens the edit popup for updating the plant name and status.
+ * If the user is online and the current plant's nickname differs from the user's nickname, the edit popup is displayed.
+ */
 function openEditPopup() {
-    const nickName = getNickName();  // 获取当前用户的昵称
-    if (navigator.onLine){
+    const nickName = getNickName();  // Get the current user's nickname
+    if (navigator.onLine) {
         if (currentPlant && currentPlant.nickName !== nickName) {
             document.getElementById('editPopupForName').style.display = 'flex';
-            isCreator = 'False'
-
+            isCreator = 'False';
         } else {
             document.getElementById('editPopupForNameAndStatus').style.display = 'flex';
-            isCreator = 'True'
+            isCreator = 'True';
         }
-        // document.getElementById('editPopupForName').style.display = 'flex';
-    }else {
-        alert(' You cannot update plant when offline')
+    } else {
+        alert('You cannot update plant when offline');
     }
 }
 
+/**
+ * Closes the edit popup for updating the plant name.
+ */
 function closeEditPopup() {
     document.getElementById('editPopupForName').style.display = 'none';
 }
+
+/**
+ * Closes the edit popup for updating the plant name and status.
+ */
 function closeEditPopupForCreator() {
     document.getElementById('editPopupForNameAndStatus').style.display = 'none';
 
 }
 
-// Function to submit a request to update the plant name
+/**
+ * Submits a request to update the plant name.
+ * The request is sent to the backend via the "/updatePlants" route.
+ */
 async function submitRequestForUser() {
-
     const plantId = getPlantId();
     const nickName = getNickName();
     const plantOriginalName = getPlantOriginalName();
-    let preferredPlantName = null
-
-    preferredPlantName = document.getElementById('preferredPlantName').value;
-    // console.log(preferredPlantName)
+    let preferredPlantName = document.getElementById('preferredPlantName').value;
     const creator = getNickNameOfPlant();
-    // Check if the preferred name is the same as the original name
+
+    // Check if the new plant name is the same as the original name
     if (preferredPlantName === plantOriginalName) {
         alert("The same name as origin");
-        closeEditPopup(); // Assume this function closes your modal or popup
-        return; // Stop the function execution here
+        closeEditPopup();  // Close the edit popup
+        return;
     }
-    // Post the data to the backend via the "/updatePlants" route
+
+    // Send update request to the backend
     const response = await fetch('/requestHandler/updatePlantsRequest', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator, plantOriginalName})
+        body: JSON.stringify({ plantId, preferredPlantName, nickName, creator, plantOriginalName })
     });
 
+    // Handle the response
     if (response.ok) {
         synPlantFromServer();
         generateDetailPage();
         alert('Request submitted successfully!');
-    }  else {
-        // General error handler for all other cases
+    } else {
         const errorData = await response.json();
         alert(`Error submitting request: ${errorData.message}`);
     }
 
-    // Close the modal after submitting
-    closeEditPopup()
+    closeEditPopup();  // Close the edit popup after submitting
 }
 
+/**
+ * Submits a request to update the plant name and status.
+ * The request is sent to the backend via the "/updatePlantsRequestForCreator" route.
+ */
 async function submitRequestForCreator() {
     const plantOriginalName = getPlantOriginalName();
     const preferredPlantName = document.getElementById('preferredPlantNameForCreator').value;
     const creator = getNickNameOfPlant();
-    const objId = ObjIdManager.getObjId(); // 从闭包获取 objId
-    console.log("Submitting objId:", objId);
+    const objId = ObjIdManager.getObjId();  // Get objId from closure
     const statusComplete = document.querySelector(`input[name="status"][id*="Complete"]`);
     const statusInProgress = document.querySelector(`input[name="status"][id*="InProgress"]`);
     let status = null;
 
+    // Get the selected status
     if (statusComplete && statusComplete.checked) {
         status = statusComplete.value;
     } else if (statusInProgress && statusInProgress.checked) {
         status = statusInProgress.value;
     }
 
+    // Check if the form is empty
     if (!preferredPlantName && !status) {
         alert("Cannot submit empty form!");
         return;
     }
 
+    // Check if the new plant name is the same as the original name
     if (preferredPlantName === plantOriginalName) {
-        alert("The same name as origin")
+        alert("The same name as origin");
         return;
     }
 
     const currentStatus = getStatusOfDetailPage();
+    // Check if the new status is the same as the current status
     if (status === currentStatus) {
         alert("The selected status is the same as the current status.");
         return;
@@ -243,6 +262,7 @@ async function submitRequestForCreator() {
         requestBody.preferredPlantName = preferredPlantName;
     }
 
+    // Send update request to the backend
     const response = await fetch('/requestHandler/updatePlantsRequestForCreator', {
         method: 'POST',
         headers: {
@@ -251,6 +271,7 @@ async function submitRequestForCreator() {
         body: JSON.stringify(requestBody)
     });
 
+    // Handle the response
     if (response.ok) {
         synPlantFromServer();
         generateDetailPage();
@@ -260,48 +281,59 @@ async function submitRequestForCreator() {
         const errorData = await response.json();
         alert(`Error submitting request: ${errorData.message}`);
     }
-
-
 }
 
+
+/**
+ * Gets the nickname of the plant.
+ * @returns {string} The nickname of the plant or an empty string if an error occurs.
+ */
 function getNickNameOfPlant() {
-    // Get the element by its ID
     try {
         const nickNameText = document.getElementById('nickName').textContent;
         const parts = nickNameText.split(': ');
-        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+        return parts.length > 1 ? parts[1].trim() : '';  // Get the nickname and trim excess whitespace
     } catch (error) {
         console.error('Error retrieving nickname of plant:', error);
-        return ''; // Return empty string in case of any error
+        return '';  // Return an empty string in case of an error
     }
 }
 
+/**
+ * Gets the original name of the plant.
+ * @returns {string} The original name of the plant or an empty string if an error occurs.
+ */
 function getPlantOriginalName() {
-    // Get the element by its ID
     try {
         const plantNameText = document.getElementById('plantName').textContent;
         const parts = plantNameText.split(': ');
-        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+        return parts.length > 1 ? parts[1].trim() : '';  // Get the plant original name and trim excess whitespace
     } catch (error) {
         console.error('Error retrieving plant original name:', error);
-        return ''; // Return empty string in case of any error
+        return '';  // Return an empty string in case of an error
     }
 }
 
+/**
+ * Gets the status of the detail page.
+ * @returns {string} The status of the detail page or an empty string if an error occurs.
+ */
 function getStatusOfDetailPage() {
-    // Get the element by its ID
     try {
         const statusOfDPText = document.getElementById('status').textContent;
         const parts = statusOfDPText.split(': ');
-        return parts.length > 1 ? parts[1].trim() : ''; // Trim any excess whitespace
+        return parts.length > 1 ? parts[1].trim() : '';  // Get the status of the detail page and trim excess whitespace
     } catch (error) {
         console.error('Error retrieving plant original name:', error);
-        return ''; // Return empty string in case of any error
+        return '';  // Return an empty string in case of an error
     }
 }
 
 
-// 闭包来存储 objId
+/**
+ * Object ID Manager for handling object IDs using a closure.
+ * @namespace
+ */
 const ObjIdManager = (function() {
     let objId = null;
 

@@ -1,8 +1,10 @@
+//this file is a websocket, when user enter a plant detail page, they can have a chat to discuss the plant
 // Initialize socket.io connection and setup chat room
 let name = getNickName();
 let roomNo = getPlantId();
 let socket = io();
 
+//if online, use websocket in chat room, otherwise store the chat in indexed db
 window.onload = function () {
     cleanChatPanel()
     if (navigator.onLine) {
@@ -19,6 +21,7 @@ window.addEventListener('offline', function() {
     }
 });
 
+//websocket initialization function
 function init() {
     // Event listener for joining a room
     socket.on('joined', function (room, userId) {
@@ -99,6 +102,7 @@ function writeOnHistory(text) {
     history.scrollTop = history.scrollHeight;
 }
 
+//clean the chat panel, because the cache would store previous chat record
 function cleanChatPanel() {
 
     let history = document.getElementById('chat_history');

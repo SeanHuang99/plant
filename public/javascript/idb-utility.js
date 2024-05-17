@@ -1,3 +1,7 @@
+/**
+ * @module idb-utility
+ */
+
 function generateSixDigitNumber() {
     const min = 100000;
     const max = 999999;
@@ -551,7 +555,7 @@ const getChatRecordById = async (store, plantId) => {
 /**
  * add chat object to specific objectStore
  * @param store
- * @param chatObj
+ * @param {Chat} chatObj
  * @returns {Promise<unknown>}
  */
 function addChatObj(store, chatObj) {

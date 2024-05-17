@@ -1,3 +1,7 @@
+/**
+ * @module GoogleMap
+ */
+
 (g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__",
         m = document, b = window;
@@ -37,7 +41,6 @@ async function initMap() {
     //Initialization location(default one is Sheffield)
     setLocation()
     const {Map} = await google.maps.importLibrary("maps");
-    const {AdvancedMarkerView} = await google.maps.importLibrary("marker")
     const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
     const {SearchBox} = await google.maps.importLibrary("places");
 

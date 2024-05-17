@@ -1,3 +1,7 @@
+/**
+ * @module plantChatRoom
+ */
+
 //this file is a websocket, when user enter a plant detail page, they can have a chat to discuss the plant
 // Initialize socket.io connection and setup chat room
 let name = getNickName();

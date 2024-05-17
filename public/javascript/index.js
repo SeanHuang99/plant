@@ -1,3 +1,7 @@
+/**
+ * @module index
+ */
+
 // const fetch = require("node-fetch");
 // const {getAllPlants} = require("../../controllers/apiController/databaseController/mongodbController");
 var storage = {

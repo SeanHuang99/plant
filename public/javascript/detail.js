@@ -1,3 +1,7 @@
+/**
+ * @module detail
+ */
+
 // store user browser history
 if(window.localStorage.getItem("lastURL")!=='/detail' || window.localStorage.getItem("lastURL")===undefined) {
     window.localStorage.setItem('lastURL', '/detail');

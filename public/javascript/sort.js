@@ -1,6 +1,10 @@
 /**
+ * @module sort
+ */
+
+/**
  * sort the plant by date
- * @param order asc/desc
+ * @param {String} order asc/desc
  * @returns {Promise<unknown>}
  */
 function sortByDate(order) {
@@ -32,8 +36,8 @@ function sortByDate(order) {
 /**
  * sort plants by specified attribute and order
  * @param plants
- * @param key specified attribute
- * @param order asc/desc
+ * @param {String} key specified attribute
+ * @param {String} order asc/desc
  * @returns {*}
  */
 function sortPlants(plants, key, order) {
@@ -72,7 +76,7 @@ function filterPlants(key, value) {
 
 /**
  * whether the plant has location
- * @param plant
+ * @param {Plant} plant
  * @returns {boolean}
  */
 function haveLoc(plant) {
@@ -83,7 +87,7 @@ function haveLoc(plant) {
 /**
  * calculate distances of the plant using current location
  * @param plants
- * @param currentLoc current location
+ * @param {Loc} currentLoc current location
  * @returns {Promise<*>}
  */
 async function calculateDistances(plants, currentLoc) {

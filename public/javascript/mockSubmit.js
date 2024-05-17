@@ -1,3 +1,6 @@
+/**
+ * @module mockSubmit
+ */
 
 //Simulate submission data to make the test much easier
 var testData = {

@@ -1,3 +1,7 @@
+/**
+ * @module upload
+ */
+
 //this js file is to check and submit the form
 //cancel form action
 //submit button should check null value in the form

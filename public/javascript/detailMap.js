@@ -1,3 +1,7 @@
+/**
+ * @module detailMap
+ */
+
 (g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__",
         m = document, b = window;

@@ -1,3 +1,7 @@
+/**
+ * @module updateRequest
+ */
+
 // updateRequest.js
 document.addEventListener('DOMContentLoaded', function() {
     initializePage();

@@ -1,3 +1,7 @@
+/**
+ * @module main
+ */
+
 document.addEventListener("DOMContentLoaded", function () {
     // Select all elements with the class 'card-link'
     const cardLinks = document.querySelectorAll('.card-link');
@@ -50,7 +54,7 @@ if (navigator.onLine) {
 
 /**
  *render the DOM of plant list in main page
- * @param {Plant} plantList
+ * @param  plantList
  */
 function renderPlantList(plantList) {
     // Gets the container element to render the plant

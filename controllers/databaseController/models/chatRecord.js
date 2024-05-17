@@ -1,3 +1,8 @@
+/**
+ * @module chatRecord
+ * @description the mongodb model of chat record
+ */
+
 const mongoose = require('mongoose');
 //define chat schema which is used for websocket chat room record synchronization
 const ChatSchema = new mongoose.Schema({

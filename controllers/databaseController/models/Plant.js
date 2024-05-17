@@ -1,3 +1,8 @@
+/**
+ * @module Plant
+ * @description the mongodb model of plant
+ */
+
 const mongoose = require('mongoose');
 
 // define plant schema

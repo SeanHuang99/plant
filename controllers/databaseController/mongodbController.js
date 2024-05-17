@@ -1,3 +1,8 @@
+/**
+ * @module mongodnController
+ * @description a customized api for mongodb.
+ * @type {e | (() => Express)}
+ */
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');

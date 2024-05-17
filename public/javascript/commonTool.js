@@ -1,6 +1,6 @@
 /**
  * @module commonTools
- * this tool is to set/get user setting.
+ * @description this tool is to set/get user setting.
  */
 
 /**

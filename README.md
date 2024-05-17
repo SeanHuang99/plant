@@ -132,6 +132,9 @@ To access and run a Node.js project deployed on a cloud server, you can simply v
 - You could see all the sightings.
 ![](./Screenshots/main.png)
 
+### Upload Page
+- You could upload a plant by inputting plant information.
+![](./Screenshots/upload01.png)
 ### Detail page. 
 - You could see the detail of the plant you choose.
 ![](./Screenshots/upload10.png)
@@ -141,11 +144,15 @@ To access and run a Node.js project deployed on a cloud server, you can simply v
 ![](./Screenshots/login.png)
 
 ### UpdateRequest page. 
+- You could request updates of a plant name as a user.
+- You could request updates of a plant name and status as the creator of this plant.
 - You could check requests of updating plant name sent from other users.
 - User Update Interface for Non-Plant Creators
 ![](./Screenshots/update01.png)
 - Update Interface for Plant Creators
 ![](./Screenshots/update09.png)
+- Update requests could be checked at update request page.
+![](./Screenshots/update14.png)
 ### About Page
 - Project Introduction
 ![](./Screenshots/about.png)

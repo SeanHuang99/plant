@@ -31,7 +31,7 @@ function init() {
         } else {
             writeOnHistory(`<b>${userId}</b> joined room ${room}`);
         }
-        //todo update indexdb from server
+        //update indexdb from server
         console.log("do synChatRecordFromServer")
         synAllChatObjsFromServer()
     });
@@ -46,7 +46,7 @@ function init() {
         } else {
             writeOnHistory(`<b><span style="color: blue;">${who}:</span></b> ${chatText}`);
         }
-        //todo update indexdb from server
+        //update indexdb from server
         console.log("do synChatRecordFromServer")
         synAllChatObjsFromServer()
     });
@@ -62,7 +62,7 @@ function sendChatText() {
     if (navigator.onLine) {
         socket.emit('chat', roomNo, name, chatText);
     } else {
-        //todo upload chat to indexdb
+        //upload chat to indexdb
         const chat = {
             nickName: getNickName(),
             content: chatText,
@@ -132,10 +132,10 @@ function getChatRecord(roomNo) {
                 }
             })
             .catch(error => {
-                console.error('Error occurred:', error);
+                console.log('Error occurred:', error);
             });
     } else {
-        //todo get chat record from indexed db
+        //get chat record from indexed db
         openChatIDB().then(IDB => {
             const transaction = IDB.transaction(["chats","sync-chats"], "readonly");
             const chatsStore = transaction.objectStore("chats");

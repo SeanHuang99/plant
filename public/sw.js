@@ -177,7 +177,7 @@ function syncChatToServer(){
                 }).then((response) => {
                     console.log("syncChatToServer response: "+response)
                     console.log('Service Worker: Syncing new Chats: ', chatObjs, ' done');
-                    //todo: clean the sync-chats indexdb
+                    //clean the sync-chats indexdb
                     deleteAllChatObjsFromIDB(syncPostDB,'sync-chats').then(()=>{
                         console.log('deleteAllChatObjsFrom sync-chats successfully')
                         // Send a notification

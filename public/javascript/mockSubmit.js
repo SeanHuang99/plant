@@ -7,8 +7,10 @@ var testData = {
     flowerColor: "#dd1313",
     flowerColorPicker: "#dd1313",
     flowers: "yes",
-    lat: "53.3921",
-    lng: "-1.4898",
+    location: {
+        lat: "53.3921",
+        lng: "-1.4898",
+    },
     nickName: "gyTest",
     plantId: null,
     plantName: "testName",

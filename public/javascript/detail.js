@@ -30,7 +30,7 @@ function generateDetailPage(){
     // console.log('plantId: '+plantId)
     if (plantId==null){
         // console.log('plantId==null')
-        //todo: return to main page, and show alert of 'cannot find plant'
+        //return to main page, and show alert of 'cannot find plant'
         alert("cannot find plant")
         window.localStorage.setItem('lastURL', '/main');
         window.location.href="/main";
@@ -84,7 +84,6 @@ function generateDetailPage(){
             }).catch(err => {
                 console.log(err)
                 clearInterval(getData)
-                //todo: return to main page, and show alert of 'cannot find plant'
             })
         })
     }
